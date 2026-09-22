@@ -33,19 +33,19 @@
         .matching-table td { padding: 8px 0; font-size: 16px; border-bottom: 1px solid #eee; }
         .matching-select { padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 15px; }
         
-        /* ✅ HIGHLIGHT STYLES */
-        .user-highlight { background-color: #ffd700; padding: 2px 4px; border-radius: 2px; cursor: pointer; display: inline; color: #000; }
+        /* ✅ HIGHLIGHT — SAME AS READING */
+        .highlight { background-color: #ffd700; padding: 2px 4px; border-radius: 2px; cursor: pointer; display: inline; color: #000; }
         .context-menu { position: absolute; background: #fff; border: 1px solid #ccc; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 9999; display: none; min-width: 160px; }
         .context-menu div { padding: 10px 14px; cursor: pointer; font-size: 14px; }
         .context-menu div:hover { background: #f0f0f0; }
         
-        /* ✅ STATUS BAR — NAVIGATION INDICATORS */
-        .question-status { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 30px 0; padding: 12px 15px; background: #f0f2f5; border-radius: 4px; border: 1px solid #d0d5dd; }
-        .part-label { font-size: 11px; font-weight: bold; color: #444; margin: 0 4px 0 8px; }
+        /* ✅ NAVIGATION — SAME AS READING */
+        .question-status { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; margin: 30px 0; padding: 12px 15px; background: #f0f2f5; border-radius: 4px; border: 1px solid #d0d5dd; }
+        .part-label { font-size: 11px; font-weight: 600; color: #1f3a5f; margin-right: 4px; margin-left: 8px; }
         .part-separator { width: 12px; height: 24px; flex-shrink: 0; }
-        .q-indicator { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 2px; border: 1px solid #d1d5db; background: #e5e7eb; color: #333; }
-        .q-indicator.current { background: #d9dce1; color: #000; border-color: #b0b4b9; }
-        .q-indicator.answered { background: #10b981; color: white; border-color: #10b981; }
+        .q-indicator { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 3px; border: 1px solid #ddd; background: #e5e7eb; color: #333; font-size: 11px; cursor: pointer; transition: all 0.2s; }
+        .q-indicator.answered { background: #10b981 !important; color: white !important; border-color: #10b981 !important; }
+        .q-indicator.current { border: 2px solid #1f3a5f; }
         
         .clear-btn { background-color: #dc2626; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 14px; margin-top: 10px; }
         .clear-btn:hover { background-color: #b91c1c; }
@@ -80,7 +80,7 @@
             <p id="audioStatus">⚠️ Audio file unavailable — check file or link.</p>
         </div>
 
-        <div class="content" id="highlightArea">
+        <div class="content" id="passageArea">
 
 <!-- ========== PART 1 ========== -->
 <h2>PART 1 — Questions 1–10</h2>
@@ -226,6 +226,7 @@
 </div>
 
 <button class="clear-btn" onclick="clearAll()">🗑️ Clear All Answers & Highlights</button>
+
 <div class="nav-container">
     <a href="index.html" class="back-main-btn">← Home</a>
     <a href="reading-cambridge19-test1.html" class="next-btn">Next: Reading →</a>
@@ -236,163 +237,174 @@
 
 <script>
 const STORAGE_KEY = 'Cambridge19_Test1_Listening';
-let savedSelection = null;
+const passageId = 'listening-cambridge19-test1';
+let currentRange = null;
 
-// ===== STATUS INDICATOR UPDATE =====
-function markAnswered(q) {
-    const ind = document.querySelector(`.q-indicator[data-q="${q}"]`);
-    if (ind) ind.classList.replace('current', 'answered');
-}
-function unmarkAnswered(q) {
-    const ind = document.querySelector(`.q-indicator[data-q="${q}"]`);
-    if (ind) ind.classList.replace('answered', 'current');
+// ✅ UPDATE STATUS — SAME AS READING
+function updateStatus() {
+    for (let q = 1; q <= 40; q++) {
+        const btn = document.querySelector(`.q-indicator[data-q="${q}"]`);
+        if (!btn) continue;
+        const val = (localStorage.getItem(`${STORAGE_KEY}_q${q}`) || '').trim();
+        btn.classList.toggle('answered', val.length > 0);
+    }
 }
 
-// ===== HIGHLIGHT FUNCTIONS =====
-function applyHighlight() {
-    if (!savedSelection || savedSelection.isCollapsed) return;
-    const range = savedSelection.getRangeAt(0);
-    if (!range || range.toString().trim() === '') return;
-    
-    const span = document.createElement('span');
-    span.className = 'user-highlight';
-    span.textContent = range.toString();
+// ✅ HIGHLIGHT — SAME AS READING
+function isSelectionValid(sel) {
+    if (!sel || sel.isCollapsed || !sel.toString().trim()) return false;
     try {
-        range.deleteContents();
-        range.insertNode(span);
-    } catch(e) {}
-    hideMenu();
+        const r = sel.getRangeAt(0);
+        const p = r.commonAncestorContainer.nodeType === Node.TEXT_NODE
+            ? r.commonAncestorContainer.parentElement : r.commonAncestorContainer;
+        const inArea = document.getElementById('passageArea').contains(p);
+        const inInput = p.closest('input,textarea,button,label,.context-menu');
+        return inArea && !inInput;
+    } catch { return false; }
 }
-function removeHighlight(el) {
-    const parent = el.closest('.user-highlight');
-    if (!parent) return;
-    parent.replaceWith(document.createTextNode(parent.textContent));
-    document.getSelection().removeAllRanges();
-}
-function showMenu(e) {
-    const sel = document.getSelection();
-    if (sel.toString().trim() !== '') {
-        savedSelection = sel;
-        menuHighlight.style.display = 'block';
-        contextMenu.style.left = e.pageX + 'px';
-        contextMenu.style.top = e.pageY + 'px';
-        contextMenu.style.display = 'block';
-    } else if (e.target.closest('.user-highlight')) {
-        savedSelection = null;
-        menuRemove.style.display = 'block';
-        contextMenu.style.left = e.pageX + 'px';
-        contextMenu.style.top = e.pageY + 'px';
+
+const contextMenu = document.getElementById('contextMenu');
+
+document.addEventListener('contextmenu', e => {
+    const sel = window.getSelection();
+    if (isSelectionValid(sel)) {
+        e.preventDefault();
+        currentRange = sel.getRangeAt(0).cloneRange();
+        const rc = currentRange.getBoundingClientRect();
+        contextMenu.style.left = (rc.left + window.scrollX) + 'px';
+        contextMenu.style.top = (rc.bottom + window.scrollY + 5) + 'px';
         contextMenu.style.display = 'block';
     } else {
-        hideMenu();
+        contextMenu.style.display = 'none';
     }
-    e.preventDefault();
-}
-function hideMenu() {
-    contextMenu.style.display = 'none';
-    menuHighlight.style.display = 'none';
-    menuRemove.style.display = 'none';
+});
+
+document.addEventListener('click', () => contextMenu.style.display = 'none');
+
+document.getElementById('menuHighlight').onclick = () => {
+    if (!currentRange) return;
+    try {
+        const sp = document.createElement('span');
+        sp.className = 'highlight';
+        sp.textContent = currentRange.toString();
+        currentRange.deleteContents();
+        currentRange.insertNode(sp);
+        window.getSelection().removeAllRanges();
+        saveHighlights();
+    } catch { alert('Select smaller text.'); }
+};
+
+document.getElementById('menuRemove').onclick = () => {
+    if (!currentRange) return;
+    try {
+        const p = (currentRange.startContainer.nodeType === Node.TEXT_NODE
+            ? currentRange.startContainer.parentElement : currentRange.startContainer)
+            .closest('.highlight');
+        if (p) {
+            p.parentNode.replaceChild(document.createTextNode(p.textContent), p);
+            p.parentNode.normalize();
+        }
+    } catch {}
+    window.getSelection().removeAllRanges();
+    saveHighlights();
+};
+
+function saveHighlights() {
+    localStorage.setItem(`${passageId}_highlights`, document.getElementById('passageArea').innerHTML);
 }
 
-// ===== CHECKBOX HELPERS =====
-function saveCheckboxGroup(qList) {
-    qList.forEach(q => {
-        const checked = Array.from(document.querySelectorAll(`input[name="q${q}"]:checked`)).map(c => c.value);
-        localStorage.setItem(`${STORAGE_KEY}_q${q}`, checked.join(','));
-        checked.length ? markAnswered(q) : unmarkAnswered(q);
-    });
+function loadHighlights() {
+    const saved = localStorage.getItem(`${passageId}_highlights`);
+    if (saved) document.getElementById('passageArea').innerHTML = saved;
 }
 
-// ===== CLEAR ALL =====
+// ✅ SAVE HELPERS
+function saveAnswer(q, val) {
+    localStorage.setItem(`${STORAGE_KEY}_q${q}`, val);
+    updateStatus();
+}
+
 function clearAll() {
-    if (!confirm('Clear all answers and highlights?')) return;
-    localStorage.clear();
-    document.querySelectorAll('.input-field').forEach(i => { i.value=''; i.classList.remove('filled'); });
-    document.querySelectorAll('input[type=radio], input[type=checkbox]').forEach(i => i.checked=false);
-    document.querySelectorAll('.matching-select').forEach(s => s.selectedIndex=0);
-    document.querySelectorAll('.q-indicator').forEach(i => { i.classList.remove('answered'); i.classList.add('current'); });
-    document.querySelectorAll('.user-highlight').forEach(h => {
-        h.replaceWith(document.createTextNode(h.textContent));
+    if (!confirm('⚠️ Clear all answers and highlights?')) return;
+    for (let q = 1; q <= 40; q++) localStorage.removeItem(`${STORAGE_KEY}_q${q}`);
+    localStorage.removeItem(`${passageId}_highlights`);
+    document.querySelectorAll('.input-field').forEach(i => { i.value = ''; i.classList.remove('filled'); });
+    document.querySelectorAll('input[type=radio], input[type=checkbox]').forEach(i => i.checked = false);
+    document.querySelectorAll('.mcq-option').forEach(o => o.classList.remove('checked'));
+    document.querySelectorAll('.matching-select').forEach(s => s.selectedIndex = 0);
+    document.querySelectorAll('.highlight').forEach(h => {
+        h.parentNode.replaceChild(document.createTextNode(h.textContent), h);
+        h.parentNode.normalize();
     });
+    updateStatus();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Highlight menu setup
-    const contextMenu = document.getElementById('contextMenu');
-    const menuHighlight = document.getElementById('menuHighlight');
-    const menuRemove = document.getElementById('menuRemove');
-    document.getElementById('highlightArea').addEventListener('contextmenu', showMenu);
-    document.addEventListener('click', hideMenu);
-    menuHighlight.addEventListener('click', applyHighlight);
-    menuRemove.addEventListener('click', (e) => {
-        const target = document.elementFromPoint(parseInt(contextMenu.style.left), parseInt(contextMenu.style.top));
-        const hl = target?.closest('.user-highlight');
-        if (hl) removeHighlight(hl);
-        hideMenu();
-    });
-
     // Audio error
     document.getElementById('audioPlayer').addEventListener('error', () => {
         document.getElementById('audioStatus').style.display = 'block';
     });
 
-    // ===== TEXT INPUTS: Q1–10, 31–40 =====
+    // Load highlights FIRST
+    loadHighlights();
+
+    // ===== TEXT INPUTS Q1–10, 31–40 =====
     [1,2,3,4,5,6,7,8,9,10,31,32,33,34,35,36,37,38,39,40].forEach(q => {
         const inp = document.getElementById(`q${q}`);
         if (!inp) return;
         const saved = localStorage.getItem(`${STORAGE_KEY}_q${q}`);
-        if (saved) { inp.value = saved; inp.classList.add('filled'); markAnswered(q); }
+        if (saved) { inp.value = saved; inp.classList.add('filled'); }
         inp.addEventListener('input', () => {
             const val = inp.value.trim();
-            localStorage.setItem(`${STORAGE_KEY}_q${q}`, val);
-            val ? (inp.classList.add('filled'), markAnswered(q)) : (inp.classList.remove('filled'), unmarkAnswered(q));
+            val ? inp.classList.add('filled') : inp.classList.remove('filled');
+            saveAnswer(q, val);
         });
     });
 
-    // ===== RADIO: Q11–15 =====
+    // ===== RADIO Q11–15 =====
     [11,12,13,14,15].forEach(q => {
         const saved = localStorage.getItem(`${STORAGE_KEY}_q${q}`);
         if (saved) {
-            const inp = document.querySelector(`input[name=q${q}][value="${saved}"]`);
-            if (inp) { inp.checked = true; inp.closest('.mcq-option').classList.add('checked'); markAnswered(q); }
+            const inp = document.querySelector(`input[name="q${q}"][value="${saved}"]`);
+            if (inp) { inp.checked = true; inp.closest('.mcq-option').classList.add('checked'); }
         }
-        document.querySelectorAll(`input[name=q${q}]`).forEach(r => {
+        document.querySelectorAll(`input[name="q${q}"]`).forEach(r => {
             r.addEventListener('change', () => {
-                localStorage.setItem(`${STORAGE_KEY}_q${q}`, r.value);
-                document.querySelectorAll(`input[name=q${q}]`).forEach(x => x.closest('.mcq-option').classList.remove('checked'));
+                document.querySelectorAll(`input[name="q${q}"]`).forEach(x => x.closest('.mcq-option').classList.remove('checked'));
                 r.closest('.mcq-option').classList.add('checked');
-                markAnswered(q);
+                saveAnswer(q, r.value);
             });
         });
     });
 
-    // ===== CHECKBOX: Q21,22,23,24 =====
+    // ===== CHECKBOX Q21–24 =====
     [21,22,23,24].forEach(q => {
         const saved = localStorage.getItem(`${STORAGE_KEY}_q${q}`);
         if (saved) {
             saved.split(',').forEach(v => {
-                const inp = document.querySelector(`input[name=q${q}][value="${v}"]`);
+                const inp = document.querySelector(`input[name="q${q}"][value="${v}"]`);
                 if (inp) inp.checked = true;
             });
-            if (saved) markAnswered(q);
         }
-        document.querySelectorAll(`input[name=q${q}]`).forEach(c => {
-            c.addEventListener('change', () => saveCheckboxGroup([q]));
+        document.querySelectorAll(`input[name="q${q}"]`).forEach(cb => {
+            cb.addEventListener('change', () => {
+                const vals = Array.from(document.querySelectorAll(`input[name="q${q}"]:checked`)).map(c => c.value);
+                saveAnswer(q, vals.join(','));
+            });
         });
     });
 
-    // ===== SELECT/DROPDOWN: Q16–20, 25–30 =====
+    // ===== SELECT Q16–20, 25–30 =====
     [16,17,18,19,20,25,26,27,28,29,30].forEach(q => {
         const sel = document.getElementById(`q${q}`);
         if (!sel) return;
         const saved = localStorage.getItem(`${STORAGE_KEY}_q${q}`);
-        if (saved) { sel.value = saved; markAnswered(q); }
-        sel.addEventListener('change', () => {
-            const val = sel.value;
-            localStorage.setItem(`${STORAGE_KEY}_q${q}`, val);
-            val ? markAnswered(q) : unmarkAnswered(q);
-        });
+        if (saved) sel.value = saved;
+        sel.addEventListener('change', () => saveAnswer(q, sel.value));
     });
+
+    // Final status sync
+    updateStatus();
 });
 </script>
 </body>
