@@ -345,6 +345,21 @@
         .back-main-btn:hover {
             background-color: #4b5563;
         }
+        .next-btn {
+            background-color: #10b981;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 4px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .next-btn:hover {
+            background-color: #059669;
+        }
     </style>
 </head>
 <body>
@@ -386,7 +401,6 @@
             </div>
             <div class="notes-block">
                 <div class="notes-title">Hinchingbrooke Country Park</div>
-
                 <p style="font-weight:bold; margin:10px 0;">The park</p>
                 <div class="question-line">
                     <span>Area:</span>
@@ -405,7 +419,6 @@
                 <div class="question-line">
                     <span>Wildlife includes birds, insects and animals</span>
                 </div>
-
                 <p style="font-weight:bold; margin:20px 0 10px;">Subjects studied in educational visits include</p>
                 <div class="question-line">
                     <span>Science: Children look at</span>
@@ -433,7 +446,6 @@
                     <input type="text" class="input-field" id="q6" placeholder="Answer">
                     <span>with natural materials, and experiment with rhythm and speed.</span>
                 </div>
-
                 <p style="font-weight:bold; margin:20px 0 10px;">Benefits of outdoor educational visits</p>
                 <div class="question-line">
                     <span>They give children a feeling of</span>
@@ -447,7 +459,6 @@
                     <input type="text" class="input-field" id="q8" placeholder="Answer">
                     <span>and gain self-confidence.</span>
                 </div>
-
                 <p style="font-weight:bold; margin:20px 0 10px;">Practical issues</p>
                 <div class="question-line">
                     <span>Cost per child: £</span>
@@ -470,7 +481,6 @@
             </div>
             <div class="mcq-block">
                 <p style="font-weight:bold; font-size:18px; text-align:center; margin-bottom:20px; color:#1f3a5f;">Stanthorpe Twinning Association</p>
-
                 <p style="font-weight:bold; margin-bottom:8px;">11 During the visit to Malatte, in France, members especially enjoyed</p>
                 <div class="mcq-option" data-q="11" data-val="A">
                     <input type="radio" name="q11" id="q11a" value="A">
@@ -705,7 +715,6 @@
             <div class="notes-block">
                 <div class="notes-title">Céide Fields</div>
                 <p style="font-weight:bold; margin-bottom:10px;">an important Neolithic archaeological site in the northwest of Ireland</p>
-
                 <p style="font-weight:bold; margin:15px 0 8px;">Discovery</p>
                 <div class="question-line">
                     <span>In the 1930s, a local teacher realised that stones beneath the bog surface were once</span>
@@ -732,7 +741,6 @@
                     <span class="q-number">34.</span>
                     <input type="text" class="input-field" id="q34" placeholder="Answer">
                 </div>
-
                 <p style="font-weight:bold; margin:20px 0 8px;">Neolithic farmers</p>
                 <div class="question-line">
                     <span>Houses were</span>
@@ -759,7 +767,6 @@
                     <span class="q-number">38.</span>
                     <input type="text" class="input-field" id="q38" placeholder="Answer">
                 </div>
-
                 <p style="font-weight:bold; margin:20px 0 8px;">Reasons for the decline in farming</p>
                 <div class="question-line">
                     <span>— a decline in</span>
@@ -825,85 +832,105 @@
                 <div class="q-indicator current" data-q="40">40</div>
             </div>
 
-            <button class="clear-btn" onclick="clearAll()">Clear All Answers, Highlights & Notes</button>
+            <button class="clear-btn" onclick="clearAll()">🗑️ Clear All Answers, Highlights & Notes</button>
 
             <div class="nav-container">
                 <a href="index.html" class="back-main-btn">← Home</a>
-                <div></div>
+                <a href="reading-cambridge19-test1.html" class="next-btn">Next: Reading →</a>
             </div>
         </div>
     </div>
 
-    <script>
-        const LISTENING_STORAGE_KEY = 'Listening_Cambridge19_Test1';
+<script>
+// ===== STORAGE KEY — consistent across all pages =====
+const LISTENING_STORAGE_KEY = 'Cambridge19_Test1_Listening';
 
-        document.addEventListener('DOMContentLoaded', function() {
-            // Audio error detection
-            const player = document.getElementById('audioPlayer');
-            const status = document.getElementById('audioStatus');
-            player.addEventListener('error', () => {
-                status.style.display = 'block';
-            });
+// ===== GLOBAL VARS FOR HIGHLIGHT =====
+let currentRange = null;
+let lastNoteId = 0;
 
-            // ===== TEXT INPUTS (Q1–Q10, Q31–Q40) =====
-            const textInputs = [1,2,3,4,5,6,7,8,9,10,31,32,33,34,35,36,37,38,39,40];
-            textInputs.forEach(q => {
-                const field = document.getElementById('q' + q);
-                if (!field) return;
-                // Load saved
-                const saved = localStorage.getItem(LISTENING_STORAGE_KEY + '_q' + q);
-                if (saved) {
-                    field.value = saved;
-                    field.classList.add('filled');
-                    markAnswered(q);
-                }
-                // Auto-save
-                field.addEventListener('input', function() {
-                    const val = this.value.trim();
-                    localStorage.setItem(LISTENING_STORAGE_KEY + '_q' + q, val);
-                    if (val) {
-                        this.classList.add('filled');
-                        markAnswered(q);
-                    } else {
-                        this.classList.remove('filled');
-                        unmarkAnswered(q);
-                    }
-                });
-            });
+// ===== MARK ANSWERED — turns indicator green =====
+function markAnswered(qNum) {
+    const indicator = document.querySelector(`.q-indicator[data-q="${qNum}"]`);
+    if (indicator) {
+        indicator.classList.remove('current');
+        indicator.classList.add('answered');
+    }
+}
 
-            // ===== RADIO MCQ (Q11–Q15) =====
-            const radioQs = [11,12,13,14,15];
-            radioQs.forEach(q => {
-                const saved = localStorage.getItem(LISTENING_STORAGE_KEY + '_q' + q);
-                if (saved) {
-                    const input = document.querySelector(`input[name="q${q}"][value="${saved}"]`);
-                    if (input) {
-                        input.checked = true;
-                        input.closest('.mcq-option').classList.add('checked');
-                        markAnswered(q);
-                    }
-                }
-                document.querySelectorAll(`input[name="q${q}"]`).forEach(radio => {
-                    radio.addEventListener('change', function() {
-                        localStorage.setItem(LISTENING_STORAGE_KEY + '_q' + q, this.value);
-                        document.querySelectorAll(`input[name="q${q}"]`).forEach(r => r.closest('.mcq-option').classList.remove('checked'));
-                        this.closest('.mcq-option').classList.add('checked');
-                        markAnswered(q);
-                    });
-                });
-            });
+// ===== UNMARK ANSWERED — removes green =====
+function unmarkAnswered(qNum) {
+    const indicator = document.querySelector(`.q-indicator[data-q="${qNum}"]`);
+    if (indicator) {
+        indicator.classList.remove('answered');
+        indicator.classList.add('current');
+    }
+}
 
-            // ===== CHECKBOX MCQ (Q21–Q24) =====
-            const checkQs = [21,22,23,24];
-            checkQs.forEach(q => {
-                const saved = localStorage.getItem(LISTENING_STORAGE_KEY + '_q' + q);
-                if (saved) {
-                    const vals = saved.split(',');
-                    vals.forEach(v => {
-                        const input = document.querySelector(`input[name="q${q}"][value="${v}"]`);
-                        if (input) {
-                            input.checked = true;
-                            updateCheckboxDisplay(q);
-                        }
-                    });
-                    if (saved) markAn
+// ===== UPDATE CHECKBOX DISPLAY =====
+function updateCheckboxDisplay(qNum) {
+    const boxes = document.querySelectorAll(`input[name="q${qNum}"]:checked`);
+    const vals = Array.from(boxes).map(b => b.value);
+    const ansSpan = document.getElementById(`ans${qNum}`);
+    if (ansSpan) ansSpan.textContent = vals.join(', ') || '';
+    return vals;
+}
+
+// ===== CLOSE NOTE FUNCTION =====
+function closeNote(noteId) {
+    const note = document.getElementById(noteId);
+    if (note) note.remove();
+}
+
+// ===== CLEAR ALL =====
+function clearAll() {
+    if (!confirm('⚠️ Clear ALL answers, highlights & notes? This cannot be undone.')) return;
+    
+    // Clear storage
+    for (let q = 1; q <= 40; q++) {
+        localStorage.removeItem(`${LISTENING_STORAGE_KEY}_q${q}`);
+    }
+    
+    // Clear text inputs
+    document.querySelectorAll('.input-field').forEach(f => {
+        f.value = '';
+        f.classList.remove('filled');
+    });
+    
+    // Clear radios
+    document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+    document.querySelectorAll('.mcq-option').forEach(o => o.classList.remove('checked'));
+    
+    // Clear checkboxes
+    document.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
+    document.getElementById('ans21').textContent = '';
+    document.getElementById('ans22').textContent = '';
+    document.getElementById('ans23').textContent = '';
+    document.getElementById('ans24').textContent = '';
+    
+    // Clear selects
+    document.querySelectorAll('.matching-select').forEach(s => s.selectedIndex = 0);
+    
+    // Reset status indicators
+    document.querySelectorAll('.q-indicator').forEach(ind => {
+        ind.classList.remove('answered');
+        ind.classList.add('current');
+    });
+    
+    // Remove all highlights
+    document.querySelectorAll('.user-highlight').forEach(h => {
+        const parent = h.parentNode;
+        parent.replaceChild(document.createTextNode(h.textContent), h);
+        parent.normalize();
+    });
+    
+    // Remove all sticky notes
+    document.querySelectorAll('.sticky-note').forEach(n => n.remove());
+    
+    alert('✅ Cleared!');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Audio error detection
+    const player = document.getElementById('audioPlayer');
+    const status =
