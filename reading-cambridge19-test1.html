@@ -8,13 +8,10 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; }
         html, body { background-color: #ffffff; height: 100%; overflow-y: auto; }
         
-        /* TOP BAR — logo + title only, NO passage buttons */
+        /* TOP BAR — logo centered and bigger */
         .top-bar { 
             background-color: #ffffff; 
-            color: #1f3a5f; 
-            padding: 10px 25px; 
-            font-size: 18px; 
-            font-weight: bold; 
+            padding: 12px 25px; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
@@ -23,22 +20,24 @@
             z-index: 100; 
             border-bottom: 1px solid #e5e5e5;
         }
-        .logo { height: 40px; width: auto; position: absolute; left: 25px; }
-        .top-title { text-align: center; }
+        .logo { 
+            height: 55px;  /* bigger */
+            width: auto; 
+        }
         
         /* MAIN TWO-COLUMN LAYOUT */
-        .main-grid { display: flex; min-height: calc(100vh - 52px - 65px); gap: 2px; }
+        .main-grid { display: flex; min-height: calc(100vh - 70px - 65px); gap: 2px; }
         
-        /* LEFT: PASSAGE PANEL */
+        /* LEFT: PASSAGE PANEL — title moved inside here */
         .passage-pane { 
             width: 50%; 
             background: #ffffff; 
             overflow-y: auto; 
             padding: 25px; 
             border-right: 1px solid #eee; 
-            max-height: calc(100vh - 52px - 65px); 
+            max-height: calc(100vh - 70px - 65px); 
             position: sticky; 
-            top: 52px; 
+            top: 70px; 
         }
         .passage-pane h2 { 
             color: #1f3a5f; 
@@ -46,6 +45,15 @@
             font-size: 20px; 
             padding-bottom: 6px; 
             border-bottom: 1px solid #eee; 
+        }
+        .exam-title {
+            text-align: center;
+            color: #1f3a5f;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #1f3a5f;
         }
         .instruction { 
             background-color: #f9f9f9; 
@@ -60,6 +68,30 @@
         .passage-text p { margin-bottom: 14px; text-align: justify; }
         .passage-section { display: none; }
         .passage-section.active { display: block; }
+
+        /* PASSAGE NAV BUTTONS */
+        .passage-nav {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+        }
+        .passage-btn {
+            padding: 10px 20px;
+            background-color: #1f3a5f;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 15px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .passage-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .passage-btn:hover:not(:disabled) {
+            background-color: #2a4a7a;
+        }
         
         /* RIGHT: QUESTIONS PANEL */
         .questions-pane { 
@@ -67,9 +99,9 @@
             background: #ffffff; 
             overflow-y: auto; 
             padding: 25px; 
-            max-height: calc(100vh - 52px - 65px); 
+            max-height: calc(100vh - 70px - 65px); 
             position: sticky; 
-            top: 52px; 
+            top: 70px; 
         }
         .questions-block { margin-bottom: 35px; display: none; }
         .questions-block.active { display: block; }
@@ -170,7 +202,7 @@
             outline: none; 
         }
         
-        /* BOTTOM NAVIGATION — unchanged */
+        /* BOTTOM NAVIGATION */
         .bottom-nav { 
             height: 65px; 
             background: #ffffff; 
@@ -245,16 +277,23 @@
         <textarea class="note-textarea" id="noteText" placeholder="Type your note here…"></textarea>
     </div>
     
-    <!-- TOP BAR — logo + title only, NO passage buttons -->
+    <!-- TOP BAR — logo centered and bigger -->
     <div class="top-bar">
         <img src="ielts-logo.png" alt="IELTS Logo" class="logo">
-        <span class="top-title">READING — CAMBRIDGE 19 TEST 1</span>
     </div>
     
     <!-- MAIN CONTENT -->
     <div class="main-grid">
-        <!-- LEFT PANEL: PASSAGE -->
+        <!-- LEFT PANEL: PASSAGE — title moved inside here -->
         <div class="passage-pane" id="passageArea">
+            <div class="exam-title">READING — CAMBRIDGE 19 TEST 1</div>
+            
+            <!-- Previous / Next Buttons -->
+            <div class="passage-nav">
+                <button class="passage-btn" id="prevBtn" disabled>← Previous Passage</button>
+                <button class="passage-btn" id="nextBtn">Next Passage →</button>
+            </div>
+            
             <div class="passage-section active" id="passage-1">
                 <h2>READING PASSAGE 1</h2>
                 <div class="instruction">You should spend about 20 minutes on Questions 1–13, which are based on Reading Passage 1 below.</div>
@@ -414,7 +453,7 @@
         </div>
     </div>
     
-    <!-- BOTTOM NAVIGATION — exactly as before, no changes -->
+    <!-- BOTTOM NAVIGATION -->
     <div class="bottom-nav">
         <span class="part-label">P1:</span>
         <div class="q-indicator" data-q="1" data-passage="1">1</div>
@@ -465,18 +504,32 @@
 <script>
 const STORAGE_KEY = 'Cambridge19_Test1_Reading';
 const passageId = 'reading-cambridge19-test1';
+let currentPassage = 1;
 let currentRange = null;
 let activeHighlight = null;
 
-// SWITCH PASSAGE — unchanged
+// SWITCH PASSAGE + UPDATE BUTTONS
 function switchPassage(passageNum) {
+    currentPassage = passageNum;
     document.querySelectorAll('.passage-section').forEach(p => p.classList.remove('active'));
     document.getElementById(`passage-${passageNum}`).classList.add('active');
     document.querySelectorAll('.questions-block').forEach(q => q.classList.remove('active'));
     document.getElementById(`questions-${passageNum}`).classList.add('active');
+    
+    // Update Previous/Next buttons
+    document.getElementById('prevBtn').disabled = (passageNum === 1);
+    document.getElementById('nextBtn').disabled = (passageNum === 3);
 }
 
-// STATUS UPDATE — unchanged
+// Passage navigation buttons
+document.getElementById('prevBtn').addEventListener('click', () => {
+    if (currentPassage > 1) switchPassage(currentPassage - 1);
+});
+document.getElementById('nextBtn').addEventListener('click', () => {
+    if (currentPassage < 3) switchPassage(currentPassage + 1);
+});
+
+// STATUS UPDATE
 function updateStatus() {
     for (let q = 1; q <= 40; q++) {
         const btn = document.querySelector(`.q-indicator[data-q="${q}"]`);
@@ -495,7 +548,7 @@ function updateStatus() {
     }
 }
 
-// CLICK QUESTION NUMBER → SWITCH PASSAGE — unchanged
+// CLICK QUESTION NUMBER → SWITCH PASSAGE
 document.querySelectorAll('.q-indicator').forEach(btn => {
     btn.addEventListener('click', () => {
         const passageNum = parseInt(btn.dataset.passage);
@@ -510,7 +563,7 @@ document.querySelectorAll('.q-indicator').forEach(btn => {
     });
 });
 
-// ALL REMAINING SCRIPT — completely unchanged
+// SELECTION VALIDATION
 function isSelectionValid(sel) {
     if (!sel || sel.isCollapsed || !sel.toString().trim()) return false;
     try {
@@ -523,6 +576,7 @@ function isSelectionValid(sel) {
     } catch { return false; }
 }
 
+// HIGHLIGHT SAVE/LOAD
 function saveHighlights() {
     localStorage.setItem(`${passageId}_highlights`, document.getElementById('passageArea').innerHTML);
 }
@@ -531,6 +585,7 @@ function loadHighlights() {
     if (saved) document.getElementById('passageArea').innerHTML = saved;
 }
 
+// DRAGGABLE NOTE
 const noteBox = document.getElementById('noteBox');
 const noteText = document.getElementById('noteText');
 const noteClose = document.getElementById('noteClose');
@@ -558,6 +613,7 @@ document.addEventListener('mousemove', e => {
 });
 document.addEventListener('mouseup', () => { isDraggingNote = false; });
 
+// RIGHT-CLICK MENU
 const contextMenu = document.getElementById('contextMenu');
 document.addEventListener('contextmenu', e => {
     const sel = window.getSelection();
@@ -583,6 +639,7 @@ document.addEventListener('contextmenu', e => {
 });
 document.addEventListener('click', e => { if (!contextMenu.contains(e.target)) contextMenu.style.display = 'none'; });
 
+// MENU ACTIONS
 document.getElementById('menuHighlight').addEventListener('click', () => {
     if (!currentRange) return;
     try {
@@ -629,11 +686,13 @@ document.getElementById('menuRemove').addEventListener('click', () => {
     saveHighlights();
 });
 
+// SAVE ANSWERS
 function saveAnswer(q, val) {
     localStorage.setItem(`${STORAGE_KEY}_q${q}`, val);
     updateStatus();
 }
 
+// CLEAR ALL
 function clearAllData() {
     if (!confirm('⚠️ Are you sure you want to clear ALL answers, highlights, and notes? This cannot be undone.')) return;
     for (let q = 1; q <= 40; q++) {
@@ -650,6 +709,7 @@ function clearAllData() {
 }
 document.getElementById('clearAllBtn').addEventListener('click', clearAllData);
 
+// INIT
 document.addEventListener('DOMContentLoaded', () => {
     loadHighlights();
     document.querySelectorAll('.highlight[data-note]').forEach(hl => {
@@ -663,6 +723,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
+    // Restore answers Q1–7
     for (let q = 1; q <= 7; q++) {
         const saved = localStorage.getItem(`${STORAGE_KEY}_q${q}`);
         if (saved) {
@@ -673,6 +734,7 @@ document.addEventListener('DOMContentLoaded', () => {
             r.addEventListener('change', () => saveAnswer(q, r.value));
         });
     }
+    // Restore answers Q8–13
     for (let q = 8; q <= 13; q++) {
         const inp = document.getElementById(`ans${q}`);
         if (!inp) continue;
