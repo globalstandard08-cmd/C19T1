@@ -36,38 +36,33 @@
         <img src="ielts-logo.png" alt="IELTS Logo" class="logo">
         <img src="flag.jpg" alt="Flag" class="flag">
     </div>
-
     <div class="cover-container">
         <h1>CAMBRIDGE IELTS PRACTICE MATERIALS</h1>
-        <h2>Select Your Test Type</h2>
+        <h2>Select Your Test — Cambridge 19 Test 1</h2>
         <p class="subtitle">Prepare effectively with authentic practice tests based on the official Cambridge IELTS format.</p>
-
         <div class="select-type">
             <label>Choose which version you want to practice:</label>
             <div class="type-buttons">
-                <button class="type-btn" data-link="listening-test4-part1.html">📚 ACADEMIC</button>
-                <button class="type-btn" data-link="listening-test4-part1.html">👥 GENERAL TRAINING</button>
+                <button class="type-btn" data-link="listening-cambridge19-test1.html">📚 ACADEMIC</button>
+                <button class="type-btn" data-link="listening-cambridge19-test1.html">👥 GENERAL TRAINING</button>
             </div>
         </div>
-
         <a id="startBtn" href="#" class="enter-btn">📝 START IELTS MOCK TEST</a>
-        <p class="test-note">You are about to start the IELTS Listening Test.</p>
+        <p class="test-note">You are about to start: <strong>Cambridge 19 — Test 1</strong><br>Complete flow: Listening → Reading → Writing → All Answers Review</p>
     </div>
-
     <div class="disclaimer">
         <h3>Disclaimer</h3>
         <p>No copyright infringement intended. All materials are for personal educational and self‑study purposes only. Original rights belong to Cambridge University Press & Assessment English. This is not an official product.</p>
     </div>
-
     <script>
         const typeBtns = document.querySelectorAll('.type-btn');
         const startBtn = document.getElementById('startBtn');
-
+        
         typeBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 typeBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                startBtn.href = "listening-test4-part1.html";
+                startBtn.href = btn.getAttribute('data-link');
                 startBtn.classList.add('enabled');
             });
         });
