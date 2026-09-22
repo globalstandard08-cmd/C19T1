@@ -5,381 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IELTS Listening - Cambridge 19 Test 1</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
-        }
-        body {
-            background-color: #f4f6f9;
-            padding: 20px;
-            line-height: 1.7;
-            position: relative;
-            -webkit-user-select: text;
-            -moz-user-select: text;
-            -ms-user-select: text;
-            user-select: text;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            overflow: visible;
-            position: relative;
-        }
-        .logo-section {
-            text-align: center;
-            padding: 20px;
-            border-bottom: 1px solid #eee;
-            min-height: 100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .logo-section img {
-            height: 120px;
-            width: auto;
-            object-fit: contain;
-        }
-        .logo-section img:error {
-            display: none;
-        }
-        .logo-section:has(img:error)::after {
-            content: "IELTS Practice";
-            font-size: 22px;
-            font-weight: bold;
-            color: #1f3a5f;
-        }
-        .header-bar {
-            background-color: #1f3a5f;
-            color: white;
-            padding: 15px 25px;
-            font-size: 18px;
-            font-weight: bold;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .audio-player {
-            background: #eef2f7;
-            padding: 18px 25px;
-            margin: 20px;
-            border-radius: 6px;
-            text-align: center;
-        }
-        .audio-player h3 {
-            color: #1f3a5f;
-            margin-bottom: 12px;
-            font-size: 17px;
-        }
-        audio {
-            width: 100%;
-            max-width: 500px;
-        }
-        #audioStatus {
-            display: none;
-            margin-top: 8px;
-            font-size: 14px;
-            color: #b91c1c;
-        }
-        .content {
-            padding: 0 30px 30px;
-            position: relative;
-        }
-        h2 {
-            color: #1f3a5f;
-            margin: 30px 0 15px;
-            font-size: 22px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #eee;
-        }
-        .instruction {
-            background-color: #f8fbfe;
-            border-left: 4px solid #1f3a5f;
-            padding: 15px;
-            margin-bottom: 25px;
-            border-radius: 4px;
-            font-weight: 500;
-        }
-        .notes-block, .mcq-block, .map-block, .matching-block {
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            padding: 25px;
-            margin-bottom: 30px;
-            background-color: #fdfdfd;
-        }
-        .notes-title {
-            font-weight: bold;
-            font-size: 20px;
-            margin-bottom: 25px;
-            text-align: center;
-            color: #1f3a5f;
-        }
-        .question-line {
-            margin-bottom: 18px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-            font-size: 16px;
-        }
-        .q-number {
-            font-weight: bold;
-            min-width: 35px;
-            color: #1f3a5f;
-        }
-        .input-field {
-            width: 220px;
-            padding: 6px 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px;
-            background: white;
-            transition: all 0.2s;
-        }
-        .input-field:focus {
-            outline: none;
-            border-color: #1f3a5f;
-            box-shadow: 0 0 3px rgba(31, 58, 95, 0.3);
-        }
-        .input-field.filled {
-            background-color: #e6f0ff;
-            border-color: #1f3a5f;
-        }
-        /* MCQ Styles */
-        .mcq-option {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            margin: 10px 0;
-            padding: 6px 0;
-            font-size: 16px;
-        }
-        .mcq-option input[type="radio"],
-        .mcq-option input[type="checkbox"] {
-            margin-top: 3px;
-            cursor: pointer;
-        }
-        .mcq-option.checked label {
-            font-weight: 500;
-        }
-        /* Map & Matching */
-        .map-container {
-            text-align: center;
-            margin: 15px 0;
-        }
-        .map-placeholder {
-            border: 1px solid #999;
-            background: #fff;
-            padding: 20px;
-            min-height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #666;
-        }
-        .matching-table {
-            width: 100%;
-            margin: 15px 0;
-        }
-        .matching-table td {
-            padding: 8px 0;
-            font-size: 16px;
-            border-bottom: 1px solid #eee;
-        }
-        .matching-select {
-            padding: 4px 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 15px;
-        }
-        /* Highlight */
-        .user-highlight {
-            background-color: #ffd700;
-            padding: 2px 4px;
-            border-radius: 2px;
-            cursor: pointer;
-            display: inline;
-            color: #000;
-        }
-        /* Context Menu */
-        .context-menu {
-            position: absolute;
-            background: #fff;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            z-index: 9999;
-            display: none;
-            min-width: 160px;
-        }
-        .context-menu div {
-            padding: 10px 14px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        .context-menu div:hover {
-            background: #f0f0f0;
-        }
-        /* Sticky Notes */
-        .sticky-note {
-            position: absolute;
-            width: 170px;
-            min-height: 70px;
-            background: #fff9c4;
-            border: 1px solid #fbc02d;
-            border-radius: 4px;
-            padding: 8px;
-            box-shadow: 2px 2px 6px rgba(0,0,0,0.15);
-            z-index: 9998;
-            font-size: 13px;
-        }
-        .note-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: bold;
-            margin-bottom: 5px;
-            font-size: 12px;
-            color: #f57f17;
-        }
-        .note-close {
-            cursor: pointer;
-            font-weight: bold;
-            color: #f57f17;
-        }
-        .note-textarea {
-            width: 100%;
-            height: 50px;
-            border: none;
-            background: transparent;
-            resize: none;
-            outline: none;
-            font-family: inherit;
-            font-size: 13px;
-        }
-        /* Status Bar */
-        .question-status {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 6px;
-            margin: 30px 0;
-            padding: 12px 15px;
-            background: #f0f2f5;
-            border-radius: 4px;
-            border: 1px solid #d0d5dd;
-            font-size: 12px;
-        }
-        .part-label {
-            font-size: 11px;
-            font-weight: bold;
-            color: #444;
-            margin-right: 4px;
-            margin-left: 8px;
-        }
-        .part-separator {
-            width: 12px;
-            height: 24px;
-            flex-shrink: 0;
-        }
-        .q-indicator {
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: normal;
-            border-radius: 2px;
-            border: 1px solid #d1d5db;
-            background: #e5e7eb;
-            color: #333;
-        }
-        .q-indicator.current {
-            background: #d9dce1;
-            color: #000;
-            border-color: #b0b4b9;
-        }
-        .q-indicator.answered {
-            background: #10b981;
-            color: white;
-            border-color: #10b981;
-        }
-        .clear-btn {
-            background-color: #dc2626;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            margin-top: 10px;
-        }
-        .clear-btn:hover {
-            background-color: #b91c1c;
-        }
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 25px;
-            padding-top: 15px;
-            border-top: 1px solid #eee;
-        }
-        .back-main-btn {
-            background-color: #6b7280;
-            color: white;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 4px;
-            font-size: 15px;
-            font-weight: 500;
-            cursor: pointer;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-        .back-main-btn:hover {
-            background-color: #4b5563;
-        }
-        .next-btn {
-            background-color: #10b981;
-            color: white;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 4px;
-            font-size: 15px;
-            font-weight: 500;
-            cursor: pointer;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-        .next-btn:hover {
-            background-color: #059669;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; }
+        body { background-color: #f4f6f9; padding: 20px; line-height: 1.7; position: relative; user-select: text; }
+        .container { max-width: 900px; margin: 0 auto; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: visible; position: relative; }
+        .logo-section { text-align: center; padding: 20px; border-bottom: 1px solid #eee; min-height: 100px; display: flex; align-items: center; justify-content: center; }
+        .logo-section img { height: 120px; width: auto; object-fit: contain; }
+        .header-bar { background-color: #1f3a5f; color: white; padding: 15px 25px; font-size: 18px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+        .audio-player { background: #eef2f7; padding: 18px 25px; margin: 20px; border-radius: 6px; text-align: center; }
+        .audio-player h3 { color: #1f3a5f; margin-bottom: 12px; font-size: 17px; }
+        audio { width: 100%; max-width: 500px; }
+        #audioStatus { display: none; margin-top: 8px; font-size: 14px; color: #b91c1c; }
+        .content { padding: 0 30px 30px; position: relative; }
+        h2 { color: #1f3a5f; margin: 30px 0 15px; font-size: 22px; padding-bottom: 8px; border-bottom: 1px solid #eee; }
+        .instruction { background-color: #f8fbfe; border-left: 4px solid #1f3a5f; padding: 15px; margin-bottom: 25px; border-radius: 4px; font-weight: 500; }
+        .notes-block, .mcq-block, .map-block, .matching-block { border: 1px solid #ccc; border-radius: 6px; padding: 25px; margin-bottom: 30px; background-color: #fdfdfd; }
+        .notes-title { font-weight: bold; font-size: 20px; margin-bottom: 25px; text-align: center; color: #1f3a5f; }
+        .question-line { margin-bottom: 18px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 16px; }
+        .q-number { font-weight: bold; min-width: 35px; color: #1f3a5f; }
+        .input-field { width: 220px; padding: 6px 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; background: white; transition: all 0.2s; }
+        .input-field:focus { outline: none; border-color: #1f3a5f; box-shadow: 0 0 3px rgba(31,58,95,0.3); }
+        .input-field.filled { background-color: #e6f0ff; border-color: #1f3a5f; }
+        .mcq-option { display: flex; align-items: flex-start; gap: 10px; margin: 10px 0; padding: 6px 0; font-size: 16px; }
+        .mcq-option input { margin-top: 3px; cursor: pointer; }
+        .mcq-option.checked label { font-weight: 500; }
+        .map-placeholder { border: 1px solid #999; background: #fff; padding: 20px; min-height: 300px; display: flex; align-items: center; justify-content: center; color: #666; }
+        .matching-table { width: 100%; margin: 15px 0; }
+        .matching-table td { padding: 8px 0; font-size: 16px; border-bottom: 1px solid #eee; }
+        .matching-select { padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 15px; }
+        
+        /* ✅ HIGHLIGHT STYLES */
+        .user-highlight { background-color: #ffd700; padding: 2px 4px; border-radius: 2px; cursor: pointer; display: inline; color: #000; }
+        .context-menu { position: absolute; background: #fff; border: 1px solid #ccc; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 9999; display: none; min-width: 160px; }
+        .context-menu div { padding: 10px 14px; cursor: pointer; font-size: 14px; }
+        .context-menu div:hover { background: #f0f0f0; }
+        
+        /* ✅ STATUS BAR — NAVIGATION INDICATORS */
+        .question-status { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 30px 0; padding: 12px 15px; background: #f0f2f5; border-radius: 4px; border: 1px solid #d0d5dd; }
+        .part-label { font-size: 11px; font-weight: bold; color: #444; margin: 0 4px 0 8px; }
+        .part-separator { width: 12px; height: 24px; flex-shrink: 0; }
+        .q-indicator { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 2px; border: 1px solid #d1d5db; background: #e5e7eb; color: #333; }
+        .q-indicator.current { background: #d9dce1; color: #000; border-color: #b0b4b9; }
+        .q-indicator.answered { background: #10b981; color: white; border-color: #10b981; }
+        
+        .clear-btn { background-color: #dc2626; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 14px; margin-top: 10px; }
+        .clear-btn:hover { background-color: #b91c1c; }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; margin-top: 25px; padding-top: 15px; border-top: 1px solid #eee; }
+        .back-main-btn { background-color: #6b7280; color: white; border: none; padding: 10px 18px; border-radius: 4px; font-size: 15px; text-decoration: none; }
+        .back-main-btn:hover { background-color: #4b5563; }
+        .next-btn { background-color: #10b981; color: white; border: none; padding: 10px 18px; border-radius: 4px; font-size: 15px; text-decoration: none; }
+        .next-btn:hover { background-color: #059669; }
     </style>
 </head>
 <body>
-    <!-- Right-click Context Menu -->
+    <!-- Right-click Menu -->
     <div class="context-menu" id="contextMenu">
         <div id="menuHighlight">✅ Highlight</div>
         <div id="menuRemove">❌ Remove Highlight</div>
-        <div id="menuNote">📝 Add Note</div>
     </div>
 
     <div class="container">
-        <div class="logo-section">
-            <img src="ielts-logo.png" alt="IELTS Logo">
-        </div>
+        <div class="logo-section"><img src="ielts-logo.png" alt="IELTS Logo"></div>
         <div class="header-bar">
             <span>LISTENING — CAMBRIDGE 19 TEST 1</span>
             <span style="font-size:15px; opacity:0.9;">Exam Mode</span>
         </div>
 
-        <!-- Audio Player -->
         <div class="audio-player">
             <h3>Play Full Recording</h3>
             <audio controls preload="auto" id="audioPlayer">
@@ -392,545 +82,318 @@
 
         <div class="content" id="highlightArea">
 
-            <!-- ========== PART 1 ========== -->
-            <h2>PART 1 — Questions 1–10</h2>
-            <div class="instruction">
-                <strong>Questions 1–10</strong><br>
-                Complete the notes below.<br>
-                Write <strong>ONE WORD AND/OR A NUMBER</strong> for each answer.
-            </div>
-            <div class="notes-block">
-                <div class="notes-title">Hinchingbrooke Country Park</div>
-                <p style="font-weight:bold; margin:10px 0;">The park</p>
-                <div class="question-line">
-                    <span>Area:</span>
-                    <span class="q-number">1.</span>
-                    <input type="text" class="input-field" id="q1" placeholder="Answer">
-                    <span>hectares</span>
-                </div>
-                <div class="question-line">
-                    <span>Habitats: wetland, grassland and woodland</span>
-                </div>
-                <div class="question-line">
-                    <span>Wetland: lakes, ponds and a</span>
-                    <span class="q-number">2.</span>
-                    <input type="text" class="input-field" id="q2" placeholder="Answer">
-                </div>
-                <div class="question-line">
-                    <span>Wildlife includes birds, insects and animals</span>
-                </div>
-                <p style="font-weight:bold; margin:20px 0 10px;">Subjects studied in educational visits include</p>
-                <div class="question-line">
-                    <span>Science: Children look at</span>
-                    <span class="q-number">3.</span>
-                    <input type="text" class="input-field" id="q3" placeholder="Answer">
-                    <span>about plants, etc.</span>
-                </div>
-                <div class="question-line">
-                    <span>Geography: includes learning to use a</span>
-                    <span class="q-number">4.</span>
-                    <input type="text" class="input-field" id="q4" placeholder="Answer">
-                    <span>and compass</span>
-                </div>
-                <div class="question-line">
-                    <span>History: changes in land use</span>
-                </div>
-                <div class="question-line">
-                    <span>Leisure and tourism: mostly concentrates on the park's</span>
-                    <span class="q-number">5.</span>
-                    <input type="text" class="input-field" id="q5" placeholder="Answer">
-                </div>
-                <div class="question-line">
-                    <span>Music: Children make</span>
-                    <span class="q-number">6.</span>
-                    <input type="text" class="input-field" id="q6" placeholder="Answer">
-                    <span>with natural materials, and experiment with rhythm and speed.</span>
-                </div>
-                <p style="font-weight:bold; margin:20px 0 10px;">Benefits of outdoor educational visits</p>
-                <div class="question-line">
-                    <span>They give children a feeling of</span>
-                    <span class="q-number">7.</span>
-                    <input type="text" class="input-field" id="q7" placeholder="Answer">
-                    <span>that they may not have elsewhere.</span>
-                </div>
-                <div class="question-line">
-                    <span>Children learn new</span>
-                    <span class="q-number">8.</span>
-                    <input type="text" class="input-field" id="q8" placeholder="Answer">
-                    <span>and gain self-confidence.</span>
-                </div>
-                <p style="font-weight:bold; margin:20px 0 10px;">Practical issues</p>
-                <div class="question-line">
-                    <span>Cost per child: £</span>
-                    <span class="q-number">9.</span>
-                    <input type="text" class="input-field" id="q9" placeholder="Answer">
-                </div>
-                <div class="question-line">
-                    <span>Adults, such as</span>
-                    <span class="q-number">10.</span>
-                    <input type="text" class="input-field" id="q10" placeholder="Answer">
-                    <span>, free</span>
-                </div>
-            </div>
+<!-- ========== PART 1 ========== -->
+<h2>PART 1 — Questions 1–10</h2>
+<div class="instruction"><strong>Questions 1–10</strong><br>Complete the notes below.<br>Write <strong>ONE WORD AND/OR A NUMBER</strong> for each answer.</div>
+<div class="notes-block">
+    <div class="notes-title">Hinchingbrooke Country Park</div>
+    <p style="font-weight:bold; margin:10px 0;">The park</p>
+    <div class="question-line"><span>Area:</span><span class="q-number">1.</span><input type="text" class="input-field" id="q1" placeholder="Answer"><span>hectares</span></div>
+    <div class="question-line"><span>Habitats: wetland, grassland and woodland</span></div>
+    <div class="question-line"><span>Wetland: lakes, ponds and a</span><span class="q-number">2.</span><input type="text" class="input-field" id="q2" placeholder="Answer"></div>
+    <div class="question-line"><span>Wildlife includes birds, insects and animals</span></div>
+    <p style="font-weight:bold; margin:20px 0 10px;">Subjects studied in educational visits include</p>
+    <div class="question-line"><span>Science: Children look at</span><span class="q-number">3.</span><input type="text" class="input-field" id="q3" placeholder="Answer"><span>about plants, etc.</span></div>
+    <div class="question-line"><span>Geography: includes learning to use a</span><span class="q-number">4.</span><input type="text" class="input-field" id="q4" placeholder="Answer"><span>and compass</span></div>
+    <div class="question-line"><span>History: changes in land use</span></div>
+    <div class="question-line"><span>Leisure and tourism: mostly concentrates on the park's</span><span class="q-number">5.</span><input type="text" class="input-field" id="q5" placeholder="Answer"></div>
+    <div class="question-line"><span>Music: Children make</span><span class="q-number">6.</span><input type="text" class="input-field" id="q6" placeholder="Answer"><span>with natural materials, and experiment with rhythm and speed.</span></div>
+    <p style="font-weight:bold; margin:20px 0 10px;">Benefits of outdoor educational visits</p>
+    <div class="question-line"><span>They give children a feeling of</span><span class="q-number">7.</span><input type="text" class="input-field" id="q7" placeholder="Answer"><span>that they may not have elsewhere.</span></div>
+    <div class="question-line"><span>Children learn new</span><span class="q-number">8.</span><input type="text" class="input-field" id="q8" placeholder="Answer"><span>and gain self-confidence.</span></div>
+    <p style="font-weight:bold; margin:20px 0 10px;">Practical issues</p>
+    <div class="question-line"><span>Cost per child: £</span><span class="q-number">9.</span><input type="text" class="input-field" id="q9" placeholder="Answer"></div>
+    <div class="question-line"><span>Adults, such as</span><span class="q-number">10.</span><input type="text" class="input-field" id="q10" placeholder="Answer"><span>, free</span></div>
+</div>
 
-            <!-- ========== PART 2 ========== -->
-            <h2>PART 2 — Questions 11–20</h2>
-            <div class="instruction">
-                <strong>Questions 11–15</strong><br>
-                Choose the correct letter, <strong>A, B or C</strong>.
-            </div>
-            <div class="mcq-block">
-                <p style="font-weight:bold; font-size:18px; text-align:center; margin-bottom:20px; color:#1f3a5f;">Stanthorpe Twinning Association</p>
-                <p style="font-weight:bold; margin-bottom:8px;">11 During the visit to Malatte, in France, members especially enjoyed</p>
-                <div class="mcq-option" data-q="11" data-val="A">
-                    <input type="radio" name="q11" id="q11a" value="A">
-                    <label for="q11a">A going to a theme park.</label>
-                </div>
-                <div class="mcq-option" data-q="11" data-val="B">
-                    <input type="radio" name="q11" id="q11b" value="B">
-                    <label for="q11b">B experiencing a river trip.</label>
-                </div>
-                <div class="mcq-option" data-q="11" data-val="C">
-                    <input type="radio" name="q11" id="q11c" value="C">
-                    <label for="q11c">C visiting a cheese factory.</label>
-                </div>
+<!-- ========== PART 2 ========== -->
+<h2>PART 2 — Questions 11–20</h2>
+<div class="instruction"><strong>Questions 11–15</strong><br>Choose the correct letter, <strong>A, B or C</strong>.</div>
+<div class="mcq-block">
+    <p style="font-weight:bold; margin-bottom:8px;">11 During the visit to Malatte, in France, members especially enjoyed</p>
+    <div class="mcq-option" data-q="11" data-val="A"><input type="radio" name="q11" id="q11a" value="A"><label for="q11a">A going to a theme park.</label></div>
+    <div class="mcq-option" data-q="11" data-val="B"><input type="radio" name="q11" id="q11b" value="B"><label for="q11b">B experiencing a river trip.</label></div>
+    <div class="mcq-option" data-q="11" data-val="C"><input type="radio" name="q11" id="q11c" value="C"><label for="q11c">C visiting a cheese factory.</label></div>
 
-                <p style="font-weight:bold; margin:20px 0 8px;">12 What will happen in Stanthorpe to mark the 25th anniversary of the Twinning Association?</p>
-                <div class="mcq-option" data-q="12" data-val="A">
-                    <input type="radio" name="q12" id="q12a" value="A">
-                    <label for="q12a">A A tree will be planted.</label>
-                </div>
-                <div class="mcq-option" data-q="12" data-val="B">
-                    <input type="radio" name="q12" id="q12b" value="B">
-                    <label for="q12b">B A garden seat will be bought.</label>
-                </div>
-                <div class="mcq-option" data-q="12" data-val="C">
-                    <input type="radio" name="q12" id="q12c" value="C">
-                    <label for="q12c">C A footbridge will be built.</label>
-                </div>
+    <p style="font-weight:bold; margin:20px 0 8px;">12 What will happen in Stanthorpe to mark the 25th anniversary?</p>
+    <div class="mcq-option" data-q="12" data-val="A"><input type="radio" name="q12" id="q12a" value="A"><label for="q12a">A A tree will be planted.</label></div>
+    <div class="mcq-option" data-q="12" data-val="B"><input type="radio" name="q12" id="q12b" value="B"><label for="q12b">B A garden seat will be bought.</label></div>
+    <div class="mcq-option" data-q="12" data-val="C"><input type="radio" name="q12" id="q12c" value="C"><label for="q12c">C A footbridge will be built.</label></div>
 
-                <p style="font-weight:bold; margin:20px 0 8px;">13 Which event raised most funds this year?</p>
-                <div class="mcq-option" data-q="13" data-val="A">
-                    <input type="radio" name="q13" id="q13a" value="A">
-                    <label for="q13a">A the film show</label>
-                </div>
-                <div class="mcq-option" data-q="13" data-val="B">
-                    <input type="radio" name="q13" id="q13b" value="B">
-                    <label for="q13b">B the pancake evening</label>
-                </div>
-                <div class="mcq-option" data-q="13" data-val="C">
-                    <input type="radio" name="q13" id="q13c" value="C">
-                    <label for="q13c">C the cookery demonstration</label>
-                </div>
+    <p style="font-weight:bold; margin:20px 0 8px;">13 Which event raised most funds this year?</p>
+    <div class="mcq-option" data-q="13" data-val="A"><input type="radio" name="q13" id="q13a" value="A"><label for="q13a">A the film show</label></div>
+    <div class="mcq-option" data-q="13" data-val="B"><input type="radio" name="q13" id="q13b" value="B"><label for="q13b">B the pancake evening</label></div>
+    <div class="mcq-option" data-q="13" data-val="C"><input type="radio" name="q13" id="q13c" value="C"><label for="q13c">C the cookery demonstration</label></div>
 
-                <p style="font-weight:bold; margin:20px 0 8px;">14 For the first evening with the French visitors host families are advised to</p>
-                <div class="mcq-option" data-q="14" data-val="A">
-                    <input type="radio" name="q14" id="q14a" value="A">
-                    <label for="q14a">A take them for a walk round the town.</label>
-                </div>
-                <div class="mcq-option" data-q="14" data-val="B">
-                    <input type="radio" name="q14" id="q14b" value="B">
-                    <label for="q14b">B go to a local restaurant.</label>
-                </div>
-                <div class="mcq-option" data-q="14" data-val="C">
-                    <input type="radio" name="q14" id="q14c" value="C">
-                    <label for="q14c">C have a meal at home.</label>
-                </div>
+    <p style="font-weight:bold; margin:20px 0 8px;">14 For the first evening host families are advised to</p>
+    <div class="mcq-option" data-q="14" data-val="A"><input type="radio" name="q14" id="q14a" value="A"><label for="q14a">A take them for a walk round the town.</label></div>
+    <div class="mcq-option" data-q="14" data-val="B"><input type="radio" name="q14" id="q14b" value="B"><label for="q14b">B go to a local restaurant.</label></div>
+    <div class="mcq-option" data-q="14" data-val="C"><input type="radio" name="q14" id="q14c" value="C"><label for="q14c">C have a meal at home.</label></div>
 
-                <p style="font-weight:bold; margin:20px 0 8px;">15 On Saturday evening there will be the chance to</p>
-                <div class="mcq-option" data-q="15" data-val="A">
-                    <input type="radio" name="q15" id="q15a" value="A">
-                    <label for="q15a">A listen to a concert.</label>
-                </div>
-                <div class="mcq-option" data-q="15" data-val="B">
-                    <input type="radio" name="q15" id="q15b" value="B">
-                    <label for="q15b">B watch a match.</label>
-                </div>
-                <div class="mcq-option" data-q="15" data-val="C">
-                    <input type="radio" name="q15" id="q15c" value="C">
-                    <label for="q15c">C take part in a competition.</label>
-                </div>
-            </div>
+    <p style="font-weight:bold; margin:20px 0 8px;">15 On Saturday evening there will be the chance to</p>
+    <div class="mcq-option" data-q="15" data-val="A"><input type="radio" name="q15" id="q15a" value="A"><label for="q15a">A listen to a concert.</label></div>
+    <div class="mcq-option" data-q="15" data-val="B"><input type="radio" name="q15" id="q15b" value="B"><label for="q15b">B watch a match.</label></div>
+    <div class="mcq-option" data-q="15" data-val="C"><input type="radio" name="q15" id="q15c" value="C"><label for="q15c">C take part in a competition.</label></div>
+</div>
 
-            <div class="instruction">
-                <strong>Questions 16–20</strong><br>
-                Label the map below.<br>
-                Write the correct letter, <strong>A–H</strong>, next to Questions 16–20.
-            </div>
-            <div class="map-block">
-                <p style="font-weight:bold; font-size:18px; text-align:center; margin-bottom:15px; color:#1f3a5f;">Farley House</p>
-                <div class="map-placeholder">
-                    [MAP: Farley House — A (top path), B (west path), C (north entrance), D (building), E (west entrance), F (south-east path), G (old stables), H (south courtyard)]
-                </div>
-                <table class="matching-table">
-                    <tr>
-                        <td class="q-number">16</td>
-                        <td>Farm shop</td>
-                        <td><select class="matching-select" id="q16" data-q="16"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option></select></td>
-                    </tr>
-                    <tr>
-                        <td class="q-number">17</td>
-                        <td>Disabled entry</td>
-                        <td><select class="matching-select" id="q17" data-q="17"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option></select></td>
-                    </tr>
-                    <tr>
-                        <td class="q-number">18</td>
-                        <td>Adventure playground</td>
-                        <td><select class="matching-select" id="q18" data-q="18"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option></select></td>
-                    </tr>
-                    <tr>
-                        <td class="q-number">19</td>
-                        <td>Kitchen gardens</td>
-                        <td><select class="matching-select" id="q19" data-q="19"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option></select></td>
-                    </tr>
-                    <tr>
-                        <td class="q-number">20</td>
-                        <td>The Temple of the Four Winds</td>
-                        <td><select class="matching-select" id="q20" data-q="20"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option></select></td>
-                    </tr>
-                </table>
-            </div>
+<div class="instruction"><strong>Questions 16–20</strong><br>Label the map below. Write the correct letter <strong>A–H</strong>.</div>
+<div class="map-block">
+    <p style="font-weight:bold; text-align:center; margin-bottom:15px; color:#1f3a5f;">Farley House</p>
+    <div class="map-placeholder">[MAP — A(top path) B(west path) C(north entrance) D(building) E(west entrance) F(south-east path) G(old stables) H(south courtyard)]</div>
+    <table class="matching-table">
+        <tr><td class="q-number">16</td><td>Farm shop</td><td><select class="matching-select" id="q16" data-q="16"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select></td></tr>
+        <tr><td class="q-number">17</td><td>Disabled entry</td><td><select class="matching-select" id="q17" data-q="17"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select></td></tr>
+        <tr><td class="q-number">18</td><td>Adventure playground</td><td><select class="matching-select" id="q18" data-q="18"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select></td></tr>
+        <tr><td class="q-number">19</td><td>Kitchen gardens</td><td><select class="matching-select" id="q19" data-q="19"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select></td></tr>
+        <tr><td class="q-number">20</td><td>Temple of the Four Winds</td><td><select class="matching-select" id="q20" data-q="20"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select></td></tr>
+    </table>
+</div>
 
-            <!-- ========== PART 3 ========== -->
-            <h2>PART 3 — Questions 21–30</h2>
-            <div class="instruction">
-                <strong>Questions 21 and 22</strong><br>
-                Choose <strong>TWO</strong> letters, <strong>A–E</strong>.
-            </div>
-            <div class="mcq-block">
-                <p style="margin-bottom:10px;">Which <strong>TWO</strong> things did Colin find most satisfying about his bread reuse project?</p>
-                <div class="mcq-option" data-q="21" data-val="A">
-                    <input type="checkbox" name="q21" id="q21a" value="A">
-                    <label for="q21a">A receiving support from local restaurants</label>
-                </div>
-                <div class="mcq-option" data-q="21" data-val="B">
-                    <input type="checkbox" name="q21" id="q21b" value="B">
-                    <label for="q21b">B finding a good way to prevent waste</label>
-                </div>
-                <div class="mcq-option" data-q="21" data-val="C">
-                    <input type="checkbox" name="q21" id="q21c" value="C">
-                    <label for="q21c">C overcoming problems in a basic process</label>
-                </div>
-                <div class="mcq-option" data-q="21" data-val="D">
-                    <input type="checkbox" name="q21" id="q21d" value="D">
-                    <label for="q21d">D experimenting with designs and colours</label>
-                </div>
-                <div class="mcq-option" data-q="21" data-val="E">
-                    <input type="checkbox" name="q21" id="q21e" value="E">
-                    <label for="q21e">E learning how to apply 3-D printing</label>
-                </div>
-                <p style="margin:10px 0;">21. <span id="ans21"></span></p>
-                <p>22. <span id="ans22"></span></p>
-            </div>
+<!-- ========== PART 3 ========== -->
+<h2>PART 3 — Questions 21–30</h2>
+<div class="instruction"><strong>Questions 21–22</strong><br>Choose <strong>TWO</strong> letters <strong>A–E</strong>.</div>
+<div class="mcq-block">
+    <p>Which TWO things did Colin find most satisfying about his bread reuse project?</p>
+    <div class="mcq-option" data-q="21"><input type="checkbox" name="q21" id="q21a" value="A"><label for="q21a">A support from restaurants</label></div>
+    <div class="mcq-option" data-q="21"><input type="checkbox" name="q21" id="q21b" value="B"><label for="q21b">B preventing waste</label></div>
+    <div class="mcq-option" data-q="21"><input type="checkbox" name="q21" id="q21c" value="C"><label for="q21c">C overcoming process problems</label></div>
+    <div class="mcq-option" data-q="21"><input type="checkbox" name="q21" id="q21d" value="D"><label for="q21d">D designs & colours</label></div>
+    <div class="mcq-option" data-q="21"><input type="checkbox" name="q21" id="q21e" value="E"><label for="q21e">E 3-D printing</label></div>
+</div>
 
-            <div class="instruction">
-                <strong>Questions 23 and 24</strong><br>
-                Choose <strong>TWO</strong> letters, <strong>A–E</strong>.
-            </div>
-            <div class="mcq-block">
-                <p style="margin-bottom:10px;">Which <strong>TWO</strong> ways do the students agree that touch-sensitive sensors for food labels could be developed in future?</p>
-                <div class="mcq-option" data-q="23" data-val="A">
-                    <input type="checkbox" name="q23" id="q23a" value="A">
-                    <label for="q23a">A for use on medical products</label>
-                </div>
-                <div class="mcq-option" data-q="23" data-val="B">
-                    <input type="checkbox" name="q23" id="q23b" value="B">
-                    <label for="q23b">B to show that food is no longer fit to eat</label>
-                </div>
-                <div class="mcq-option" data-q="23" data-val="C">
-                    <input type="checkbox" name="q23" id="q23c" value="C">
-                    <label for="q23c">C for use with drinks as well as foods</label>
-                </div>
-                <div class="mcq-option" data-q="23" data-val="D">
-                    <input type="checkbox" name="q23" id="q23d" value="D">
-                    <label for="q23d">D to provide applications for blind people</label>
-                </div>
-                <div class="mcq-option" data-q="23" data-val="E">
-                    <input type="checkbox" name="q23" id="q23e" value="E">
-                    <label for="q23e">E to indicate the weight of certain foods</label>
-                </div>
-                <p style="margin:10px 0;">23. <span id="ans23"></span></p>
-                <p>24. <span id="ans24"></span></p>
-            </div>
+<div class="instruction"><strong>Questions 23–24</strong><br>Choose <strong>TWO</strong> letters <strong>A–E</strong>.</div>
+<div class="mcq-block">
+    <p>Which TWO ways could touch-sensitive sensors be developed?</p>
+    <div class="mcq-option" data-q="23"><input type="checkbox" name="q23" id="q23a" value="A"><label for="q23a">A medical products</label></div>
+    <div class="mcq-option" data-q="23"><input type="checkbox" name="q23" id="q23b" value="B"><label for="q23b">B food expiry</label></div>
+    <div class="mcq-option" data-q="23"><input type="checkbox" name="q23" id="q23c" value="C"><label for="q23c">C drinks as well</label></div>
+    <div class="mcq-option" data-q="23"><input type="checkbox" name="q23" id="q23d" value="D"><label for="q23d">D for blind users</label></div>
+    <div class="mcq-option" data-q="23"><input type="checkbox" name="q23" id="q23e" value="E"><label for="q23e">E weight indicators</label></div>
+</div>
 
-            <div class="instruction">
-                <strong>Questions 25–30</strong><br>
-                What is the students' opinion about each of the following food trends?<br>
-                Choose <strong>SIX</strong> answers from the box and write the correct letter, <strong>A–H</strong>, next to Questions 25–30.
-            </div>
-            <div class="matching-block">
-                <p style="font-weight:bold; text-align:center; margin-bottom:15px;">Opinions</p>
-                <table style="margin:0 auto 20px; border:1px solid #ccc; padding:10px; background:#fff;">
-                    <tr><td>A</td><td>This is only relevant to young people.</td></tr>
-                    <tr><td>B</td><td>This may have disappointing results.</td></tr>
-                    <tr><td>C</td><td>This already seems to be widespread.</td></tr>
-                    <tr><td>D</td><td>Retailers should do more to encourage this.</td></tr>
-                    <tr><td>E</td><td>More financial support is needed for this.</td></tr>
-                    <tr><td>F</td><td>Most people know little about this.</td></tr>
-                    <tr><td>G</td><td>There should be stricter regulations about this.</td></tr>
-                    <tr><td>H</td><td>This could be dangerous.</td></tr>
-                </table>
-                <p style="font-weight:bold; margin-bottom:10px;">Food trends</p>
-                <table class="matching-table">
-                    <tr>
-                        <td class="q-number">25</td>
-                        <td>Use of local products</td>
-                        <td><select class="matching-select" id="q25" data-q="25"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option></select></td>
-                    </tr>
-                    <tr>
-                        <td class="q-number">26</td>
-                        <td>Reduction in unnecessary packaging</td>
-                        <td><select class="matching-select" id="q26" data-q="26"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option></select></td>
-                    </tr>
-                    <tr>
-                        <td class="q-number">27</td>
-                        <td>Gluten-free and lactose-free food</td>
-                        <td><select class="matching-select" id="q27" data-q="27"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option></select></td>
-                    </tr>
-                    <tr>
-                        <td class="q-number">28</td>
-                        <td>Use of branded products related to celebrity chefs</td>
-                        <td><select class="matching-select" id="q28" data-q="28"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option></select></td>
-                    </tr>
-                    <tr>
-                        <td class="q-number">29</td>
-                        <td>Development of 'ghost kitchens' for takeaway food</td>
-                        <td><select class="matching-select" id="q29" data-q="29"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option></select></td>
-                    </tr>
-                    <tr>
-                        <td class="q-number">30</td>
-                        <td>Use of mushrooms for common health concerns</td>
-                        <td><select class="matching-select" id="q30" data-q="30"><option value="">—</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E</option><option value="F">F</option><option value="G">G</option><option value="H">H</option></select></td>
-                    </tr>
-                </table>
-            </div>
+<div class="instruction"><strong>Questions 25–30</strong><br>Match trends to opinions <strong>A–H</strong>.</div>
+<div class="matching-block">
+    <table style="margin:0 auto 20px; border:1px solid #ccc; padding:10px; background:#fff;">
+        <tr><td>A</td><td>Only for young people</td></tr>
+        <tr><td>B</td><td>May disappoint</td></tr>
+        <tr><td>C</td><td>Already widespread</td></tr>
+        <tr><td>D</td><td>Retailers should encourage</td></tr>
+        <tr><td>E</td><td>Needs funding</td></tr>
+        <tr><td>F</td><td>Little known</td></tr>
+        <tr><td>G</td><td>Needs regulation</td></tr>
+        <tr><td>H</td><td>Could be dangerous</td></tr>
+    </table>
+    <table class="matching-table">
+        <tr><td class="q-number">25</td><td>Local products</td><td><select class="matching-select" id="q25" data-q="25"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select></td></tr>
+        <tr><td class="q-number">26</td><td>Less packaging</td><td><select class="matching-select" id="q26" data-q="26"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select></td></tr>
+        <tr><td class="q-number">27</td><td>Gluten/lactose free</td><td><select class="matching-select" id="q27" data-q="27"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select></td></tr>
+        <tr><td class="q-number">28</td><td>Celebrity brands</td><td><select class="matching-select" id="q28" data-q="28"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select></td></tr>
+        <tr><td class="q-number">29</td><td>Ghost kitchens</td><td><select class="matching-select" id="q29" data-q="29"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select></td></tr>
+        <tr><td class="q-number">30</td><td>Mushroom remedies</td><td><select class="matching-select" id="q30" data-q="30"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select></td></tr>
+    </table>
+</div>
 
-            <!-- ========== PART 4 ========== -->
-            <h2>PART 4 — Questions 31–40</h2>
-            <div class="instruction">
-                <strong>Questions 31–40</strong><br>
-                Complete the notes below.<br>
-                Write <strong>ONE WORD ONLY</strong> for each answer.
-            </div>
-            <div class="notes-block">
-                <div class="notes-title">Céide Fields</div>
-                <p style="font-weight:bold; margin-bottom:10px;">an important Neolithic archaeological site in the northwest of Ireland</p>
-                <p style="font-weight:bold; margin:15px 0 8px;">Discovery</p>
-                <div class="question-line">
-                    <span>In the 1930s, a local teacher realised that stones beneath the bog surface were once</span>
-                    <span class="q-number">31.</span>
-                    <input type="text" class="input-field" id="q31" placeholder="Answer">
-                </div>
-                <div class="question-line">
-                    <span>His</span>
-                    <span class="q-number">32.</span>
-                    <input type="text" class="input-field" id="q32" placeholder="Answer">
-                    <span>became an archaeologist and undertook an investigation of the site:</span>
-                </div>
-                <div class="question-line">
-                    <span>— a traditional method used by local people to dig for</span>
-                    <span class="q-number">33.</span>
-                    <input type="text" class="input-field" id="q33" placeholder="Answer">
-                    <span>was used to identify where stones were located</span>
-                </div>
-                <div class="question-line">
-                    <span>— carbon dating later proved the site was Neolithic.</span>
-                </div>
-                <div class="question-line">
-                    <span>Items are well preserved in the bog because of a lack of</span>
-                    <span class="q-number">34.</span>
-                    <input type="text" class="input-field" id="q34" placeholder="Answer">
-                </div>
-                <p style="font-weight:bold; margin:20px 0 8px;">Neolithic farmers</p>
-                <div class="question-line">
-                    <span>Houses were</span>
-                    <span class="q-number">35.</span>
-                    <input type="text" class="input-field" id="q35" placeholder="Answer">
-                    <span>in shape and had a hole in the roof.</span>
-                </div>
-                <p style="font-weight:bold; margin:15px 0 8px;">Neolithic innovations include:</p>
-                <div class="question-line">
-                    <span>— cooking indoors</span>
-                </div>
-                <div class="question-line">
-                    <span>— pots used for storage and to make</span>
-                    <span class="q-number">36.</span>
-                    <input type="text" class="input-field" id="q36" placeholder="Answer">
-                </div>
-                <div class="question-line">
-                    <span>Each field at Céide was large enough to support a big</span>
-                    <span class="q-number">37.</span>
-                    <input type="text" class="input-field" id="q37" placeholder="Answer">
-                </div>
-                <div class="question-line">
-                    <span>The fields were probably used to restrict the grazing of animals — no evidence of structures to house them during</span>
-                    <span class="q-number">38.</span>
-                    <input type="text" class="input-field" id="q38" placeholder="Answer">
-                </div>
-                <p style="font-weight:bold; margin:20px 0 8px;">Reasons for the decline in farming</p>
-                <div class="question-line">
-                    <span>— a decline in</span>
-                    <span class="q-number">39.</span>
-                    <input type="text" class="input-field" id="q39" placeholder="Answer">
-                    <span>quality</span>
-                </div>
-                <div class="question-line">
-                    <span>— an increase in</span>
-                    <span class="q-number">40.</span>
-                    <input type="text" class="input-field" id="q40" placeholder="Answer">
-                </div>
-            </div>
+<!-- ========== PART 4 ========== -->
+<h2>PART 4 — Questions 31–40</h2>
+<div class="instruction"><strong>Questions 31–40</strong><br>Complete the notes. Write <strong>ONE WORD ONLY</strong>.</div>
+<div class="notes-block">
+    <div class="notes-title">Céide Fields</div>
+    <p style="font-weight:bold; margin:15px 0 8px;">Discovery</p>
+    <div class="question-line"><span>In the 1930s, stones under the bog were once</span><span class="q-number">31.</span><input type="text" class="input-field" id="q31" placeholder="Answer"></div>
+    <div class="question-line"><span>His</span><span class="q-number">32.</span><input type="text" class="input-field" id="q32" placeholder="Answer"><span>became an archaeologist</span></div>
+    <div class="question-line"><span>Method to find stones: digging for</span><span class="q-number">33.</span><input type="text" class="input-field" id="q33" placeholder="Answer"></div>
+    <div class="question-line"><span>Preserved due to lack of</span><span class="q-number">34.</span><input type="text" class="input-field" id="q34" placeholder="Answer"></div>
+    <p style="font-weight:bold; margin:20px 0 8px;">Neolithic farmers</p>
+    <div class="question-line"><span>Houses were</span><span class="q-number">35.</span><input type="text" class="input-field" id="q35" placeholder="Answer"><span>in shape</span></div>
+    <div class="question-line"><span>Pots for storage and to make</span><span class="q-number">36.</span><input type="text" class="input-field" id="q36" placeholder="Answer"></div>
+    <div class="question-line"><span>Each field supported a large</span><span class="q-number">37.</span><input type="text" class="input-field" id="q37" placeholder="Answer"></div>
+    <div class="question-line"><span>No housing for animals during</span><span class="q-number">38.</span><input type="text" class="input-field" id="q38" placeholder="Answer"></div>
+    <p style="font-weight:bold; margin:20px 0 8px;">Decline in farming</p>
+    <div class="question-line"><span>— decline in</span><span class="q-number">39.</span><input type="text" class="input-field" id="q39" placeholder="Answer"><span>quality</span></div>
+    <div class="question-line"><span>— increase in</span><span class="q-number">40.</span><input type="text" class="input-field" id="q40" placeholder="Answer"></div>
+</div>
 
-            <!-- Status Bar -->
-            <div class="question-status">
-                <span class="part-label">Part 1</span>
-                <div class="q-indicator current" data-q="1">1</div>
-                <div class="q-indicator current" data-q="2">2</div>
-                <div class="q-indicator current" data-q="3">3</div>
-                <div class="q-indicator current" data-q="4">4</div>
-                <div class="q-indicator current" data-q="5">5</div>
-                <div class="q-indicator current" data-q="6">6</div>
-                <div class="q-indicator current" data-q="7">7</div>
-                <div class="q-indicator current" data-q="8">8</div>
-                <div class="q-indicator current" data-q="9">9</div>
-                <div class="q-indicator current" data-q="10">10</div>
-                <div class="part-separator"></div>
-                <span class="part-label">Part 2</span>
-                <div class="q-indicator current" data-q="11">11</div>
-                <div class="q-indicator current" data-q="12">12</div>
-                <div class="q-indicator current" data-q="13">13</div>
-                <div class="q-indicator current" data-q="14">14</div>
-                <div class="q-indicator current" data-q="15">15</div>
-                <div class="q-indicator current" data-q="16">16</div>
-                <div class="q-indicator current" data-q="17">17</div>
-                <div class="q-indicator current" data-q="18">18</div>
-                <div class="q-indicator current" data-q="19">19</div>
-                <div class="q-indicator current" data-q="20">20</div>
-                <div class="part-separator"></div>
-                <span class="part-label">Part 3</span>
-                <div class="q-indicator current" data-q="21">21</div>
-                <div class="q-indicator current" data-q="22">22</div>
-                <div class="q-indicator current" data-q="23">23</div>
-                <div class="q-indicator current" data-q="24">24</div>
-                <div class="q-indicator current" data-q="25">25</div>
-                <div class="q-indicator current" data-q="26">26</div>
-                <div class="q-indicator current" data-q="27">27</div>
-                <div class="q-indicator current" data-q="28">28</div>
-                <div class="q-indicator current" data-q="29">29</div>
-                <div class="q-indicator current" data-q="30">30</div>
-                <div class="part-separator"></div>
-                <span class="part-label">Part 4</span>
-                <div class="q-indicator current" data-q="31">31</div>
-                <div class="q-indicator current" data-q="32">32</div>
-                <div class="q-indicator current" data-q="33">33</div>
-                <div class="q-indicator current" data-q="34">34</div>
-                <div class="q-indicator current" data-q="35">35</div>
-                <div class="q-indicator current" data-q="36">36</div>
-                <div class="q-indicator current" data-q="37">37</div>
-                <div class="q-indicator current" data-q="38">38</div>
-                <div class="q-indicator current" data-q="39">39</div>
-                <div class="q-indicator current" data-q="40">40</div>
-            </div>
+<!-- Status Bar -->
+<div class="question-status">
+    <span class="part-label">Part 1</span>
+    <div class="q-indicator" data-q="1">1</div><div class="q-indicator" data-q="2">2</div><div class="q-indicator" data-q="3">3</div><div class="q-indicator" data-q="4">4</div><div class="q-indicator" data-q="5">5</div><div class="q-indicator" data-q="6">6</div><div class="q-indicator" data-q="7">7</div><div class="q-indicator" data-q="8">8</div><div class="q-indicator" data-q="9">9</div><div class="q-indicator" data-q="10">10</div>
+    <div class="part-separator"></div><span class="part-label">Part 2</span>
+    <div class="q-indicator" data-q="11">11</div><div class="q-indicator" data-q="12">12</div><div class="q-indicator" data-q="13">13</div><div class="q-indicator" data-q="14">14</div><div class="q-indicator" data-q="15">15</div><div class="q-indicator" data-q="16">16</div><div class="q-indicator" data-q="17">17</div><div class="q-indicator" data-q="18">18</div><div class="q-indicator" data-q="19">19</div><div class="q-indicator" data-q="20">20</div>
+    <div class="part-separator"></div><span class="part-label">Part 3</span>
+    <div class="q-indicator" data-q="21">21</div><div class="q-indicator" data-q="22">22</div><div class="q-indicator" data-q="23">23</div><div class="q-indicator" data-q="24">24</div><div class="q-indicator" data-q="25">25</div><div class="q-indicator" data-q="26">26</div><div class="q-indicator" data-q="27">27</div><div class="q-indicator" data-q="28">28</div><div class="q-indicator" data-q="29">29</div><div class="q-indicator" data-q="30">30</div>
+    <div class="part-separator"></div><span class="part-label">Part 4</span>
+    <div class="q-indicator" data-q="31">31</div><div class="q-indicator" data-q="32">32</div><div class="q-indicator" data-q="33">33</div><div class="q-indicator" data-q="34">34</div><div class="q-indicator" data-q="35">35</div><div class="q-indicator" data-q="36">36</div><div class="q-indicator" data-q="37">37</div><div class="q-indicator" data-q="38">38</div><div class="q-indicator" data-q="39">39</div><div class="q-indicator" data-q="40">40</div>
+</div>
 
-            <button class="clear-btn" onclick="clearAll()">🗑️ Clear All Answers, Highlights & Notes</button>
+<button class="clear-btn" onclick="clearAll()">🗑️ Clear All Answers & Highlights</button>
+<div class="nav-container">
+    <a href="index.html" class="back-main-btn">← Home</a>
+    <a href="reading-cambridge19-test1.html" class="next-btn">Next: Reading →</a>
+</div>
 
-            <div class="nav-container">
-                <a href="index.html" class="back-main-btn">← Home</a>
-                <a href="reading-cambridge19-test1.html" class="next-btn">Next: Reading →</a>
-            </div>
-        </div>
-    </div>
+        </div><!-- /content -->
+    </div><!-- /container -->
 
 <script>
-// ===== STORAGE KEY — consistent across all pages =====
-const LISTENING_STORAGE_KEY = 'Cambridge19_Test1_Listening';
+const STORAGE_KEY = 'Cambridge19_Test1_Listening';
+let savedSelection = null;
 
-// ===== GLOBAL VARS FOR HIGHLIGHT =====
-let currentRange = null;
-let lastNoteId = 0;
+// ===== STATUS INDICATOR UPDATE =====
+function markAnswered(q) {
+    const ind = document.querySelector(`.q-indicator[data-q="${q}"]`);
+    if (ind) ind.classList.replace('current', 'answered');
+}
+function unmarkAnswered(q) {
+    const ind = document.querySelector(`.q-indicator[data-q="${q}"]`);
+    if (ind) ind.classList.replace('answered', 'current');
+}
 
-// ===== MARK ANSWERED — turns indicator green =====
-function markAnswered(qNum) {
-    const indicator = document.querySelector(`.q-indicator[data-q="${qNum}"]`);
-    if (indicator) {
-        indicator.classList.remove('current');
-        indicator.classList.add('answered');
+// ===== HIGHLIGHT FUNCTIONS =====
+function applyHighlight() {
+    if (!savedSelection || savedSelection.isCollapsed) return;
+    const range = savedSelection.getRangeAt(0);
+    if (!range || range.toString().trim() === '') return;
+    
+    const span = document.createElement('span');
+    span.className = 'user-highlight';
+    span.textContent = range.toString();
+    try {
+        range.deleteContents();
+        range.insertNode(span);
+    } catch(e) {}
+    hideMenu();
+}
+function removeHighlight(el) {
+    const parent = el.closest('.user-highlight');
+    if (!parent) return;
+    parent.replaceWith(document.createTextNode(parent.textContent));
+    document.getSelection().removeAllRanges();
+}
+function showMenu(e) {
+    const sel = document.getSelection();
+    if (sel.toString().trim() !== '') {
+        savedSelection = sel;
+        menuHighlight.style.display = 'block';
+        contextMenu.style.left = e.pageX + 'px';
+        contextMenu.style.top = e.pageY + 'px';
+        contextMenu.style.display = 'block';
+    } else if (e.target.closest('.user-highlight')) {
+        savedSelection = null;
+        menuRemove.style.display = 'block';
+        contextMenu.style.left = e.pageX + 'px';
+        contextMenu.style.top = e.pageY + 'px';
+        contextMenu.style.display = 'block';
+    } else {
+        hideMenu();
     }
+    e.preventDefault();
+}
+function hideMenu() {
+    contextMenu.style.display = 'none';
+    menuHighlight.style.display = 'none';
+    menuRemove.style.display = 'none';
 }
 
-// ===== UNMARK ANSWERED — removes green =====
-function unmarkAnswered(qNum) {
-    const indicator = document.querySelector(`.q-indicator[data-q="${qNum}"]`);
-    if (indicator) {
-        indicator.classList.remove('answered');
-        indicator.classList.add('current');
-    }
-}
-
-// ===== UPDATE CHECKBOX DISPLAY =====
-function updateCheckboxDisplay(qNum) {
-    const boxes = document.querySelectorAll(`input[name="q${qNum}"]:checked`);
-    const vals = Array.from(boxes).map(b => b.value);
-    const ansSpan = document.getElementById(`ans${qNum}`);
-    if (ansSpan) ansSpan.textContent = vals.join(', ') || '';
-    return vals;
-}
-
-// ===== CLOSE NOTE FUNCTION =====
-function closeNote(noteId) {
-    const note = document.getElementById(noteId);
-    if (note) note.remove();
+// ===== CHECKBOX HELPERS =====
+function saveCheckboxGroup(qList) {
+    qList.forEach(q => {
+        const checked = Array.from(document.querySelectorAll(`input[name="q${q}"]:checked`)).map(c => c.value);
+        localStorage.setItem(`${STORAGE_KEY}_q${q}`, checked.join(','));
+        checked.length ? markAnswered(q) : unmarkAnswered(q);
+    });
 }
 
 // ===== CLEAR ALL =====
 function clearAll() {
-    if (!confirm('⚠️ Clear ALL answers, highlights & notes? This cannot be undone.')) return;
-    
-    // Clear storage
-    for (let q = 1; q <= 40; q++) {
-        localStorage.removeItem(`${LISTENING_STORAGE_KEY}_q${q}`);
-    }
-    
-    // Clear text inputs
-    document.querySelectorAll('.input-field').forEach(f => {
-        f.value = '';
-        f.classList.remove('filled');
-    });
-    
-    // Clear radios
-    document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
-    document.querySelectorAll('.mcq-option').forEach(o => o.classList.remove('checked'));
-    
-    // Clear checkboxes
-    document.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
-    document.getElementById('ans21').textContent = '';
-    document.getElementById('ans22').textContent = '';
-    document.getElementById('ans23').textContent = '';
-    document.getElementById('ans24').textContent = '';
-    
-    // Clear selects
-    document.querySelectorAll('.matching-select').forEach(s => s.selectedIndex = 0);
-    
-    // Reset status indicators
-    document.querySelectorAll('.q-indicator').forEach(ind => {
-        ind.classList.remove('answered');
-        ind.classList.add('current');
-    });
-    
-    // Remove all highlights
+    if (!confirm('Clear all answers and highlights?')) return;
+    localStorage.clear();
+    document.querySelectorAll('.input-field').forEach(i => { i.value=''; i.classList.remove('filled'); });
+    document.querySelectorAll('input[type=radio], input[type=checkbox]').forEach(i => i.checked=false);
+    document.querySelectorAll('.matching-select').forEach(s => s.selectedIndex=0);
+    document.querySelectorAll('.q-indicator').forEach(i => { i.classList.remove('answered'); i.classList.add('current'); });
     document.querySelectorAll('.user-highlight').forEach(h => {
-        const parent = h.parentNode;
-        parent.replaceChild(document.createTextNode(h.textContent), h);
-        parent.normalize();
+        h.replaceWith(document.createTextNode(h.textContent));
     });
-    
-    // Remove all sticky notes
-    document.querySelectorAll('.sticky-note').forEach(n => n.remove());
-    
-    alert('✅ Cleared!');
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Audio error detection
-    const player = document.getElementById('audioPlayer');
-    const status =
+document.addEventListener('DOMContentLoaded', () => {
+    // Highlight menu setup
+    const contextMenu = document.getElementById('contextMenu');
+    const menuHighlight = document.getElementById('menuHighlight');
+    const menuRemove = document.getElementById('menuRemove');
+    document.getElementById('highlightArea').addEventListener('contextmenu', showMenu);
+    document.addEventListener('click', hideMenu);
+    menuHighlight.addEventListener('click', applyHighlight);
+    menuRemove.addEventListener('click', (e) => {
+        const target = document.elementFromPoint(parseInt(contextMenu.style.left), parseInt(contextMenu.style.top));
+        const hl = target?.closest('.user-highlight');
+        if (hl) removeHighlight(hl);
+        hideMenu();
+    });
+
+    // Audio error
+    document.getElementById('audioPlayer').addEventListener('error', () => {
+        document.getElementById('audioStatus').style.display = 'block';
+    });
+
+    // ===== TEXT INPUTS: Q1–10, 31–40 =====
+    [1,2,3,4,5,6,7,8,9,10,31,32,33,34,35,36,37,38,39,40].forEach(q => {
+        const inp = document.getElementById(`q${q}`);
+        if (!inp) return;
+        const saved = localStorage.getItem(`${STORAGE_KEY}_q${q}`);
+        if (saved) { inp.value = saved; inp.classList.add('filled'); markAnswered(q); }
+        inp.addEventListener('input', () => {
+            const val = inp.value.trim();
+            localStorage.setItem(`${STORAGE_KEY}_q${q}`, val);
+            val ? (inp.classList.add('filled'), markAnswered(q)) : (inp.classList.remove('filled'), unmarkAnswered(q));
+        });
+    });
+
+    // ===== RADIO: Q11–15 =====
+    [11,12,13,14,15].forEach(q => {
+        const saved = localStorage.getItem(`${STORAGE_KEY}_q${q}`);
+        if (saved) {
+            const inp = document.querySelector(`input[name=q${q}][value="${saved}"]`);
+            if (inp) { inp.checked = true; inp.closest('.mcq-option').classList.add('checked'); markAnswered(q); }
+        }
+        document.querySelectorAll(`input[name=q${q}]`).forEach(r => {
+            r.addEventListener('change', () => {
+                localStorage.setItem(`${STORAGE_KEY}_q${q}`, r.value);
+                document.querySelectorAll(`input[name=q${q}]`).forEach(x => x.closest('.mcq-option').classList.remove('checked'));
+                r.closest('.mcq-option').classList.add('checked');
+                markAnswered(q);
+            });
+        });
+    });
+
+    // ===== CHECKBOX: Q21,22,23,24 =====
+    [21,22,23,24].forEach(q => {
+        const saved = localStorage.getItem(`${STORAGE_KEY}_q${q}`);
+        if (saved) {
+            saved.split(',').forEach(v => {
+                const inp = document.querySelector(`input[name=q${q}][value="${v}"]`);
+                if (inp) inp.checked = true;
+            });
+            if (saved) markAnswered(q);
+        }
+        document.querySelectorAll(`input[name=q${q}]`).forEach(c => {
+            c.addEventListener('change', () => saveCheckboxGroup([q]));
+        });
+    });
+
+    // ===== SELECT/DROPDOWN: Q16–20, 25–30 =====
+    [16,17,18,19,20,25,26,27,28,29,30].forEach(q => {
+        const sel = document.getElementById(`q${q}`);
+        if (!sel) return;
+        const saved = localStorage.getItem(`${STORAGE_KEY}_q${q}`);
+        if (saved) { sel.value = saved; markAnswered(q); }
+        sel.addEventListener('change', () => {
+            const val = sel.value;
+            localStorage.setItem(`${STORAGE_KEY}_q${q}`, val);
+            val ? markAnswered(q) : unmarkAnswered(q);
+        });
+    });
+});
+</script>
+</body>
+</html>
