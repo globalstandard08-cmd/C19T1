@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading - Cambridge 19 Test 1</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; }
+        body { background-color: #f4f6f9; padding: 20px; line-height: 1.7; position: relative; user-select: text; }
+        .container { max-width: 900px; margin: 0 auto; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: visible; position: relative; }
+        .logo-section { text-align: center; padding: 20px; border-bottom: 1px solid #eee; min-height: 100px; display: flex; align-items: center; justify-content: center; }
+        .logo-section img { height: 120px; width: auto; object-fit: contain; }
+        .header-bar { background-color: #1f3a5f; color: white; padding: 15px 25px; font-size: 18px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+        .content { padding: 0 30px 30px; position: relative; }
+        h1 { color: #1f3a5f; margin: 30px 0 20px; font-size: 26px; text-align: center; }
+        h2 { color: #1f3a5f; margin: 30px 0 15px; font-size: 22px; padding-bottom: 8px; border-bottom: 1px solid #eee; }
+        .instruction { background-color: #f8fbfe; border-left: 4px solid #1f3a5f; padding: 15px; margin-bottom: 25px; border-radius: 4px; font-weight: 500; }
+        .passage-text { font-size: 16px; margin-bottom: 40px; }
+        .passage-text p { margin-bottom: 15px; text-align: justify; }
+        .questions-block { border: 1px solid #ccc; border-radius: 6px; padding: 25px; margin-bottom: 30px; background-color: #fdfdfd; }
+        .q-row { display: flex; align-items: center; gap: 10px; margin: 12px 0; font-size: 16px; }
+        .q-num { font-weight: bold; min-width: 25px; color: #1f3a5f; }
+        .true-false-box { display: flex; gap: 20px; margin-left: 10px; }
+        .tf-option { display: flex; align-items: center; gap: 5px; cursor: pointer; }
+        .input-answer { width: 180px; padding: 6px 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; background: white; }
+        .input-answer:focus { outline: none; border-color: #1f3a5f; box-shadow: 0 0 3px rgba(31,58,95,0.3); }
+        .input-answer.filled { background-color: #e6f0ff; border-color: #1f3a5f; }
+        
+        /* HIGHLIGHT + NOTE */
+        .highlight { background-color: #ffd700; padding: 2px 4px; border-radius: 2px; cursor: pointer; display: inline; color: #000; position: relative; }
+        .note-marker { position: absolute; top: -8px; right: -8px; width: 18px; height: 18px; background: #1f3a5f; color: white; border-radius: 50%; font-size: 11px; font-weight: bold; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; }
+        .context-menu { position: absolute; background: #fff; border: 1px solid #ccc; border-radius: 4px; box-shadow: 0 2px 12px rgba(0,0,0,0.15); z-index: 9999; display: none; min-width: 180px; }
+        .context-menu div { padding: 10px 14px; cursor: pointer; font-size: 14px; border-bottom: 1px solid #f0f0f0; }
+        .context-menu div:last-child { border-bottom: none; }
+        .context-menu div:hover { background: #f0f0f0; }
+        
+        /* DRAGGABLE NOTE BOX */
+        .note-box { position: absolute; width: 260px; min-height: 80px; background: #fffde7; border: 1px solid #f9d423; border-radius: 6px; box-shadow: 0 3px 10px rgba(0,0,0,0.15); z-index: 9990; display: none; }
+        .note-header { background: #f9d423; padding: 6px 10px; font-size: 13px; font-weight: bold; cursor: move; display: flex; justify-content: space-between; align-items: center; color: #333; }
+        .note-close { cursor: pointer; font-weight: bold; font-size: 16px; line-height: 1; }
+        .note-textarea { width: 100%; min-height: 60px; border: none; padding: 10px; font-size: 14px; resize: vertical; background: transparent; outline: none; }
+        
+        /* NAVIGATION STATUS */
+        .question-status { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; margin: 30px 0; padding: 12px 15px; background: #f0f2f5; border-radius: 4px; border: 1px solid #d0d5dd; }
+        .part-label { font-size: 11px; font-weight: 600; color: #1f3a5f; margin-right: 4px; margin-left: 8px; }
+        .q-indicator { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 3px; border: 1px solid #ddd; background: #e5e7eb; color: #333; font-size: 11px; cursor: pointer; transition: all 0.2s; }
+        .q-indicator.answered { background: #10b981 !important; color: white !important; border-color: #10b981 !important; }
+        
+        .clear-btn { background-color: #dc2626; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 14px; margin-top: 10px; }
+        .clear-btn:hover { background-color: #b91c1c; }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; margin-top: 25px; padding-top: 15px; border-top: 1px solid #eee; }
+        .back-btn { background-color: #6b7280; color: white; border: none; padding: 10px 18px; border-radius: 4px; font-size: 15px; text-decoration: none; }
+        .back-btn:hover { background-color: #4b5563; }
+        .next-btn { background-color: #10b981; color: white; border: none; padding: 10px 18px; border-radius: 4px; font-size: 15px; text-decoration: none; }
+        .next-btn:hover { background-color: #059669; }
+    </style>
+</head>
+<body>
+    <!-- Right-click Menu -->
+    <div class="context-menu" id="contextMenu">
+        <div id="menuHighlight">🖍️ Highlight</div>
+        <div id="menuAddNote">📝 Add Note</div>
+        <div id="menuRemove">❌ Remove Highlight & Note</div>
+    </div>
+
+    <!-- Draggable Note Box -->
+    <div class="note-box" id="noteBox">
+        <div class="note-header" id="noteDragHandle">
+            <span>📝 Note</span>
+            <span class="note-close" id="noteClose">×</span>
+        </div>
+        <textarea class="note-textarea" id="noteText" placeholder="Type your note here…"></textarea>
+    </div>
+
+    <div class="container">
+        <div class="logo-section"><img src="ielts-logo.png" alt="IELTS Logo"></div>
+        <div class="header-bar">
+            <span>READING — CAMBRIDGE 19 TEST 1</span>
+            <span style="font-size:15px; opacity:0.9;">Exam Mode</span>
+        </div>
+
+        <div class="content" id="passageArea">
+
+<!-- ========== PASSAGE 1 ========== -->
+<h2>READING PASSAGE 1</h2>
+<div class="instruction">You should spend about 20 minutes on Questions 1–13, which are based on Reading Passage 1 below.</div>
+
+<h1>How tennis rackets have changed</h1>
+
+<div class="passage-text">
+<p>In 2016, the British professional tennis player Andy Murray was ranked as the world's number one. It was an incredible achievement by any standard — made even more remarkable by the fact that he did this during a period considered to be one of the strongest in the sport's history, competing against the likes of Rafael Nadal, Roger Federer and Novak Djokovic, to name just a few. Yet five years previously, he had been regarded as a talented player who entered but never won the major tournaments.</p>
+
+<p>Of the changes that account for this transformation, one was visible and widely publicised: in 2011, Murray invited former number one Ivan Lendl onto his coaching team — a valuable addition that had a visible impact on the player's playing style. Another change was so subtle as to pass more or less unnoticed. Like many players, Murray has long preferred a racket that consists of two types of string: one for the mains (verticals) and another for the crosses (horizontals). While he continued to use natural string in the crosses, in 2012 he switched to a synthetic string for the mains. A small change, perhaps, but its importance should not be underestimated.</p>
+
+<p>The modification that Murray made is just one of a number of options available to players looking to tweak their rackets in order to improve their games. 'Touring professionals have their rackets customised to their specific needs,' says Colin Triplow, a UK-based professional racket stringer. 'It's a highly important part of performance maximisation. Consequently, the specific racket used by the world's elite are not actually readily available to the public; rather, each racket is individually made to suit the player who uses it.' Take the US professional tennis players Mike and Bob Bryan, for example: 'We're very particular with our racket specifications,' they say. 'All our rackets are sent from our manufacturer to Tampa, Florida, where our frames go through a … thorough customisation process.' They explain how they have not just adjusted only racket length, but even experimented with different kinds of paint. The rackets they use now weigh more than the average model and also have a denser string pattern (i.e. more crosses and mains).</p>
+
+<p>The primary reason for these modifications is simple: as the line between winning and losing becomes thinner and thinner, even these slight changes become more and more important. As a result, players and their teams are becoming increasingly creative with the modifications to their rackets as they look to maximise their competitive advantage.</p>
+
+<p>Racket modifications dating way back to the 1970s, when the amateur German tennis player Werner Fischer played with the so-called spaghetti-strung racket. It created a string bed that generated so much topspin that it was quickly banned by the International Tennis Federation. However, within a decade or two, racket modification became a regularity. Today, it is in many ways, an aspect of the game that is equal in significance to nutrition or training.</p>
+
+<p>Modifications can be divided into two categories: those to the string bed and those to the racket frame. The former is far more common than the latter: the choice of the strings and the tension with which they are installed is something that nearly all professional players experiment with. They will continually change it depending on various factors including the court surface, climatic conditions, and game styles. Some will even change it depending on how they feel at the time.</p>
+
+<p>At one time, all tennis rackets were strung with natural gut made from the outer layer of sheep or cow intestines. This all changed in the early 1990s with the development of synthetic strings that were cheaper and more durable. They were made from three materials: nylon (relatively durable and affordable), Kevlar (too stiff to be used alone) or co-polyester (polyester combined with additives that enhance its performance). Even so, many professional players continue to use a 'hybrid set-up', where a combination of both synthetic and natural strings are used.</p>
+
+<p>Of the synthetics, co-polyester is by far the most widely used. It is a perfect fit for the style of tennis now played, where players tend to batter it out from the back of the court rather than coming to the net. Studies indicate that the average spin from a co-polyester string is 25% greater than that from natural string or other synthetics. In a sense, the development of co-polyester strings has revolutionised the game.</p>
+
+<p>However, many players go beyond these basic adjustments to the strings and make changes to the racket frame itself! For example, much of the serving power of US professional player Pete Sampras was attributed to the addition of four to five lead weights onto his rackets, and today many professionals have the weight adjusted during the manufacturing process.</p>
+
+<p>Other changes to the frame involve the handle. Players have individual preferences for the shape of the handle and some will have the handle of one racket moulded onto the frame of a different racket. Other players make different changes. The professional Portuguese player Gonçalo Oliveira replaced the original grips of his rackets with something thinner because they had previously felt uncomfortable to hold.</p>
+
+<p>Racket customisation and modification have pushed the standards of the game to greater levels that few could have anticipated in the days of natural strings and heavy, wooden frames, and it's exciting to see what further developments there will be in the future.</p>
+</div>
+
+<!-- ========== QUESTIONS 1–7: TRUE/FALSE/NOT GIVEN ========== -->
+<div class="questions-block">
+    <h3>Questions 1–7</h3>
+    <div class="instruction">Do the following statements agree with the information given in Reading Passage 1?<br><br>In boxes 1–7 on your answer sheet, write</div>
+    <div style="margin: 10px 0 20px 20px;">
+        <p><strong>TRUE</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if the statement agrees with the information</p>
+        <p><strong>FALSE</strong>&nbsp;&nbsp;&nbsp;&nbsp;if the statement contradicts the information</p>
+        <p><strong>NOT GIVEN</strong>&nbsp;if there is no information on this</p>
+    </div>
+
+    <div class="q-row">
+        <span class="q-num">1</span>
+        <span>People had expected Andy Murray to become the world's top tennis player for at least five years before 2016.</span>
+        <div class="true-false-box">
+            <label class="tf-option"><input type="radio" name="q1" value="TRUE"> TRUE</label>
+            <label class="tf-option"><input type="radio" name="q1" value="FALSE"> FALSE</label>
+            <label class="tf-option"><input type="radio" name="q1" value="NOT GIVEN"> NOT GIVEN</label>
+        </div>
+    </div>
+
+    <div class="q-row">
+        <span class="q-num">2</span>
+        <span>The change that Andy Murray made to his rackets attracted a lot of attention.</span>
+        <div class="true-false-box">
+            <label class="tf-option"><input type="radio" name="q2" value="TRUE"> TRUE</label>
+            <label class="tf-option"><input type="radio" name="q2" value="FALSE"> FALSE</label>
+            <label class="tf-option"><input type="radio" name="q2" value="NOT GIVEN"> NOT GIVEN</label>
+        </div>
+    </div>
+
+    <div class="q-row">
+        <span class="q-num">3</span>
+        <span>Most of the world's top players take a professional racket stringer on tour with them.</span>
+        <div class="true-false-box">
+            <label class="tf-option"><input type="radio" name="q3" value="TRUE"> TRUE</label>
+            <label class="tf-option"><input type="radio" name="q3" value="FALSE"> FALSE</label>
+            <label class="tf-option"><input type="radio" name="q3" value="NOT GIVEN"> NOT GIVEN</label>
+        </div>
+    </div>
+
+    <div class="q-row">
+        <span class="q-num">4</span>
+        <span>Mike and Bob Bryan use rackets that are light in comparison to the majority of rackets.</span>
+        <div class="true-false-box">
+            <label class="tf-option"><input type="radio" name="q4" value="TRUE"> TRUE</label>
+            <label class="tf-option"><input type="radio" name="q4" value="FALSE"> FALSE</label>
+            <label class="tf-option"><input type="radio" name="q4" value="NOT GIVEN"> NOT GIVEN</label>
+        </div>
+    </div>
+
+    <div class="q-row">
+        <span class="q-num">5</span>
+        <span>Werner Fischer played with a spaghetti-strung racket that he designed himself.</span>
+        <div class="true-false-box">
+            <label class="tf-option"><input type="radio" name="q5" value="TRUE"> TRUE</label>
+            <label class="tf-option"><input type="radio" name="q5" value="FALSE"> FALSE</label>
+            <label class="tf-option"><input type="radio" name="q5" value="NOT GIVEN"> NOT GIVEN</label>
+        </div>
+    </div>
+
+    <div class="q-row">
+        <span class="q-num">6</span>
+        <span>The weather can affect how professional players adjust the strings on their rackets.</span>
+        <div class="true-false-box">
+            <label class="tf-option"><input type="radio" name="q6" value="TRUE"> TRUE</label>
+            <label class="tf-option"><input type="radio" name="q6" value="FALSE"> FALSE</label>
+            <label class="tf-option"><input type="radio" name="q6" value="NOT GIVEN"> NOT GIVEN</label>
+        </div>
+    </div>
+
+    <div class="q-row">
+        <span class="q-num">7</span>
+        <span>It was believed that the change Pete Sampras made to his rackets contributed to his strong serve.</span>
+        <div class="true-false-box">
+            <label class="tf-option"><input type="radio" name="q7" value="TRUE"> TRUE</label>
+            <label class="tf-option"><input type="radio" name="q7" value="FALSE"> FALSE</label>
+            <label class="tf-option"><input type="radio" name="q7" value="NOT GIVEN"> NOT GIVEN</label>
+        </div>
+    </div>
+</div>
+
+<!-- ========== QUESTIONS 8–13: NOTES COMPLETION ========== -->
+<div class="questions-block">
+    <h3>Questions 8–13</h3>
+    <div class="instruction">Complete the notes below.<br>Choose <strong>ONE WORD ONLY</strong> from the passage for each answer.<br>Write your answers in boxes 8–13 on your answer sheet.</div>
+
+    <h4 style="margin: 20px 0; text-align:center; font-size:18px; color:#1f3a5f;">The tennis racket and how it has changed</h4>
+
+    <div class="q-row">
+        <span class="q-num">8</span>
+        <span>Mike and Bob Bryan made changes to the types of</span>
+        <input type="text" class="input-answer" id="q8" placeholder="Answer">
+        <span>used on their racket frames.</span>
+    </div>
+
+    <div class="q-row">
+        <span class="q-num">9</span>
+        <span>Players were not allowed to use the spaghetti-strung racket because of the amount of</span>
+        <input type="text" class="input-answer" id="q9" placeholder="Answer">
+        <span>it created.</span>
+    </div>
+
+    <div class="q-row">
+        <span class="q-num">10</span>
+        <span>Changes to rackets can be regarded as being as important as players' diets or the</span>
+        <input type="text" class="input-answer" id="q10" placeholder="Answer">
+        <span>they do.</span>
+    </div>
+
+    <div class="q-row">
+        <span class="q-num">11</span>
+        <span>All rackets used to have natural strings made from the</span>
+        <input type="text" class="input-answer" id="q11" placeholder="Answer">
+        <span>of animals.</span>
+    </div>
+
+    <div class="q-row">
+        <span class="q-num">12</span>
+        <span>Pete Sampras had metal</span>
+        <input type="text" class="input-answer" id="q12" placeholder="Answer">
+        <span>put into the frames of his rackets.</span>
+    </div>
+
+    <div class="q-row">
+        <span class="q-num">13</span>
+        <span>Gonçalo Oliveira changed the</span>
+        <input type="text" class="input-answer" id="q13" placeholder="Answer">
+        <span>on his racket handles.</span>
+    </div>
+</div>
+
+<!-- Status Bar -->
+<div class="question-status">
+    <span class="part-label">Passage 1</span>
+    <div class="q-indicator" data-q="1">1</div><div class="q-indicator" data-q="2">2</div><div class="q-indicator" data-q="3">3</div><div class="q-indicator" data-q="4">4</div><div class="q-indicator" data-q="5">5</div><div class="q-indicator" data-q="6">6</div><div class="q-indicator" data-q="7">7</div><div class="q-indicator" data-q="8">8</div><div class="q-indicator" data-q="9">9</div><div class="q-indicator" data-q="10">10</div><div class="q-indicator" data-q="11">11</div><div class="q-indicator" data-q="12">12</div><div class="q-indicator" data-q="13">13</div>
+</div>
+
+<button class="clear-btn" onclick="clearAll()">🗑️ Clear All Answers & Highlights</button>
+
+<div class="nav-container">
+    <a href="reading-intro.html" class="back-btn">← Reading Intro</a>
+    <a href="#" class="next-btn" style="pointer-events:none; opacity:0.6;">Next: Passage 2 →</a>
+</div>
+
+        </div><!-- /content -->
+    </div><!-- /container -->
+
+<script>
+const STORAGE_KEY = 'Cambridge19_Test1_Reading';
+const passageId = 'reading-cambridge19-test1';
+let currentRange = null;
+let activeHighlight = null;
+
+// UPDATE STATUS
+function updateStatus() {
+    for (let q = 1; q <= 13; q++) {
+        const btn = document.querySelector(`.q-indicator[data-q="${q}"]`);
+        if (!btn) continue;
+        let val = '';
+        if (q <= 7) {
+            const checked = document.querySelector(`input[name="q${q}"]:checked`);
+            val = checked ? checked.value : '';
+        } else {
+            val = (document.getElementById(`q${q}`)?.value || '').trim();
+        }
+        btn.classList.toggle('answered', val.length > 0);
+    }
+}
+
+// SELECTION VALIDATION
+function isSelectionValid(sel) {
+    if (!sel || sel.isCollapsed || !sel.toString().trim()) return false;
+    try {
+        const r = sel.getRangeAt(0);
+        const p = r.commonAncestorContainer.nodeType === Node.TEXT_NODE
+            ? r.commonAncestorContainer.parentElement : r.commonAncestorContainer;
+        const inArea = document.getElementById('passageArea').contains(p);
+        const inInput = p.closest('input,textarea,button,label,.context-menu,.note-box');
+        return inArea && !inInput;
+    } catch { return false; }
+}
+
+// SAVE/LOAD HIGHLIGHTS
+function saveHighlights() {
+    localStorage.setItem(`${passageId}_highlights`, document.getElementById('passageArea').innerHTML);
+}
+function loadHighlights() {
+    const saved = localStorage.getItem(`${passageId}_highlights`);
+    if (saved) document.getElementById('passageArea').innerHTML = saved;
+}
+
+// DRAGGABLE NOTE
+const noteBox = document.getElementById('noteBox');
+const noteText = document.getElementById('noteText');
+const noteClose = document.getElementById('noteClose');
+const noteDragHandle = document.getElementById('noteDragHandle');
+let isDraggingNote = false;
+let dragOffsetX = 0, dragOffsetY = 0;
+
+noteClose.addEventListener('click', () => {
+    noteBox.style.display = 'none';
+    activeHighlight = null;
+});
+
+noteText.addEventListener('input', () => {
+    if (activeHighlight) {
+        activeHighlight.setAttribute('data-note', noteText.value);
+        saveHighlights();
+    }
+});
+
+document.addEventListener('mousedown', e => {
+    if (!noteDragHandle.contains(e.target)) return;
+    isDraggingNote = true;
+    const rc = noteBox.getBoundingClientRect();
+    dragOffsetX = e.clientX - rc.left;
+    dragOffsetY = e.clientY - rc.top;
+    noteBox.style.zIndex = '9999';
+});
+document.addEventListener('mousemove', e => {
+    if (!isDraggingNote) return;
+    noteBox.style.left = (e.clientX - dragOffsetX) + 'px';
+    noteBox.style.top = (e.clientY - dragOffsetY) + 'px';
+});
+document.addEventListener('mouseup', () => { isDraggingNote = false; });
+
+// CONTEXT MENU
+const contextMenu = document.getElementById('contextMenu');
+
+document.addEventListener('contextmenu', e => {
+    const sel = window.getSelection();
+    const targetHl = e.target.closest('.highlight');
+    
+    if (targetHl) {
+        e.preventDefault();
+        activeHighlight = targetHl;
+        const rc = targetHl.getBoundingClientRect();
+        contextMenu.style.left = (rc.left + window.scrollX) + 'px';
+        contextMenu.style.top = (rc.bottom + window.scrollY + 5) + 'px';
+        contextMenu.style.display = 'block';
+    }
+    else if (isSelectionValid(sel)) {
+        e.preventDefault();
+        currentRange = sel.getRangeAt(0).cloneRange();
+        const rc = currentRange.getBoundingClientRect();
+        contextMenu.style.left = (rc.left + window.scrollX) + 'px';
+        contextMenu.style.top = (rc.bottom + window.scrollY + 5) + 'px';
+        contextMenu.style.display = 'block';
+        activeHighlight = null;
+    }
+    else {
+        contextMenu.style.display = 'none';
+    }
+});
+
+document.addEventListener('click', e => {
+    if (!contextMenu.contains(e.target)) contextMenu.style.display = 'none';
+});
+
+// HIGHLIGHT
+document.getElementById('menuHighlight').addEventListener('click', () => {
+    if (!currentRange) return;
+    try {
+        const sp = document.createElement('span');
+        sp.className = 'highlight';
+        sp.textContent = currentRange.toString();
+        currentRange.deleteContents();
+        currentRange.insertNode(sp);
+        window.getSelection().removeAllRanges();
+        saveHighlights();
+    } catch { alert('Select smaller text.'); }
+    contextMenu.style.display = 'none';
+});
+
+// ADD NOTE
+document.getElementById('menuAddNote').addEventListener('click', () => {
+    contextMenu.style.display = 'none';
+    if (!activeHighlight) {
+        if (!currentRange) return;
+        try {
+            const sp = document.createElement('span');
+            sp.className = 'highlight';
+            sp.textContent = currentRange.toString();
+            currentRange.deleteContents();
+            currentRange.insertNode(sp);
+            activeHighlight = sp;
+            window.getSelection().removeAllRanges();
+            saveHighlights();
+        } catch { alert('Select smaller text.'); return; }
+    }
+    const rc = activeHighlight.getBoundingClientRect();
+    noteBox.style.left = (rc.right + window.scrollX + 10) + 'px';
+    noteBox.style.top = (rc.top + window.scrollY) + 'px';
+    noteBox.style.display = 'block';
+    noteText.value = activeHighlight.getAttribute('data-note') || '';
+    noteText.focus();
+});
+
+// REMOVE
+document.getElementById('menuRemove').addEventListener('click', () => {
+    contextMenu.style.display = 'none';
+    noteBox.style.display = 'none';
+    if (!activeHighlight) return;
+    activeHighlight.parentNode.replaceChild(document.createTextNode(activeHighlight.textContent), activeHighlight);
+    activeHighlight.parentNode.normalize();
+    activeHighlight = null;
+    saveHighlights();
+});
+
+// SAVE HELPERS
+function saveAnswer(q, val) {
+    localStorage.setItem(`${STORAGE_KEY}_q${q}`, val);
+    updateStatus();
+}
+
+function clearAll() {
+    if (!confirm('⚠️ Clear all answers and highlights?')) return;
+    for (let q = 1; q <= 13; q++) localStorage.removeItem(`${STORAGE_KEY}_q${q}`);
+    localStorage.removeItem(`${passageId}_highlights`);
+    document.querySelectorAll('input[type=radio]').forEach(i => i.checked = false);
+    document.querySelectorAll('.input-answer').forEach(i => { i.value = ''; i.classList.remove('filled'); });
+    noteBox.style.display = 'none';
+    updateStatus();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadHighlights();
+    
+    // Restore note markers
+    document.querySelectorAll('.highlight[data-note]').forEach(hl => {
+        if (hl.getAttribute('data-note')) {
+            let marker = hl.querySelector('.note-marker');
+            if (!marker) {
+                marker = document.createElement('span');
+                marker.className = 'note-marker';
+                marker.textContent = '!';
+                hl.appendChild(marker);
+            }
+        }
+    });
+
+    // Q1–7: TRUE/FALSE/NOT GIVEN
+    for (let q = 1; q <= 7; q++) {
+        const saved = localStorage.getItem(`${STORAGE_KEY}_q${q}`);
+        if (saved) {
+            const inp = document.querySelector(`input[name="q${q}"][value="${saved}"]`);
+            if (inp) inp.checked = true;
+        }
+        document.querySelectorAll(`input[name="q${q}"]`).forEach(r => {
+            r.addEventListener('change', () => saveAnswer(q, r.value));
+        });
+    }
+
+    // Q8–13: TEXT INPUT
+    for (let q = 8; q <= 13; q++) {
+        const inp = document.getElementById(`q${q}`);
+        const saved = localStorage.getItem(`${STORAGE_KEY}_q${q}`);
+        if (saved) { inp.value = saved; inp.classList.add('filled'); }
+        inp.addEventListener('input', () => {
+            const val = inp.value.trim();
+            val ? inp.classList.add('filled') : inp.classList.remove('filled');
+            saveAnswer(q, val);
+        });
+    }
+
+    updateStatus();
+});
+</script>
+</body>
+</html>
