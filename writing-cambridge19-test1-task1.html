@@ -60,7 +60,6 @@
             padding: 20px 25px 25px;
             background-color: #fefefe;
             border-right: 1px solid #e2e8f0;
-            overflow-y: auto;
             display: flex;
             flex-direction: column;
         }
@@ -74,20 +73,27 @@
             border: 1px solid #c5d2e3;
             background: #f8fafc;
             padding: 18px;
-            margin: 0 0 20px;
+            margin: 0 0 15px;
             font-size: 15px;
             border-radius: 6px;
+        }
+        .graph-container {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            background: #fff;
+            min-height: 300px;
+            max-height: 550px;
         }
         .task-image {
             display: block;
             width: 100%;
             height: auto;
-            flex: 1;
             object-fit: contain;
             margin: 0 auto;
-            border: 1px solid #e2e8f0;
-            border-radius: 4px;
-            background: #fff;
+            padding: 10px;
         }
         .writing-panel {
             width: 52%;
@@ -194,6 +200,9 @@
                 border-right: none;
                 border-bottom: 1px solid #e2e8f0;
             }
+            .graph-container {
+                max-height: 350px;
+            }
             textarea {
                 min-height: 300px;
             }
@@ -217,7 +226,9 @@
                 Summarise the information by selecting and reporting the main features, and make comparisons where relevant.<br><br>
                 <strong>Write at least 150 words.</strong>
             </div>
-            <img src="C19writingtask1.png" alt="Number of participants, by activity 2000–2020" class="task-image">
+            <div class="graph-container">
+                <img src="C19writingtask1.png" alt="Number of participants, by activity 2000–2020" class="task-image">
+            </div>
         </div>
         <div class="writing-panel">
             <textarea id="task1Input" placeholder="Write your response here..."></textarea>
