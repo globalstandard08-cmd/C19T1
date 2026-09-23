@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading - Cambridge 19 Test 1 - Passage 3</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; }
+        html, body { background-color: #ffffff; height: 100%; overflow-y: auto; }
+        
+        .top-bar { 
+            background-color: #ffffff; 
+            padding: 10px 25px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            position: sticky; 
+            top: 0; 
+            z-index: 100; 
+            border-bottom: 1px solid #e5e5e5;
+        }
+        .logo { font-size: 22px; font-weight: bold; color: #1f3a5f; }
+        
+        .main-grid { display: flex; min-height: calc(100vh - 60px - 50px); gap: 2px; }
+        
+        .passage-pane { 
+            width: 50%; 
+            background: #ffffff; 
+            overflow-y: auto; 
+            padding: 25px; 
+            border-right: 1px solid #eee; 
+            max-height: calc(100vh - 60px - 50px); 
+            position: sticky; 
+            top: 60px; 
+        }
+        .exam-title {
+            text-align: center;
+            color: #1f3a5f;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #1f3a5f;
+        }
+        .instruction { 
+            background-color: #f9f9f9; 
+            border-left: 3px solid #1f3a5f; 
+            padding: 12px; 
+            margin-bottom: 18px; 
+            border-radius: 4px; 
+            font-weight: 500; 
+            font-size: 15px; 
+        }
+        .passage-text { font-size: 16px; line-height: 1.7; margin-top: 15px; }
+        .passage-text p { margin-bottom: 14px; text-align: justify; }
+        .para-label { 
+            font-weight: bold; 
+            color: #1f3a5f; 
+            display: inline-block; 
+            min-width: 25px; 
+            vertical-align: top; 
+        }
+        .para-content { display: inline; }
+        
+        .questions-pane { 
+            width: 50%; 
+            background: #ffffff; 
+            overflow-y: auto; 
+            padding: 25px; 
+            max-height: calc(100vh - 60px - 50px); 
+            position: sticky; 
+            top: 60px; 
+        }
+        .questions-pane h3 { color: #1f3a5f; margin: 25px 0 10px; font-size: 17px; }
+        .q-row { display: flex; align-items: flex-start; gap: 10px; margin: 14px 0; font-size: 16px; flex-wrap: wrap; }
+        .q-row.current { 
+            background-color: #eaf1fa; 
+            padding: 10px 8px; 
+            border-radius: 4px;
+            margin-left: -8px;
+            margin-right: -8px;
+        }
+        .q-num { font-weight: bold; min-width: 28px; color: #1f3a5f; flex-shrink: 0; }
+        .input-answer { 
+            padding: 7px 10px; 
+            border: 1px solid #ddd; 
+            border-radius: 4px; 
+            font-size: 16px; 
+            background: #ffffff; 
+        }
+        .input-answer:focus { outline: none; border-color: #1f3a5f; }
+        .input-answer.filled { background-color: #f5f8ff; border-color: #1f3a5f; }
+        .input-answer.short { width: 60px; text-align: center; }
+        
+        .mc-option { 
+            display: flex; 
+            align-items: flex-start; 
+            gap: 8px; 
+            padding: 6px 0; 
+            cursor: pointer;
+            width: 100%;
+        }
+        .mc-option input { 
+            margin-top: 3px; 
+            width: 18px; 
+            height: 18px; 
+            cursor: pointer;
+            accent-color: #1f3a5f;
+        }
+        .mc-letter { 
+            font-weight: bold; 
+            min-width: 20px; 
+            display: inline-block;
+        }
+        
+        .list-match { margin: 15px 0; }
+        .list-match p { margin: 8px 0; }
+        .match-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 0;
+        }
+        .match-letter {
+            font-weight: bold;
+            min-width: 25px;
+            color: #1f3a5f;
+        }
+        
+        .highlight { 
+            background-color: #ffd700; 
+            padding: 2px 4px; 
+            border-radius: 2px; 
+            cursor: pointer; 
+            display: inline; 
+            color: #000; 
+            position: relative; 
+        }
+        .note-marker { 
+            position: absolute; 
+            top: -8px; 
+            right: -8px; 
+            width: 18px; 
+            height: 18px; 
+            background: #1f3a5f; 
+            color: white; 
+            border-radius: 50%; 
+            font-size: 11px; 
+            font-weight: bold; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            cursor: pointer; 
+            z-index: 10; 
+        }
+        .context-menu { 
+            position: absolute; 
+            background: #fff; 
+            border: 1px solid #ddd; 
+            border-radius: 4px; 
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1); 
+            z-index: 9999; 
+            display: none; 
+            min-width: 180px; 
+        }
+        .context-menu div { 
+            padding: 10px 14px; 
+            cursor: pointer; 
+            font-size: 14px; 
+            border-bottom: 1px solid #f5f5f5; 
+        }
+        .context-menu div:last-child { border-bottom: none; }
+        .context-menu div:hover { background: #f5f5f5; }
+        
+        .note-box { 
+            position: absolute; 
+            width: 260px; 
+            min-height: 80px; 
+            background: #fffde7; 
+            border: 1px solid #f9d423; 
+            border-radius: 6px; 
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1); 
+            z-index: 9990; 
+            display: none; 
+        }
+        .note-header { 
+            background: #f9d423; 
+            padding: 6px 10px; 
+            font-size: 13px; 
+            font-weight: bold; 
+            cursor: move; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            color: #333; 
+        }
+        .note-close { cursor: pointer; font-weight: bold; font-size: 16px; line-height: 1; }
+        .note-textarea { 
+            width: 100%; 
+            min-height: 60px; 
+            border: none; 
+            padding: 10px; 
+            font-size: 14px; 
+            resize: vertical; 
+            background: transparent; 
+            outline: none; 
+        }
+        
+        .bottom-nav { 
+            min-height: 50px; 
+            background: #fff; 
+            border-top: 1px solid #eee; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between;
+            padding: 6px 8px; 
+            gap: 4px; 
+            overflow-x: hidden;
+            overflow-y: hidden;
+            flex-wrap: nowrap;
+            position: sticky; 
+            bottom: 0; 
+            z-index: 90; 
+        }
+        .nav-group { display: flex; align-items: center; gap: 2px; flex-wrap: nowrap; }
+        .part-label { 
+            font-size: 9px; 
+            font-weight: 600; 
+            color: #1f3a5f; 
+            margin: 0 2px; 
+            white-space: nowrap; 
+        }
+        .q-indicator { 
+            width: 22px; 
+            height: 22px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            border-radius: 3px; 
+            border: 1px solid #ddd; 
+            background: #fff; 
+            color: #333; 
+            font-size: 11px; 
+            cursor: pointer; 
+            transition: all 0.2s; 
+            flex-shrink: 0; 
+        }
+        .q-indicator:hover { border-color: #1f3a5f; }
+        .q-indicator.answered { 
+            background: #10b981; 
+            color: white; 
+            border-color: #10b981; 
+        }
+        .q-indicator.current { 
+            background-color: #eaf1fa; 
+            border-color: #1f3a5f;
+            border-width: 2px;
+            font-weight: bold;
+        }
+        .nav-btn {
+            padding: 5px 10px;
+            background-color: #1f3a5f;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            flex-shrink: 0;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        .nav-btn:hover { background-color: #2a4a7a; }
+        .clear-btn { 
+            background-color: #dc2626; 
+            color: white; 
+            border: none; 
+            padding: 5px 8px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-size: 11px; 
+            font-weight: bold; 
+            white-space: nowrap; 
+            flex-shrink: 0;
+        }
+        .clear-btn:hover { background-color: #b91c1c; }
+    </style>
+</head>
+<body>
+    <div class="context-menu" id="contextMenu">
+        <div id="menuHighlight">🖍️ Highlight</div>
+        <div id="menuAddNote">📝 Add Note</div>
+        <div id="menuRemove">❌ Remove Highlight & Note</div>
+    </div>
+    
+    <div class="note-box" id="noteBox">
+        <div class="note-header" id="noteDragHandle">
+            <span>📝 Note</span>
+            <span class="note-close" id="noteClose">×</span>
+        </div>
+        <textarea class="note-textarea" id="noteText" placeholder="Type your note here…"></textarea>
+    </div>
+    
+    <div class="top-bar">
+        <div class="logo">IELTS READING — Cambridge 19 Test 1 — PASSAGE 3</div>
+    </div>
+    
+    <div class="main-grid">
+        <div class="passage-pane" id="passageArea">
+            <div class="exam-title">READING PASSAGE 3</div>
+            <div class="instruction">You should spend about 20 minutes on Questions 27–40, which are based on Reading Passage 3 below.</div>
+            <h3 style="color:#1f3a5f; margin:15px 0; font-size:20px; text-align:center;">The persistence and peril of misinformation</h3>
+            <div class="passage-text">
+<p><span class="para-label">A</span><span class="para-content"> Brian Southwell looks at how human brains verify information and discusses some of the challenges of battling widespread falsehoods.</span></p>
+<p>Misinformation — both deliberately promoted and accidentally shared — is perhaps an inevitable part of the world in which we live, but it is not a new problem. People have likely lied to one another for as long as verbal communication has existed. Deceiving others can offer an apparent opportunity to gain strategic advantage, to motivate others to action, or even to protect personal bonds. Moreover, people have been sharing inaccurate information with one another for thousands of years.</p>
+<p>However, we currently live in an era in which technology enables information to reach large audiences distributed across the globe, and thus the potential for immediate and widespread effects from misinformation now looms larger than in the past. Yet the means to correct misinformation might, over time, be found in those same patterns of mass communication and of the facilitated spread of information.</p>
+<p>The main worry regarding misinformation is its potential to unduly influence attitudes and behaviour, leading people to think and act differently than they would if they were correctly informed, as suggested by the research teams of Stephan Lewandowsky of the University of Bristol and Elizabeth Marsh of Duke University, among others. In other words, we worry that misinformation might lead to people holding misperceptions (or false beliefs) and that these misperceptions, especially when they occur among large groups of people, may have detrimental, downstream consequences for health, social harmony, and the political climate.</p>
+<p>At least three observations related to misinformation in the contemporary mass-media environment warrant the attention of researchers, policy makers, and everyone who watches television, listens to the radio, or reads information online. First of all, people who encounter misinformation tend to believe it, at least initially. Secondly, electronic and print media often do not block many types of misinformation before it appears in content available to large audiences. Thirdly, countering misinformation once it has enjoyed wide exposure can be a resource-intensive effort.</p>
+<p>Knowing what happens when people initially encounter misinformation holds tremendous importance for estimating the potential for subsequent problems. Although it is fairly routine for individuals to come across information that is false, the question of exactly how — and when — we mentally label information as true or false has generated philosophical debate. The dilemma is neatly summarized by a contrast between how the 17th-century philosophers René Descartes and Baruch Spinoza described human information engagement, with conflicting predictions that only recently have been empirically tested in robust ways.</p>
+<p>Descartes argued that a person only accepts or rejects information after first considering its truth or falsehood; Spinoza argued that people accept all encountered information (or misinformation) by default and then subsequently verify or reject it through a separate cognitive process. In recent decades, empirical evidence from the research teams of Eris Asher of the University of Chicago and Daniel Gilbert at Harvard University, among others, has supported Spinoza's account: people appear to encode all new information as if it were true, even if only momentarily, and later tag the information as being either true or false, a pattern that seems consistent with the observation that mental resources for scepticism physically reside in a different part of the brain than the resources used in perceiving and encoding.</p>
+<p>What about our second observation: that misinformation often appears in electronic or print media without being preemptively blocked? In support of this, one might consider the nature of regulatory structures in the United States: regulatory agencies here tend to foster the public detection of broadcast information. Organizations such as the Food and Drug Administration (FDA) offer considerable monitoring and notification functions, but these roles typically do not involve preemptive censorship. The FDA oversees direct-to-consumer prescription drug advertising, for example, and has developed mechanisms such as the 'Bad Ad' program, through which people can report advertising in apparent violation of FDA guidelines on drug risks. Such programs, although valuable, do not keep false information from reaching the audience. In addition, even misinformation that is successfully corrected can continue to affect attitudes.</p>
+<p>This leads us to our third observation: a campaign to correct misinformation, even if rhetorically compelling, requires resources and planning to accomplish necessary reach and frequency. For corrective campaigns to be persuasive, audiences need to be able to comprehend them, which requires either effort to frame messages in ways that are accessible or to educate and sensitize audiences to the possibility of misinformation. That some audiences might be unaware of the potential for misinformation also suggests the utility of media literacy efforts as early as elementary school. Even with journalists and scholars pointing to the phenomenon of 'fake news', people do not distinguish between demonstrably false stories and those based in fact when scanning and processing written information.</p>
+<p>We live at a time when widespread misinformation is common. Yet at this very moment many people also are passionately developing potential solutions and remedies. The journey forward will undoubtedly be a long and arduous one. Future remedies will require not only continued theoretical consideration but also the development and maintenance of consistent monitoring tools — and a recognition among fellow members of society of which claims we should find credible in the media that are insufficiently based in scientific consensus and social reality should be countered. Misinformation arises as a result of human fallibility and human information needs. To overcome the worst effects of the phenomenon, we will need coordinated efforts over time, rather than any singular one-size-fits-all panacea we could hope to offer.</p>
+            </div>
+        </div>
+        
+        <div class="questions-pane" id="questionsArea">
+            <h3>Questions 27–30</h3>
+            <div class="instruction">Choose the correct letter, A, B, C or D.<br>Write the correct letter in boxes 27–30 on your answer sheet.</div>
+            
+            <div class="q-row" id="q27">
+                <span class="q-num">27</span>
+                <div>
+                    <span>What point does the writer make about misinformation in the first paragraph?</span>
+                    <label class="mc-option">
+                        <input type="radio" name="q27" value="A">
+                        <span><span class="mc-letter">A</span> Misinformation is a relatively recent phenomenon.</span>
+                    </label>
+                    <label class="mc-option">
+                        <input type="radio" name="q27" value="B">
+                        <span><span class="mc-letter">B</span> Some people find it easy to identify misinformation.</span>
+                    </label>
+                    <label class="mc-option">
+                        <input type="radio" name="q27" value="C">
+                        <span><span class="mc-letter">C</span> Misinformation changes as it is passed from one person to another.</span>
+                    </label>
+                    <label class="mc-option">
+                        <input type="radio" name="q27" value="D">
+                        <span><span class="mc-letter">D</span> There may be a number of reasons for the spread of misinformation.</span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="q-row" id="q28">
+                <span class="q-num">28</span>
+                <div>
+                    <span>What does the writer say about the role of technology?</span>
+                    <label class="mc-option">
+                        <input type="radio" name="q28" value="A">
+                        <span><span class="mc-letter">A</span> It may at some point provide us with a solution to misinformation.</span>
+                    </label>
+                    <label class="mc-option">
+                        <input type="radio" name="q28" value="B">
+                        <span><span class="mc-letter">B</span> It could fundamentally alter the way in which people regard information.</span>
+                    </label>
+                    <label class="mc-option">
+                        <input type="radio" name="q28" value="C">
+                        <span><span class="mc-letter">C</span> It has changed the way in which organisations use misinformation.</span>
+                    </label>
+                    <label class="mc-option">
+                        <input type="radio" name="q28" value="D">
+                        <span><span class="mc-letter">D</span> It has made it easier for people to check whether information is accurate.</span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="q-row" id="q29">
+                <span class="q-num">29</span>
+                <div>
+                    <span>What is the writer doing in the fourth paragraph?</span>
+                    <label class="mc-option">
+                        <input type="radio" name="q29" value="A">
+                        <span><span class="mc-letter">A</span> comparing the different opinions people have of misinformation</span>
+                    </label>
+                    <label class="mc-option">
+                        <input type="radio" name="q29" value="B">
+                        <span><span class="mc-letter">B</span> explaining how the effects of misinformation have changed over time</span>
+                    </label>
+                    <label class="mc-option">
+                        <input type="radio" name="q29" value="C">
+                        <span><span class="mc-letter">C</span> outlining which issues connected with misinformation are significant today</span>
+                    </label>
+                    <label class="mc-option">
+                        <input type="radio" name="q29" value="D">
+                        <span><span class="mc-letter">D</span> describing the attitude of policy makers towards misinformation in the media</span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="q-row" id="q30">
+                <span class="q-num">30</span>
+                <div>
+                    <span>What point does the writer make about regulation in the USA?</span>
+                    <label class="mc-option">
+                        <input type="radio" name="q30" value="A">
+                        <span><span class="mc-letter">A</span> The guidelines issued by the FDA need to be simplified.</span>
+                    </label>
+                    <label class="mc-option">
+                        <input type="radio" name="q30" value="B">
+                        <span><span class="mc-letter">B</span> Regulation does not affect people's opinions of new prescription drugs.</span>
+                    </label>
+                    <label class="mc-option">
+                        <input type="radio" name="q30" value="C">
+                        <span><span class="mc-letter">C</span> The USA has more regulatory bodies than most other countries.</span>
+                    </label>
+                    <label class="mc-option">
+                        <input type="radio" name="q30" value="D">
+                        <span><span class="mc-letter">D</span> Regulation fails to prevent misinformation from appearing in the media.</span>
+                    </label>
+                </div>
+            </div>
+            
+            <h3>Questions 31–36</h3>
+            <div class="instruction">Complete the summary using the list of phrases, A–J, below.<br>Write the correct letter, A–J, in boxes 31–36 on your answer sheet.</div>
+            
+            <div class="summary-box">
+                <h4>What happens when people encounter misinformation?</h4>
+                <p>Although people have 
+                    <select class="input-answer" id="ans31">
+                        <option value="">Select</option>
+                        <option value="A">A — constant conflict</option>
+                        <option value="B">B — additional evidence</option>
+                        <option value="C">C — different locations</option>
+                        <option value="D">D — experimental subjects</option>
+                        <option value="E">E — short period</option>
+                        <option value="F">F — extreme distrust</option>
+                        <option value="G">G — frequent exposure</option>
+                        <option value="H">H — mental operation</option>
+                        <option value="I">I — dubious reason</option>
+                        <option value="J">J — different ideas</option>
+                    </select>
+                     to misinformation, there is debate about precisely how and when we label something as true or false. The philosophers Descartes and Spinoza had 
+                    <select class="input-answer" id="ans32">
+                        <option value="">Select</option>
+                        <option value="A">A — constant conflict</option>
+                        <option value="B">B — additional evidence</option>
+                        <option value="C">C — different locations</option>
+                        <option value="D">D — experimental subjects</option>
+                        <option value="E">E — short period</option>
+                        <option value="F">F — extreme distrust</option>
+                        <option value="G">G — frequent exposure</option>
+                        <option value="H">H — mental operation</option>
+                        <option value="I">I — dubious reason</option>
+                        <option value="J">J — different ideas</option>
+                    </select>
+                     about how people engage with information. While Descartes believed that people accept or reject information after considering whether it is true or not, Spinoza argued that people accepted all information they encountered (including misinformation) and did not verify or reject it until afterwards. Moreover, Spinoza believed that a distinct 
+                    <select class="input-answer" id="ans33">
+                        <option value="">Select</option>
+                        <option value="A">A — constant conflict</option>
+                        <option value="B">B — additional evidence</option>
+                        <option value="C">C — different locations</option>
+                        <option value="D">D — experimental subjects</option>
+                        <option value="E">E — short period</option>
+                        <option value="F">F — extreme distrust</option>
+                        <option value="G">G — frequent exposure</option>
+                        <option value="H">H — mental operation</option>
+                        <option value="I">I — dubious reason</option>
+                        <option value="J">J — different ideas</option>
+                    </select>
+                     is involved in these stages. Recent research has provided 
+                    <select class="input-answer" id="ans34">
+                        <option value="">Select</option>
+                        <option value="A">A — constant conflict</option>
+                        <option value="B">B — additional evidence</option>
+                        <option value="C">C — different locations</option>
+                        <option value="D">D — experimental subjects</option>
+                        <option value="E">E — short period</option>
+                        <option value="F">F — extreme distrust</option>
+                        <option value="G">G — frequent exposure</option>
+                        <option value="H">H — mental operation</option>
+                        <option value="I">I — dubious reason</option>
+                        <option value="J">J — different ideas</option>
+                    </select>
+                     for Spinoza's theory and it would appear that people accept all encountered information as if it were true, even if this is for an extremely 
+                    <select class="input-answer" id="ans35">
+                        <option value="">Select</option>
+                        <option value="A">A — constant conflict</option>
+                        <option value="B">B — additional evidence</option>
+                        <option value="C">C — different locations</option>
+                        <option value="D">D — experimental subjects</option>
+                        <option value="E">E — short period</option>
+                        <option value="F">F — extreme distrust</option>
+                        <option value="G">G — frequent exposure</option>
+                        <option value="H">H — mental operation</option>
+                        <option value="I">I — dubious reason</option>
+                        <option value="J">J — different ideas</option>
+                    </select>
+                     and do not label the information as true or false until later. This is consistent with the fact that the resources for scepticism and the resources for perceiving and encoding are in 
+                    <select class="input-answer" id="ans36">
+                        <option value="">Select</option>
+                        <option value="A">A — constant conflict</option>
+                        <option value="B">B — additional evidence</option>
+                        <option value="C">C — different locations</option>
+                        <option value="D">D — experimental subjects</option>
+                        <option value="E">E — short period</option>
+                        <option value="F">F — extreme distrust</option>
+                        <option value="G">G — frequent exposure</option>
+                        <option value="H">H — mental operation</option>
+                        <option value="I">I — dubious reason</option>
+                        <option value="J">J — different ideas</option>
+                    </select>
+                     in the brain.</p>
+            </div>
+            
+            <h3>Questions 37–40</h3>
+            <div class="instruction">Complete the sentences below.<br>Choose <strong>ONE WORD ONLY</strong> from the passage for each answer.<br>Write your answers in boxes 37–40 on your answer sheet.</div>
+            
+            <div class="q-row" id="q37">
+                <span class="q-num">37</span>
+                <span>It is important to be able to distinguish false stories from those based in fact when doing this online.</span>
+                <input type="text" class="input-answer short" id="ans37" placeholder="37">
+            </div>
+            <div class="q-row" id="q38">
+                <span class="q-num">38</span>
+                <span>There are many people working on possible __________ to the problem of misinformation.</span>
+                <input type="text" class="input-answer short" id="ans38" placeholder="38">
+            </div>
+            <div class="q-row" id="q39">
+                <span class="q-num">39</span>
+                <span>We should be more ready to question claims that are not supported by __________ facts.</span>
+                <input type="text" class="input-answer short" id="ans39" placeholder="39">
+            </div>
+            <div class="q-row" id="q40">
+                <span class="q-num">40</span>
+                <span>Dealing with misinformation will require a __________ approach rather than one single solution.</span>
+                <input type="text" class="input-answer short" id="ans40" placeholder="40">
+            </div>
+        </div>
+    </div>
+    
+    <div class="bottom-nav">
+        <button class="clear-btn" id="clearAllBtn">🗑️ Clear</button>
+        <div class="nav-group">
+            <a href="reading-cambridge19-test1-passage2.html" class="nav-btn">← Previous</a>
+            
+            <span class="part-label">P1</span>
+            <div class="q-indicator" data-q="1">1</div>
+            <div class="q-indicator" data-q="2">2</div>
+            <div class="q-indicator" data-q="3">3</div>
+            <div class="q-indicator" data-q="4">4</div>
+            <div class="q-indicator" data-q="5">5</div>
+            <div class="q-indicator" data-q="6">6</div>
+            <div class="q-indicator" data-q="7">7</div>
+            <div class="q-indicator" data-q="8">8</div>
+            <div class="q-indicator" data-q="9">9</div>
+            <div class="q-indicator" data-q="10">10</div>
+            <div class="q-indicator" data-q="11">11</div>
+            <div class="q-indicator" data-q="12">12</div>
+            <div class="q-indicator" data-q="13">13</div>
+            
+            <span class="part-label">P2</span>
+            <div class="q-indicator" data-q="14">14</div>
+            <div class="q-indicator" data-q="15">15</div>
+            <div class="q-indicator" data-q="16">16</div>
+            <div class="q-indicator" data-q="17">17</div>
+            <div class="q-indicator" data-q="18">18</div>
+            <div class="q-indicator" data-q="19">19</div>
+            <div class="q-indicator" data-q="20">20</div>
+            <div class="q-indicator" data-q="21">21</div>
+            <div class="q-indicator" data-q="22">22</div>
+            <div class="q-indicator" data-q="23">23</div>
+            <div class="q-indicator" data-q="24">24</div>
+            <div class="q-indicator" data-q="25">25</div>
+            <div class="q-indicator" data-q="26">26</div>
+            
+            <span class="part-label">P3</span>
+            <div class="q-indicator" data-q="27">27</div>
+            <div class="q-indicator" data-q="28">28</div>
+            <div class="q-indicator" data-q="29">29</div>
+            <div class="q-indicator" data-q="30">30</div>
+            <div class="q-indicator" data-q="31">31</div>
+            <div class="q-indicator" data-q="32">32</div>
+            <div class="q-indicator" data-q="33">33</div>
+            <div class="q-indicator" data-q="34">34</div>
+            <div class="q-indicator" data-q="35">35</div>
+            <div class="q-indicator" data-q="36">36</div>
+            <div class="q-indicator" data-q="37">37</div>
+            <div class="q-indicator" data-q="38">38</div>
+            <div class="q-indicator" data-q="39">39</div>
+            <div class="q-indicator" data-q="40">40</div>
+        </div>
+    </div>
+
+<script>
+const STORAGE_KEY = 'Cambridge19_Test1_Reading';
+const passageId = 'reading-cambridge19-test1-passage3';
+let currentRange = null, activeHighlight = null, currentQuestionNum = 27;
+
+function setCurrentQuestion(qNum) {
+    document.querySelectorAll('.q-row.current').forEach(r => r.classList.remove('current'));
+    document.querySelectorAll('.q-indicator.current').forEach(b => b.classList.remove('current'));
+    currentQuestionNum = qNum;
+    document.getElementById(`q${qNum}`)?.classList.add('current');
+    document.querySelector(`.q-indicator[data-q="${qNum}"]`)?.classList.add('current');
+}
+
+function updateStatus() {
+    for (let q = 1; q <= 40; q++) {
+        const btn = document.querySelector(`.q-indicator[data-q="${q}"]`);
+        if (!btn) continue;
+        const val = localStorage.getItem(`${STORAGE_KEY}_q${q}`) || '';
+        btn.classList.toggle('answered', val.length > 0);
+    }
+}
+
+document.querySelectorAll('.q-indicator').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const qNum = parseInt(btn.dataset.q);
+        let targetFile = '';
+        if (qNum >= 1 && qNum <= 13) {
+            targetFile = 'reading-cambridge19-test1.html';
+        } else if (qNum >= 14 && qNum <= 26) {
+            targetFile = 'reading-cambridge19-test1-passage2.html';
+        } else if (qNum >= 27 && qNum <= 40) {
+            targetFile = 'reading-cambridge19-test1-passage3.html';
+        }
+        if (targetFile && !window.location.pathname.includes(targetFile)) {
+            window.location.href = targetFile + '#q' + qNum;
+            return;
+        }
+        setCurrentQuestion(qNum);
+        document.getElementById(`q${qNum}`)?.scrollIntoView({behavior:'smooth', block:'center'});
+    });
+});
+
+function isSelectionValid(sel) {
+    if (!sel || sel.isCollapsed || !sel.toString().trim()) return false;
+    try {
+        const p = sel.getRangeAt(0).commonAncestorContainer.nodeType === Node.TEXT_NODE
+            ? sel.getRangeAt(0).commonAncestorContainer.parentElement : sel.getRangeAt(0).commonAncestorContainer;
+        return (document.getElementById('passageArea').contains(p) || document.getElementById('questionsArea').contains(p))
+            && !p.closest('input,textarea,select,button,label,.context-menu,.note-box,.summary-box');
+    } catch { return false; }
+}
+
+function saveHighlightsData() {
+    const highlights = [];
+    document.querySelectorAll('.highlight').forEach((hl, idx) => {
+        highlights.push({id: idx, text: hl.textContent, note: hl.getAttribute('data-note') || ''});
+    });
+    localStorage.setItem(`${passageId}_highlights`, JSON.stringify(highlights));
+}
+
+function restoreNoteMarkers() {
+    document.querySelectorAll('.highlight').forEach(hl => {
+        if (hl.getAttribute('data-note') && !hl.querySelector('.note-marker')) {
+            const m = document.createElement('span');
+            m.className = 'note-marker'; m.textContent = '!';
+            hl.appendChild(m);
+        }
+    });
+}
+
+const noteBox = document.getElementById('noteBox'), noteText = document.getElementById('noteText');
+let isDraggingNote = false, dragOffsetX = 0, dragOffsetY = 0;
+document.getElementById('noteClose').addEventListener('click', () => { noteBox.style.display = 'none'; activeHighlight = null; });
+noteText.addEventListener('input', () => {
+    if (!activeHighlight) return;
+    activeHighlight.setAttribute('data-note', noteText.value);
+    if (noteText.value && !activeHighlight.querySelector('.note-marker')) {
+        const m = document.createElement('span'); m.className = 'note-marker'; m.textContent = '!';
+        activeHighlight.appendChild(m);
+    }
+    if (!noteText.value) activeHighlight.querySelector('.note-marker')?.remove();
+    saveHighlightsData();
+});
+document.addEventListener('mousedown', e => {
+    if (!document.getElementById('noteDragHandle').contains(e.target)) return;
+    isDraggingNote = true;
+    const rc = noteBox.getBoundingClientRect();
+    dragOffsetX = e.clientX - rc.left; dragOffsetY = e.clientY - rc.top;
+});
+document.addEventListener('mousemove', e => {
+    if (!isDraggingNote) return;
+    noteBox.style.left = (e.clientX - dragOffsetX) + 'px';
+    noteBox.style.top = (e.clientY - dragOffsetY) + 'px';
+});
+document.addEventListener('mouseup', () => { isDraggingNote = false; });
+
+const contextMenu = document.getElementById('contextMenu');
+document.addEventListener('contextmenu', e => {
+    const sel = window.getSelection();
+    const targetHl = e.target.closest('.highlight');
+    if (targetHl) {
+        e.preventDefault(); activeHighlight = targetHl;
+        const rc = targetHl.getBoundingClientRect();
+        contextMenu.style.left = (rc.left + window.scrollX) + 'px';
+        contextMenu.style.top = (rc.bottom + window.scrollY + 5) + 'px';
+        contextMenu.style.display = 'block';
+    } else if (isSelectionValid(sel)) {
+        e.preventDefault(); currentRange = sel.getRangeAt(0).cloneRange();
+        const rc = currentRange.getBoundingClientRect();
+        contextMenu.style.left = (rc.left + window.scrollX) + 'px';
+        contextMenu.style.top = (rc.bottom + window.scrollY + 5) + 'px';
+        contextMenu.style.display = 'block'; activeHighlight = null;
+    } else contextMenu.style.display = 'none';
+});
+document.addEventListener('click', e => { if (!contextMenu.contains(e.target)) contextMenu.style.display = 'none'; });
+
+document.getElementById('menuHighlight').addEventListener('click', () => {
+    if (!currentRange) return;
+    try {
+        const sp = document.createElement('span'); sp.className = 'highlight'; sp.textContent = currentRange.toString();
+        currentRange.deleteContents(); currentRange.insertNode(sp);
+        window.getSelection().removeAllRanges(); saveHighlightsData();
+    } catch { alert('Select smaller text.'); }
+    contextMenu.style.display = 'none';
+});
+
+document.getElementById('menuAddNote').addEventListener('click', () => {
+    contextMenu.style.display = 'none';
+    if (!activeHighlight) {
+        if (!currentRange) return;
+        try {
+            const sp = document.createElement('span'); sp.className = 'highlight'; sp.textContent = currentRange.toString();
+            currentRange.deleteContents(); currentRange.insertNode(sp);
+            window.getSelection().removeAllRanges(); activeHighlight = sp; saveHighlightsData();
+        } catch { alert('Select smaller text.'); return; }
+    }
+    const rc = activeHighlight.getBoundingClientRect();
+    noteBox.style.left = (rc.right + window.scrollX + 10) + 'px';
+    noteBox.style.top = (rc.top + window.scrollY) + 'px';
+    noteBox.style.display = 'block';
+    noteText.value = activeHighlight.getAttribute('data-note') || '';
+    noteText.focus();
+});
+
+document.getElementById('menuRemove').addEventListener('click', () => {
+    contextMenu.style.display = 'none'; noteBox.style.display = 'none';
+    if (!activeHighlight) return;
+    const p = activeHighlight.parentNode;
+    p.replaceChild(document.createTextNode(activeHighlight.textContent), activeHighlight);
+    p.normalize(); activeHighlight = null; saveHighlightsData();
+});
+
+function saveAnswer(q, val) { localStorage.setItem(`${STORAGE_KEY}_q${q}`, val); updateStatus(); }
+
+function clearAllData() {
+    if (!confirm('⚠️ Clear ALL answers, highlights, notes? Cannot undo.')) return;
+    for (let q = 27; q <= 40; q++) localStorage.removeItem(`${STORAGE_KEY}_q${q}`);
+    localStorage.removeItem(`${passageId}_highlights`);
+    document.querySelectorAll('input[type=radio]').forEach(i => i.checked = false);
+    document.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+    document.querySelectorAll('.input-answer').forEach(i => { i.value = ''; i.classList.remove('filled'); });
+    document.querySelectorAll('.highlight').forEach(hl => {
+        const p = hl.parentNode; p.replaceChild(document.createTextNode(hl.textContent), hl); p.normalize();
+    });
+    noteBox.style.display = 'none'; location.reload();
+}
+document.getElementById('clearAllBtn').addEventListener('click', clearAllData);
+
+document.addEventListener('DOMContentLoaded', () => {
+    restoreNoteMarkers();
+    
+    // Radio Q27-30
+    for (let q = 27; q <= 30; q++) {
+        const saved = localStorage.getItem(`${STORAGE_KEY}_q${q}`);
+        if (saved) {
+            const radio = document.querySelector(`input[name="q${q}"][value="${saved}"]`);
+            if (radio) radio.checked = true;
+        }
+        document.querySelectorAll(`input[name="q${q}"]`).forEach(radio => {
+            radio.addEventListener('change', () => saveAnswer(q, radio.value));
+        });
+    }
+    
+    // Select Q31-36
+    for (let q = 31; q <= 36; q++) {
+        const sel = document.getElementById(`ans${q}`);
+        if (!sel) continue;
+        const saved = localStorage.getItem(`${STORAGE_KEY}_q${q}`);
+        if (saved) sel.value = saved;
+        sel.addEventListener('change', () => saveAnswer(q, sel.value));
+    }
+    
+    // Text Q37-40
+    for (let q = 37; q <= 40; q++) {
+        const inp = document.getElementById(`ans${q}`);
+        if (!inp) continue;
+        const saved = localStorage.getItem(`${STORAGE_KEY}_q${q}`);
+        if (saved) { inp.value = saved; inp.classList.add('filled'); }
+        inp.addEventListener('input', () => {
+            const v = inp.value.trim();
+            v ? inp.classList.add('filled') : inp.classList.remove('filled');
+            saveAnswer(q, v);
+        });
+    }
+    
+    setCurrentQuestion(27);
+    updateStatus();
+});
+</script>
+</body>
+</html>
