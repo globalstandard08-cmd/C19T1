@@ -105,7 +105,7 @@
         .input-answer:focus { outline: none; border-color: #1f3a5f; }
         .input-answer.filled { background-color: #f5f8ff; border-color: #1f3a5f; }
         
-        /* HIGHLIGHT + NOTE */
+        /* HIGHLIGHT + NOTE — works in BOTH panels */
         .highlight { 
             background-color: #ffd700; 
             padding: 2px 4px; 
@@ -587,26 +587,27 @@ document.querySelectorAll('.q-indicator').forEach(btn => {
     });
 });
 
-// SELECTION VALIDATION
+// SELECTION VALIDATION — NOW WORKS IN BOTH PANELS
 function isSelectionValid(sel) {
     if (!sel || sel.isCollapsed || !sel.toString().trim()) return false;
     try {
         const r = sel.getRangeAt(0);
         const p = r.commonAncestorContainer.nodeType === Node.TEXT_NODE
             ? r.commonAncestorContainer.parentElement : r.commonAncestorContainer;
+        // Allow highlighting in BOTH passage AND questions panels
         const inPassage = document.getElementById('passageArea').contains(p);
-        const inInput = p.closest('input,textarea,button,label,.context-menu,.note-box');
-        return inPassage && !inInput;
+        const inQuestions = document.getElementById('questionsArea').contains(p);
+        const inInput = p.closest('input,textarea,button,label,.context-menu,.note-box,.true-false-box,.input-answer');
+        return (inPassage || inQuestions) && !inInput;
     } catch { return false; }
 }
 
-// --- HIGHLIGHT STORAGE FIXED: Save structured data, not whole HTML ---
+// --- HIGHLIGHT STORAGE — separate storage for questions highlights ---
 function getHighlights() {
     try { return JSON.parse(localStorage.getItem(`${passageId}_highlights`) || '[]'); }
     catch { return []; }
 }
 function saveHighlightsData() {
-    // Extract all highlights and store structured data
     const highlights = [];
     document.querySelectorAll('.highlight').forEach((hl, idx) => {
         highlights.push({
@@ -618,7 +619,7 @@ function saveHighlightsData() {
     localStorage.setItem(`${passageId}_highlights`, JSON.stringify(highlights));
 }
 
-// Restore markers only — text is already in HTML
+// Restore note markers
 function restoreNoteMarkers() {
     document.querySelectorAll('.highlight').forEach(hl => {
         if (hl.getAttribute('data-note')) {
@@ -675,7 +676,7 @@ document.addEventListener('mousemove', e => {
 });
 document.addEventListener('mouseup', () => { isDraggingNote = false; });
 
-// RIGHT-CLICK MENU
+// RIGHT-CLICK MENU — NOW ACTIVE IN BOTH PANELS
 const contextMenu = document.getElementById('contextMenu');
 document.addEventListener('contextmenu', e => {
     const sel = window.getSelection();
@@ -768,6 +769,12 @@ function clearAllData() {
         i.value = '';
         i.classList.remove('filled');
     });
+    // Remove all highlights from both panels
+    document.querySelectorAll('.highlight').forEach(hl => {
+        const parent = hl.parentNode;
+        parent.replaceChild(document.createTextNode(hl.textContent), hl);
+        parent.normalize();
+    });
     noteBox.style.display = 'none';
     location.reload();
 }
@@ -806,10 +813,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    // Q14–40 placeholder handlers — extend when you add the HTML
+    // Q14–40 placeholder handlers
     for (let q = 14; q <= 40; q++) {
         const saved = localStorage.getItem(`${STORAGE_KEY}_q${q}`);
-        // Add your own restore logic here when you have the HTML elements
     }
     
     setCurrentQuestion(1);
