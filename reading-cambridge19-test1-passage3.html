@@ -50,6 +50,7 @@
             border-radius: 4px; 
             font-weight: 500; 
             font-size: 15px; 
+            line-height: 1.6;
         }
         .passage-text { font-size: 16px; line-height: 1.7; margin-top: 15px; }
         .passage-text p { margin-bottom: 14px; text-align: justify; }
@@ -72,7 +73,7 @@
             top: 60px; 
         }
         .questions-pane h3 { color: #1f3a5f; margin: 25px 0 10px; font-size: 17px; }
-        .q-row { display: flex; align-items: center; gap: 10px; margin: 14px 0; font-size: 16px; flex-wrap: nowrap; }
+        .q-row { display: flex; align-items: flex-start; gap: 10px; margin: 14px 0; font-size: 16px; flex-wrap: nowrap; }
         .q-row.current { 
             background-color: #eaf1fa; 
             padding: 10px 8px; 
@@ -80,7 +81,8 @@
             margin-left: -8px;
             margin-right: -8px;
         }
-        .q-num { font-weight: bold; min-width: 28px; color: #1f3a5f; flex-shrink: 0; }
+        .q-num { font-weight: bold; min-width: 28px; color: #1f3a5f; flex-shrink: 0; padding-top: 2px; }
+        .q-text { flex: 1; line-height: 1.6; }
         .input-answer { 
             padding: 7px 10px; 
             border: 1px solid #ddd; 
@@ -88,10 +90,11 @@
             font-size: 16px; 
             background: #ffffff; 
             flex-shrink: 0;
+            width: 90px; 
+            text-align: center;
         }
         .input-answer:focus { outline: none; border-color: #1f3a5f; }
         .input-answer.filled { background-color: #f5f8ff; border-color: #1f3a5f; }
-        .input-answer.short { width: 100px; text-align: center; }
         
         .mc-option { 
             display: flex; 
@@ -122,6 +125,15 @@
             margin: 15px 0;
         }
         .summary-box h4 { color: #1f3a5f; margin-bottom: 12px; font-size: 16px; }
+        
+        .yn-legend {
+            margin: 10px 0 15px 0;
+            padding-left: 38px;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+        .yn-legend div { margin: 2px 0; }
+        .yn-code { font-weight: bold; display: inline-block; min-width: 90px; color: #1f3a5f; }
         
         .highlight { 
             background-color: #ffd700; 
@@ -211,7 +223,7 @@
             justify-content: space-between;
             padding: 6px 8px; 
             gap: 4px; 
-            overflow-x: hidden;
+            overflow-x: auto;
             overflow-y: hidden;
             flex-wrap: nowrap;
             position: sticky; 
@@ -330,8 +342,8 @@
             
             <div class="q-row" id="q27">
                 <span class="q-num">27</span>
-                <div>
-                    <span>What point does the writer make about misinformation in the first paragraph?</span>
+                <div class="q-text">
+                    What point does the writer make about misinformation in the first paragraph?
                     <label class="mc-option">
                         <input type="radio" name="q27" value="A">
                         <span><span class="mc-letter">A</span> Misinformation is a relatively recent phenomenon.</span>
@@ -353,8 +365,8 @@
             
             <div class="q-row" id="q28">
                 <span class="q-num">28</span>
-                <div>
-                    <span>What does the writer say about the role of technology?</span>
+                <div class="q-text">
+                    What does the writer say about the role of technology?
                     <label class="mc-option">
                         <input type="radio" name="q28" value="A">
                         <span><span class="mc-letter">A</span> It may at some point provide us with a solution to misinformation.</span>
@@ -376,8 +388,8 @@
             
             <div class="q-row" id="q29">
                 <span class="q-num">29</span>
-                <div>
-                    <span>What is the writer doing in the fourth paragraph?</span>
+                <div class="q-text">
+                    What is the writer doing in the fourth paragraph?
                     <label class="mc-option">
                         <input type="radio" name="q29" value="A">
                         <span><span class="mc-letter">A</span> comparing the different opinions people have of misinformation</span>
@@ -399,8 +411,8 @@
             
             <div class="q-row" id="q30">
                 <span class="q-num">30</span>
-                <div>
-                    <span>What point does the writer make about regulation in the USA?</span>
+                <div class="q-text">
+                    What point does the writer make about regulation in the USA?
                     <label class="mc-option">
                         <input type="radio" name="q30" value="A">
                         <span><span class="mc-letter">A</span> The guidelines issued by the FDA need to be simplified.</span>
@@ -513,27 +525,36 @@
             </div>
             
             <h3>Questions 37–40</h3>
-            <div class="instruction">Complete the sentences below.<br>Choose <strong>ONE WORD ONLY</strong> from the passage for each answer.<br>Write your answers in boxes 37–40 on your answer sheet.</div>
+            <div class="instruction">Do the following statements agree with the claims of the writer in Reading Passage 3?<br>In boxes 37–40 on your answer sheet, write:</div>
+            
+            <div class="yn-legend">
+                <div><span class="yn-code">YES</span> if the statement agrees with the claims of the writer</div>
+                <div><span class="yn-code">NO</span> if the statement contradicts the claims of the writer</div>
+                <div><span class="yn-code">NOT GIVEN</span> if it is impossible to say what the writer thinks about this</div>
+            </div>
             
             <div class="q-row" id="q37">
                 <span class="q-num">37</span>
-                <span>It is important to be able to distinguish false stories from those based in fact when doing this online:</span>
-                <input type="text" class="input-answer short" id="ans37" placeholder="">
+                <span class="q-text">Campaigns designed to correct misinformation will fail to achieve their purpose if people are unable to understand them.</span>
+                <input type="text" class="input-answer" id="ans37" placeholder="">
             </div>
+            
             <div class="q-row" id="q38">
                 <span class="q-num">38</span>
-                <span>There are many people working on possible __________ to the problem of misinformation:</span>
-                <input type="text" class="input-answer short" id="ans38" placeholder="">
+                <span class="q-text">Attempts to teach elementary school students about misinformation have been opposed.</span>
+                <input type="text" class="input-answer" id="ans38" placeholder="">
             </div>
+            
             <div class="q-row" id="q39">
                 <span class="q-num">39</span>
-                <span>We should be more ready to question claims that are not supported by __________ facts:</span>
-                <input type="text" class="input-answer short" id="ans39" placeholder="">
+                <span class="q-text">It may be possible to overcome the problem of misinformation in a relatively short period.</span>
+                <input type="text" class="input-answer" id="ans39" placeholder="">
             </div>
+            
             <div class="q-row" id="q40">
                 <span class="q-num">40</span>
-                <span>Dealing with misinformation will require a __________ approach rather than one single solution:</span>
-                <input type="text" class="input-answer short" id="ans40" placeholder="">
+                <span class="q-text">The need to keep up with new information is hugely exaggerated in today's world.</span>
+                <input type="text" class="input-answer" id="ans40" placeholder="">
             </div>
         </div>
     </div>
@@ -785,14 +806,15 @@ document.addEventListener('DOMContentLoaded', () => {
         sel.addEventListener('change', () => saveAnswer(q, sel.value));
     }
     
-    // Text Q37-40
+    // YES/NO/NOT GIVEN Q37-40
     for (let q = 37; q <= 40; q++) {
         const inp = document.getElementById(`ans${q}`);
         if (!inp) continue;
         const saved = localStorage.getItem(`${STORAGE_KEY}_q${q}`);
         if (saved) { inp.value = saved; inp.classList.add('filled'); }
         inp.addEventListener('input', () => {
-            const v = inp.value.trim();
+            const v = inp.value.trim().toUpperCase();
+            inp.value = v;
             v ? inp.classList.add('filled') : inp.classList.remove('filled');
             saveAnswer(q, v);
         });
