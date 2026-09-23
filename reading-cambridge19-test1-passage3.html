@@ -72,7 +72,7 @@
             top: 60px; 
         }
         .questions-pane h3 { color: #1f3a5f; margin: 25px 0 10px; font-size: 17px; }
-        .q-row { display: flex; align-items: flex-start; gap: 10px; margin: 14px 0; font-size: 16px; flex-wrap: wrap; }
+        .q-row { display: flex; align-items: center; gap: 10px; margin: 14px 0; font-size: 16px; flex-wrap: nowrap; }
         .q-row.current { 
             background-color: #eaf1fa; 
             padding: 10px 8px; 
@@ -87,10 +87,11 @@
             border-radius: 4px; 
             font-size: 16px; 
             background: #ffffff; 
+            flex-shrink: 0;
         }
         .input-answer:focus { outline: none; border-color: #1f3a5f; }
         .input-answer.filled { background-color: #f5f8ff; border-color: #1f3a5f; }
-        .input-answer.short { width: 60px; text-align: center; }
+        .input-answer.short { width: 100px; text-align: center; }
         
         .mc-option { 
             display: flex; 
@@ -113,19 +114,14 @@
             display: inline-block;
         }
         
-        .list-match { margin: 15px 0; }
-        .list-match p { margin: 8px 0; }
-        .match-option {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 6px 0;
+        .summary-box {
+            border: 1px solid #ddd;
+            padding: 18px;
+            border-radius: 4px;
+            background: #fafafa;
+            margin: 15px 0;
         }
-        .match-letter {
-            font-weight: bold;
-            min-width: 25px;
-            color: #1f3a5f;
-        }
+        .summary-box h4 { color: #1f3a5f; margin-bottom: 12px; font-size: 16px; }
         
         .highlight { 
             background-color: #ffd700; 
@@ -271,6 +267,10 @@
             white-space: nowrap;
         }
         .nav-btn:hover { background-color: #2a4a7a; }
+        .writing-btn {
+            background-color: #10b981;
+        }
+        .writing-btn:hover { background-color: #059669; }
         .clear-btn { 
             background-color: #dc2626; 
             color: white; 
@@ -517,23 +517,23 @@
             
             <div class="q-row" id="q37">
                 <span class="q-num">37</span>
-                <span>It is important to be able to distinguish false stories from those based in fact when doing this online.</span>
-                <input type="text" class="input-answer short" id="ans37" placeholder="37">
+                <span>It is important to be able to distinguish false stories from those based in fact when doing this online:</span>
+                <input type="text" class="input-answer short" id="ans37" placeholder="">
             </div>
             <div class="q-row" id="q38">
                 <span class="q-num">38</span>
-                <span>There are many people working on possible __________ to the problem of misinformation.</span>
-                <input type="text" class="input-answer short" id="ans38" placeholder="38">
+                <span>There are many people working on possible __________ to the problem of misinformation:</span>
+                <input type="text" class="input-answer short" id="ans38" placeholder="">
             </div>
             <div class="q-row" id="q39">
                 <span class="q-num">39</span>
-                <span>We should be more ready to question claims that are not supported by __________ facts.</span>
-                <input type="text" class="input-answer short" id="ans39" placeholder="39">
+                <span>We should be more ready to question claims that are not supported by __________ facts:</span>
+                <input type="text" class="input-answer short" id="ans39" placeholder="">
             </div>
             <div class="q-row" id="q40">
                 <span class="q-num">40</span>
-                <span>Dealing with misinformation will require a __________ approach rather than one single solution.</span>
-                <input type="text" class="input-answer short" id="ans40" placeholder="40">
+                <span>Dealing with misinformation will require a __________ approach rather than one single solution:</span>
+                <input type="text" class="input-answer short" id="ans40" placeholder="">
             </div>
         </div>
     </div>
@@ -588,6 +588,8 @@
             <div class="q-indicator" data-q="38">38</div>
             <div class="q-indicator" data-q="39">39</div>
             <div class="q-indicator" data-q="40">40</div>
+            
+            <a href="writing-intro.html" class="nav-btn writing-btn">Next → Writing</a>
         </div>
     </div>
 
