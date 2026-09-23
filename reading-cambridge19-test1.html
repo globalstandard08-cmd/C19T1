@@ -83,6 +83,14 @@
         .questions-block.active { display: block; }
         .questions-block h3 { color: #1f3a5f; margin-bottom: 10px; font-size: 18px; }
         .q-row { display: flex; align-items: flex-start; gap: 10px; margin: 14px 0; font-size: 16px; flex-wrap: wrap; }
+        /* IELTS CBT style: highlight current question row */
+        .q-row.current { 
+            background-color: #eaf1fa; 
+            padding: 10px 8px; 
+            border-radius: 4px;
+            margin-left: -8px;
+            margin-right: -8px;
+        }
         .q-num { font-weight: bold; min-width: 28px; color: #1f3a5f; flex-shrink: 0; }
         .true-false-box { display: flex; gap: 18px; flex-wrap: wrap; }
         .tf-option { display: flex; align-items: center; gap: 5px; cursor: pointer; padding: 3px 0; }
@@ -178,17 +186,18 @@
             outline: none; 
         }
         
-        /* BOTTOM NAVIGATION — NO scrollbar, fits all */
+        /* BOTTOM NAVIGATION — Clear on FAR LEFT, Next on FAR RIGHT */
         .bottom-nav { 
-            height: 48px; 
+            min-height: 48px; 
             background: #ffffff; 
             border-top: 1px solid #eee; 
             display: flex; 
             align-items: center; 
             justify-content: space-between;
-            padding: 0 8px; 
-            gap: 2px; 
-            overflow: visible;
+            padding: 8px; 
+            gap: 8px; 
+            overflow-x: auto;
+            overflow-y: hidden;
             flex-wrap: nowrap;
             position: sticky; 
             bottom: 0; 
@@ -204,7 +213,7 @@
             font-size: 9px; 
             font-weight: 600; 
             color: #1f3a5f; 
-            margin: 0 1px; 
+            margin: 0 4px; 
             white-space: nowrap; 
         }
         .q-indicator { 
@@ -228,7 +237,12 @@
             color: white !important; 
             border-color: #10b981 !important; 
         }
-        .q-indicator.current { box-shadow: inset 0 0 0 2px #1f3a5f; }
+        .q-indicator.current { 
+            background-color: #eaf1fa; 
+            border-color: #1f3a5f;
+            border-width: 2px;
+            font-weight: bold;
+        }
         
         /* NEXT BUTTON IN BOTTOM NAV */
         .next-passage-btn {
@@ -261,7 +275,6 @@
             font-weight: bold; 
             white-space: nowrap; 
             flex-shrink: 0;
-            margin-left: 6px;
         }
         .clear-btn:hover { background-color: #b91c1c; }
     </style>
@@ -283,7 +296,7 @@
         <textarea class="note-textarea" id="noteText" placeholder="Type your note here…"></textarea>
     </div>
     
-    <!-- TOP BAR — logo centered only -->
+    <!-- TOP BAR -->
     <div class="top-bar">
         <img src="ielts-logo.png" alt="IELTS Logo" class="logo">
     </div>
@@ -301,13 +314,13 @@
                 <div class="passage-text">
 <p>In 2016, the British professional tennis player Andy Murray was ranked as the world's number one. It was an incredible achievement by any standard — made even more remarkable by the fact that he did this during a period considered to be one of the strongest in the sport's history, competing against the likes of Rafael Nadal, Roger Federer and Novak Djokovic, to name just a few. Yet five years previously, he had been regarded as a talented player who entered but never won the major tournaments.</p>
 <p>Of the changes that account for this transformation, one was visible and widely publicised: in 2011, Murray invited former number one Ivan Lendl onto his coaching team — a valuable addition that had a visible impact on the player's playing style. Another change was so subtle as to pass more or less unnoticed. Like many players, Murray has long preferred a racket that consists of two types of string: one for the mains (verticals) and another for the crosses (horizontals). While he continued to use natural string in the crosses, in 2012 he switched to a synthetic string for the mains. A small change, perhaps, but its importance should not be underestimated.</p>
-<p>The modification that Murray made is just one of a number of options available to players looking to tweak their rackets in order to improve their games. 'Touring professionals have their rackets customised to their specific needs,' says Colin Triplow, a UK-based professional racket stringer. 'It's a highly important part of performance maximisation. Consequently, the specific racket used by the world's elite are not actually readily available to the public; rather, each racket is individually made to suit the player who uses it.' Take the US professional tennis players Mike and Bob Bryan, for example: 'We're very particular with our racket specifications,' they say. 'All our rackets are sent from our manufacturer to Tampa, Florida, where our frames go through a … thorough customisation process.' They explain how they have not just adjusted only racket length, but even experimented with different kinds of paint. The rackets they use now weigh more than the average model and also have a denser string pattern (i.e. more crosses and mains).</p>
+<p>The modification that Murray made is just one of a number of options available to players looking to tweak their rackets in order to improve their games. 'Touring professionals have their rackets customised to their specific needs,' says Colin Triplow, a UK-based professional racket stringer. 'It's a highly important part of performance maximisation. Consequently, the specific racket used by the world's elite is not actually readily available to the public; rather, each racket is individually made to suit the player who uses it.' Take the US professional tennis players Mike and Bob Bryan, for example: 'We're very particular with our racket specifications,' they say. 'All our rackets are sent from our manufacturer to Tampa, Florida, where our frames go through a thorough customisation process.' They explain how they have not just only adjusted racket length, but even experimented with different kinds of paint. The rackets they use now weigh more than the average model and also have a denser string pattern (i.e. more crosses and mains).</p>
 <p>The primary reason for these modifications is simple: as the line between winning and losing becomes thinner and thinner, even these slight changes become more and more important. As a result, players and their teams are becoming increasingly creative with the modifications to their rackets as they look to maximise their competitive advantage.</p>
-<p>Racket modifications dating way back to the 1970s, when the amateur German tennis player Werner Fischer played with the so-called spaghetti-strung racket. It created a string bed that generated so much topspin that it was quickly banned by the International Tennis Federation. However, within a decade or two, racket modification became a regularity. Today, it is in many ways, an aspect of the game that is equal in significance to nutrition or training.</p>
+<p>Racket modifications date way back to the 1970s, when the amateur German tennis player Werner Fischer played with the so-called spaghetti-strung racket. It created a string bed that generated so much topspin that it was quickly banned by the International Tennis Federation. However, within a decade or two, racket modification became a regularity. Today, it is in many ways, an aspect of the game that is equal in significance to nutrition or training.</p>
 <p>Modifications can be divided into two categories: those to the string bed and those to the racket frame. The former is far more common than the latter: the choice of the strings and the tension with which they are installed is something that nearly all professional players experiment with. They will continually change it depending on various factors including the court surface, climatic conditions, and game styles. Some will even change it depending on how they feel at the time.</p>
 <p>At one time, all tennis rackets were strung with natural gut made from the outer layer of sheep or cow intestines. This all changed in the early 1990s with the development of synthetic strings that were cheaper and more durable. They were made from three materials: nylon (relatively durable and affordable), Kevlar (too stiff to be used alone) or co-polyester (polyester combined with additives that enhance its performance). Even so, many professional players continue to use a 'hybrid set-up', where a combination of both synthetic and natural strings are used.</p>
 <p>Of the synthetics, co-polyester is by far the most widely used. It is a perfect fit for the style of tennis now played, where players tend to batter it out from the back of the court rather than coming to the net. Studies indicate that the average spin from a co-polyester string is 25% greater than that from natural string or other synthetics. In a sense, the development of co-polyester strings has revolutionised the game.</p>
-<p>However, many players go beyond these basic adjustments to the strings and make changes to the racket frame itself! For example, much of the serving power of US professional player Pete Sampras was attributed to the addition of four to five lead weights onto his rackets, and today many professionals have the weight adjusted during the manufacturing process.</p>
+<p>However, many players go beyond these basic adjustments to the strings and make changes to the racket frame itself. For example, much of the serving power of US professional player Pete Sampras was attributed to the addition of four to five lead weights onto his rackets, and today many professionals have the weight adjusted during the manufacturing process.</p>
 <p>Other changes to the frame involve the handle. Players have individual preferences for the shape of the handle and some will have the handle of one racket moulded onto the frame of a different racket. Other players make different changes. The professional Portuguese player Gonçalo Oliveira replaced the original grips of his rackets with something thinner because they had previously felt uncomfortable to hold.</p>
 <p>Racket customisation and modification have pushed the standards of the game to greater levels that few could have anticipated in the days of natural strings and heavy, wooden frames, and it's exciting to see what further developments there will be in the future.</p>
                 </div>
@@ -453,8 +466,12 @@
         </div>
     </div>
     
-    <!-- BOTTOM NAVIGATION — no scrollbar, fits all -->
+    <!-- BOTTOM NAVIGATION — Clear button FAR LEFT, Next FAR RIGHT, fully separated -->
     <div class="bottom-nav">
+        <!-- FAR LEFT: Clear Button -->
+        <button class="clear-btn" id="clearAllBtn">🗑️ Clear</button>
+        
+        <!-- CENTER: Question Indicators -->
         <div class="nav-group">
             <span class="part-label">P1:</span>
             <div class="q-indicator" data-q="1" data-passage="1">1</div>
@@ -503,10 +520,8 @@
             <div class="q-indicator" data-q="40" data-passage="3">40</div>
         </div>
         
-        <div style="display: flex; align-items: center; flex-shrink: 0;">
-            <button class="next-passage-btn" id="nextBtn">Next →</button>
-            <button class="clear-btn" id="clearAllBtn">🗑️ Clear</button>
-        </div>
+        <!-- FAR RIGHT: Next Button -->
+        <button class="next-passage-btn" id="nextBtn">Next →</button>
     </div>
 
 <script>
@@ -515,6 +530,7 @@ const passageId = 'reading-cambridge19-test1';
 let currentPassage = 1;
 let currentRange = null;
 let activeHighlight = null;
+let currentQuestionNum = 1;
 
 // SWITCH PASSAGE + UPDATE NEXT BUTTON
 function switchPassage(passageNum) {
@@ -528,6 +544,20 @@ function switchPassage(passageNum) {
     document.getElementById('nextBtn').disabled = (passageNum === 3);
 }
 
+// Update current question highlighting
+function setCurrentQuestion(qNum) {
+    // Remove old highlight
+    document.querySelectorAll('.q-row.current').forEach(r => r.classList.remove('current'));
+    document.querySelectorAll('.q-indicator.current').forEach(b => b.classList.remove('current'));
+    
+    currentQuestionNum = qNum;
+    const row = document.getElementById(`q${qNum}`);
+    const indicator = document.querySelector(`.q-indicator[data-q="${qNum}"]`);
+    
+    if (row) row.classList.add('current');
+    if (indicator) indicator.classList.add('current');
+}
+
 // Next Passage button
 document.getElementById('nextBtn').addEventListener('click', () => {
     if (currentPassage < 3) switchPassage(currentPassage + 1);
@@ -538,32 +568,22 @@ function updateStatus() {
     for (let q = 1; q <= 40; q++) {
         const btn = document.querySelector(`.q-indicator[data-q="${q}"]`);
         if (!btn) continue;
-        let val = '';
-        if (q <= 7) {
-            const checked = document.querySelector(`input[name="q${q}"]:checked`);
-            val = checked ? checked.value : '';
-        } else if (q >= 8 && q <= 13) {
-            const inp = document.getElementById(`ans${q}`);
-            val = inp ? inp.value.trim() : '';
-        } else {
-            val = localStorage.getItem(`${STORAGE_KEY}_q${q}`) || '';
-        }
+        let val = localStorage.getItem(`${STORAGE_KEY}_q${q}`) || '';
         btn.classList.toggle('answered', val.length > 0);
     }
 }
 
-// CLICK QUESTION NUMBER → SWITCH PASSAGE
+// CLICK QUESTION NUMBER → SWITCH PASSAGE + HIGHLIGHT ROW
 document.querySelectorAll('.q-indicator').forEach(btn => {
     btn.addEventListener('click', () => {
         const passageNum = parseInt(btn.dataset.passage);
         const qNum = parseInt(btn.dataset.q);
         switchPassage(passageNum);
+        setCurrentQuestion(qNum);
         const target = document.getElementById(`q${qNum}`);
         if (target) {
             target.scrollIntoView({behavior:'smooth', block:'center'});
         }
-        document.querySelectorAll('.q-indicator').forEach(b => b.classList.remove('current'));
-        btn.classList.add('current');
     });
 });
 
@@ -580,13 +600,36 @@ function isSelectionValid(sel) {
     } catch { return false; }
 }
 
-// HIGHLIGHT SAVE/LOAD
-function saveHighlights() {
-    localStorage.setItem(`${passageId}_highlights`, document.getElementById('passageArea').innerHTML);
+// --- HIGHLIGHT STORAGE FIXED: Save structured data, not whole HTML ---
+function getHighlights() {
+    try { return JSON.parse(localStorage.getItem(`${passageId}_highlights`) || '[]'); }
+    catch { return []; }
 }
-function loadHighlights() {
-    const saved = localStorage.getItem(`${passageId}_highlights`);
-    if (saved) document.getElementById('passageArea').innerHTML = saved;
+function saveHighlightsData() {
+    // Extract all highlights and store structured data
+    const highlights = [];
+    document.querySelectorAll('.highlight').forEach((hl, idx) => {
+        highlights.push({
+            id: idx,
+            text: hl.textContent,
+            note: hl.getAttribute('data-note') || ''
+        });
+    });
+    localStorage.setItem(`${passageId}_highlights`, JSON.stringify(highlights));
+}
+
+// Restore markers only — text is already in HTML
+function restoreNoteMarkers() {
+    document.querySelectorAll('.highlight').forEach(hl => {
+        if (hl.getAttribute('data-note')) {
+            if (!hl.querySelector('.note-marker')) {
+                const marker = document.createElement('span');
+                marker.className = 'note-marker';
+                marker.textContent = '!';
+                hl.appendChild(marker);
+            }
+        }
+    });
 }
 
 // DRAGGABLE NOTE
@@ -595,13 +638,28 @@ const noteText = document.getElementById('noteText');
 const noteClose = document.getElementById('noteClose');
 const noteDragHandle = document.getElementById('noteDragHandle');
 let isDraggingNote = false, dragOffsetX = 0, dragOffsetY = 0;
-noteClose.addEventListener('click', () => { noteBox.style.display = 'none'; activeHighlight = null; });
+
+noteClose.addEventListener('click', () => { 
+    noteBox.style.display = 'none'; 
+    activeHighlight = null; 
+});
 noteText.addEventListener('input', () => {
     if (activeHighlight) {
         activeHighlight.setAttribute('data-note', noteText.value);
-        saveHighlights();
+        if (noteText.value && !activeHighlight.querySelector('.note-marker')) {
+            const marker = document.createElement('span');
+            marker.className = 'note-marker';
+            marker.textContent = '!';
+            activeHighlight.appendChild(marker);
+        }
+        if (!noteText.value) {
+            const m = activeHighlight.querySelector('.note-marker');
+            if (m) m.remove();
+        }
+        saveHighlightsData();
     }
 });
+
 document.addEventListener('mousedown', e => {
     if (!noteDragHandle.contains(e.target)) return;
     isDraggingNote = true;
@@ -653,10 +711,11 @@ document.getElementById('menuHighlight').addEventListener('click', () => {
         currentRange.deleteContents();
         currentRange.insertNode(sp);
         window.getSelection().removeAllRanges();
-        saveHighlights();
+        saveHighlightsData();
     } catch { alert('Select smaller text.'); }
     contextMenu.style.display = 'none';
 });
+
 document.getElementById('menuAddNote').addEventListener('click', () => {
     contextMenu.style.display = 'none';
     if (!activeHighlight) {
@@ -669,7 +728,7 @@ document.getElementById('menuAddNote').addEventListener('click', () => {
             currentRange.insertNode(sp);
             window.getSelection().removeAllRanges();
             activeHighlight = sp;
-            saveHighlights();
+            saveHighlightsData();
         } catch { alert('Select smaller text.'); return; }
     }
     const rc = activeHighlight.getBoundingClientRect();
@@ -679,6 +738,7 @@ document.getElementById('menuAddNote').addEventListener('click', () => {
     noteText.value = activeHighlight.getAttribute('data-note') || '';
     noteText.focus();
 });
+
 document.getElementById('menuRemove').addEventListener('click', () => {
     contextMenu.style.display = 'none';
     noteBox.style.display = 'none';
@@ -687,7 +747,7 @@ document.getElementById('menuRemove').addEventListener('click', () => {
     parent.replaceChild(document.createTextNode(activeHighlight.textContent), activeHighlight);
     parent.normalize();
     activeHighlight = null;
-    saveHighlights();
+    saveHighlightsData();
 });
 
 // SAVE ANSWERS
@@ -715,18 +775,9 @@ document.getElementById('clearAllBtn').addEventListener('click', clearAllData);
 
 // INIT
 document.addEventListener('DOMContentLoaded', () => {
-    loadHighlights();
-    document.querySelectorAll('.highlight[data-note]').forEach(hl => {
-        if (hl.getAttribute('data-note')) {
-            let marker = hl.querySelector('.note-marker');
-            if (!marker) {
-                marker = document.createElement('span');
-                marker.className = 'note-marker';
-                marker.textContent = '!';
-                hl.appendChild(marker);
-            }
-        }
-    });
+    // Restore note markers
+    restoreNoteMarkers();
+    
     // Restore answers Q1–7
     for (let q = 1; q <= 7; q++) {
         const saved = localStorage.getItem(`${STORAGE_KEY}_q${q}`);
@@ -738,6 +789,7 @@ document.addEventListener('DOMContentLoaded', () => {
             r.addEventListener('change', () => saveAnswer(q, r.value));
         });
     }
+    
     // Restore answers Q8–13
     for (let q = 8; q <= 13; q++) {
         const inp = document.getElementById(`ans${q}`);
@@ -753,7 +805,14 @@ document.addEventListener('DOMContentLoaded', () => {
             saveAnswer(q, val);
         });
     }
-    document.querySelector('.q-indicator[data-q="1"]').classList.add('current');
+    
+    // Q14–40 placeholder handlers — extend when you add the HTML
+    for (let q = 14; q <= 40; q++) {
+        const saved = localStorage.getItem(`${STORAGE_KEY}_q${q}`);
+        // Add your own restore logic here when you have the HTML elements
+    }
+    
+    setCurrentQuestion(1);
     updateStatus();
 });
 </script>
