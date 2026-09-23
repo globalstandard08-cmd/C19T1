@@ -256,12 +256,9 @@
             font-weight: bold;
             flex-shrink: 0;
             white-space: nowrap;
+            text-decoration: none;
         }
-        .next-passage-btn:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
-        .next-passage-btn:hover:not(:disabled) {
+        .next-passage-btn:hover {
             background-color: #2a4a7a;
         }
         .clear-btn { 
@@ -466,7 +463,7 @@
         </div>
     </div>
     
-    <!-- BOTTOM NAVIGATION — Clear button FAR LEFT, Next FAR RIGHT, fully separated -->
+    <!-- BOTTOM NAVIGATION — Clear button FAR LEFT, Next FAR RIGHT -->
     <div class="bottom-nav">
         <!-- FAR LEFT: Clear Button -->
         <button class="clear-btn" id="clearAllBtn">🗑️ Clear</button>
@@ -521,9 +518,8 @@
         </div>
         
         <!-- FAR RIGHT: Next Button -->
-              <a href="reading-cambridge19-test1-passage2.html" class="next-passage-btn">P2 →</a>
+        <a href="reading-cambridge19-test1-passage2.html" class="next-passage-btn">Next →</a>
     </div>
-
 <script>
 const STORAGE_KEY = 'Cambridge19_Test1_Reading';
 const passageId = 'reading-cambridge19-test1';
@@ -532,21 +528,17 @@ let currentRange = null;
 let activeHighlight = null;
 let currentQuestionNum = 1;
 
-// SWITCH PASSAGE + UPDATE NEXT BUTTON
+// SWITCH PASSAGE
 function switchPassage(passageNum) {
     currentPassage = passageNum;
     document.querySelectorAll('.passage-section').forEach(p => p.classList.remove('active'));
     document.getElementById(`passage-${passageNum}`).classList.add('active');
     document.querySelectorAll('.questions-block').forEach(q => q.classList.remove('active'));
     document.getElementById(`questions-${passageNum}`).classList.add('active');
-    
-    // Disable Next button on last passage
-    document.getElementById('nextBtn').disabled = (passageNum === 3);
 }
 
 // Update current question highlighting
 function setCurrentQuestion(qNum) {
-    // Remove old highlight
     document.querySelectorAll('.q-row.current').forEach(r => r.classList.remove('current'));
     document.querySelectorAll('.q-indicator.current').forEach(b => b.classList.remove('current'));
     
@@ -558,18 +550,13 @@ function setCurrentQuestion(qNum) {
     if (indicator) indicator.classList.add('current');
 }
 
-// Next Passage button
-document.getElementById('nextBtn').addEventListener('click', () => {
-    if (currentPassage < 3) switchPassage(currentPassage + 1);
-});
-
-// STATUS UPDATE
+// STATUS UPDATE — Shades answered boxes green
 function updateStatus() {
     for (let q = 1; q <= 40; q++) {
         const btn = document.querySelector(`.q-indicator[data-q="${q}"]`);
         if (!btn) continue;
         let val = localStorage.getItem(`${STORAGE_KEY}_q${q}`) || '';
-        btn.classList.toggle('answered', val.length > 0);
+        btn.classList.toggle('answered', val.trim().length > 0);
     }
 }
 
@@ -587,14 +574,13 @@ document.querySelectorAll('.q-indicator').forEach(btn => {
     });
 });
 
-// SELECTION VALIDATION — NOW WORKS IN BOTH PANELS
+// SELECTION VALIDATION — works in BOTH panels
 function isSelectionValid(sel) {
     if (!sel || sel.isCollapsed || !sel.toString().trim()) return false;
     try {
         const r = sel.getRangeAt(0);
         const p = r.commonAncestorContainer.nodeType === Node.TEXT_NODE
             ? r.commonAncestorContainer.parentElement : r.commonAncestorContainer;
-        // Allow highlighting in BOTH passage AND questions panels
         const inPassage = document.getElementById('passageArea').contains(p);
         const inQuestions = document.getElementById('questionsArea').contains(p);
         const inInput = p.closest('input,textarea,button,label,.context-menu,.note-box,.true-false-box,.input-answer');
@@ -602,7 +588,7 @@ function isSelectionValid(sel) {
     } catch { return false; }
 }
 
-// --- HIGHLIGHT STORAGE — separate storage for questions highlights ---
+// HIGHLIGHT STORAGE
 function getHighlights() {
     try { return JSON.parse(localStorage.getItem(`${passageId}_highlights`) || '[]'); }
     catch { return []; }
@@ -639,7 +625,6 @@ const noteText = document.getElementById('noteText');
 const noteClose = document.getElementById('noteClose');
 const noteDragHandle = document.getElementById('noteDragHandle');
 let isDraggingNote = false, dragOffsetX = 0, dragOffsetY = 0;
-
 noteClose.addEventListener('click', () => { 
     noteBox.style.display = 'none'; 
     activeHighlight = null; 
@@ -660,7 +645,6 @@ noteText.addEventListener('input', () => {
         saveHighlightsData();
     }
 });
-
 document.addEventListener('mousedown', e => {
     if (!noteDragHandle.contains(e.target)) return;
     isDraggingNote = true;
@@ -676,7 +660,7 @@ document.addEventListener('mousemove', e => {
 });
 document.addEventListener('mouseup', () => { isDraggingNote = false; });
 
-// RIGHT-CLICK MENU — NOW ACTIVE IN BOTH PANELS
+// RIGHT-CLICK MENU
 const contextMenu = document.getElementById('contextMenu');
 document.addEventListener('contextmenu', e => {
     const sel = window.getSelection();
@@ -716,7 +700,6 @@ document.getElementById('menuHighlight').addEventListener('click', () => {
     } catch { alert('Select smaller text.'); }
     contextMenu.style.display = 'none';
 });
-
 document.getElementById('menuAddNote').addEventListener('click', () => {
     contextMenu.style.display = 'none';
     if (!activeHighlight) {
@@ -739,7 +722,6 @@ document.getElementById('menuAddNote').addEventListener('click', () => {
     noteText.value = activeHighlight.getAttribute('data-note') || '';
     noteText.focus();
 });
-
 document.getElementById('menuRemove').addEventListener('click', () => {
     contextMenu.style.display = 'none';
     noteBox.style.display = 'none';
@@ -769,7 +751,6 @@ function clearAllData() {
         i.value = '';
         i.classList.remove('filled');
     });
-    // Remove all highlights from both panels
     document.querySelectorAll('.highlight').forEach(hl => {
         const parent = hl.parentNode;
         parent.replaceChild(document.createTextNode(hl.textContent), hl);
@@ -782,10 +763,9 @@ document.getElementById('clearAllBtn').addEventListener('click', clearAllData);
 
 // INIT
 document.addEventListener('DOMContentLoaded', () => {
-    // Restore note markers
     restoreNoteMarkers();
     
-    // Restore answers Q1–7
+    // Restore answers Q1–7 (True/False/Not Given)
     for (let q = 1; q <= 7; q++) {
         const saved = localStorage.getItem(`${STORAGE_KEY}_q${q}`);
         if (saved) {
@@ -797,7 +777,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    // Restore answers Q8–13
+    // Restore answers Q8–13 (text input)
     for (let q = 8; q <= 13; q++) {
         const inp = document.getElementById(`ans${q}`);
         if (!inp) continue;
@@ -813,13 +793,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    // Q14–40 placeholder handlers
-    for (let q = 14; q <= 40; q++) {
-        const saved = localStorage.getItem(`${STORAGE_KEY}_q${q}`);
-    }
-    
     setCurrentQuestion(1);
-    updateStatus();
+    updateStatus(); // ✅ Shades answered boxes on load
 });
 </script>
 </body>
