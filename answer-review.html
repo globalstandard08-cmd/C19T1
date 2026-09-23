@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Answers Review — Complete ✅</title>
+    <title>All Answers Review — Cambridge 19 Test 1</title>
     <style>
         body { font-family: Arial, sans-serif; padding: 20px; background:#f5f7fa; line-height:1.6; }
         .container { max-width: 900px; margin: 0 auto; background:white; padding:30px; border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,0.1); }
@@ -74,12 +74,12 @@
 </head>
 <body>
     <div class="container">
-        <h1>📋 All Student Answers — Complete Test</h1>
+        <h1>📋 All Answers — Cambridge 19 Test 1</h1>
         
         <div class="status">✅ Auto-loaded from Listening, Reading & Writing</div>
         
         <!-- LISTENING -->
-        <h2>👂 Listening Test — All 4 Parts (Q1–Q40)</h2>
+        <h2>👂 Listening — Q1–Q40</h2>
         <div id="listening" class="answer-grid"><span class="empty">Loading...</span></div>
         
         <!-- READING PASSAGE 1 -->
@@ -110,9 +110,9 @@
         </div>
     </div>
 <script>
-// ✅ STORAGE KEYS — matches your actual files
-const READING_KEY = 'Reading_Test';
+// ✅ STORAGE KEYS — exactly matching your files
 const LISTENING_KEY = 'Listening_Test';
+const READING_KEY = 'Reading_Test';
 
 // ✅ LISTENING LOADER
 function loadListeningAnswers(containerId, startQ, endQ) {
@@ -130,7 +130,7 @@ function loadListeningAnswers(containerId, startQ, endQ) {
     container.innerHTML = found ? html : '<span class="empty">⚠️ No answers found. Answer a question first.</span>';
 }
 
-// ✅ READING LOADER — works with ALL your reading pages
+// ✅ READING LOADER — matches your Cambridge 19 Test 1 files
 function loadReadingAnswers(containerId, startQ, endQ) {
     const container = document.getElementById(containerId);
     const allAnswers = JSON.parse(localStorage.getItem(READING_KEY) || '{}');
@@ -139,24 +139,19 @@ function loadReadingAnswers(containerId, startQ, endQ) {
     
     for (let q = startQ; q <= endQ; q++) {
         let ans = allAnswers[`q${q}`];
-        if (ans === undefined || ans === null || ans === '') {
+        if (!ans || ans.trim() === '') {
             ans = localStorage.getItem(READING_KEY + '_q' + q) || '';
         }
-        if (ans && ans.trim() !== '') {
-            found = true;
-        } else {
-            ans = '';
-        }
+        if (ans && ans.trim() !== '') found = true;
         html += `<div class="answer-box">
             <div class="q-label">Q${q}</div>
             <div class="a-value">${ans || '<span class="empty">—</span>'}</div>
         </div>`;
     }
-    
     container.innerHTML = found ? html : '<span class="empty">⚠️ No answers found. Answer a question first.</span>';
 }
 
-// ✅ WRITING LOADER
+// ✅ WRITING LOADER — matches your Task 1 & 2 keys
 function loadWriting(taskKey, containerId, minWords) {
     const container = document.getElementById(containerId);
     const text = localStorage.getItem(taskKey) || '';
@@ -171,17 +166,17 @@ function loadWriting(taskKey, containerId, minWords) {
 }
 
 window.onload = function() {
-    // ✅ LISTENING — Q1–Q40
+    // ✅ LISTENING — listening-cambridge19-test1.html
     loadListeningAnswers('listening', 1, 40);
     
-    // ✅ READING — ALL 3 PASSAGES (matches your file names)
-    loadReadingAnswers('reading1', 1, 13);      <!-- reading-passage1.html -->
-    loadReadingAnswers('reading2', 14, 26);     <!-- reading-test4-passage2.html -->
-    loadReadingAnswers('reading3', 27, 40);     <!-- reading-test4-passage3.html -->
+    // ✅ READING — matches your exact file set
+    loadReadingAnswers('reading1', 1, 13);   // reading-cambridge19-test1-passage1.html
+    loadReadingAnswers('reading2', 14, 26);   // reading-cambridge19-test1-passage2.html
+    loadReadingAnswers('reading3', 27, 40);   // reading-cambridge19-test1-passage3.html
     
-    // ✅ WRITING
-    loadWriting('task1Input', 'writingTask1', 150);
-    loadWriting('task2Input', 'writingTask2', 250);
+    // ✅ WRITING — matches your Task files
+    loadWriting('task1Input', 'writingTask1', 150);  // writing-cambridge19-test1-task1.html
+    loadWriting('task2Input', 'writingTask2', 250);  // writing-cambridge19-test1-task2.html
 };
 
 // ✅ CLEAR EVERYTHING
