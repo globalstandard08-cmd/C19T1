@@ -26,6 +26,7 @@
 <body>
     <div class="container">
         <h1>📋 Your Answers — Cambridge 19 Test 1</h1>
+        <!-- LISTENING -->
         <h2>🎧 Listening</h2>
         <h3>Part 1 — Questions 1–10</h3>
         <div id="listening-p1"></div>
@@ -35,6 +36,7 @@
         <div id="listening-p3"></div>
         <h3>Part 4 — Questions 31–40</h3>
         <div id="listening-p4"></div>
+        <!-- READING -->
         <h2>📖 Reading</h2>
         <h3>Passage 1 — Questions 1–13</h3>
         <div id="reading-p1"></div>
@@ -42,6 +44,7 @@
         <div id="reading-p2"></div>
         <h3>Passage 3 — Questions 27–40</h3>
         <div id="reading-p3"></div>
+        <!-- WRITING -->
         <h2>✍️ Writing</h2>
         <h3>Task 1</h3>
         <div id="writing-task1" class="writing-box"></div>
@@ -54,36 +57,61 @@
         </div>
     </div>
 <script>
+// --- STORAGE KEYS ---
 const KEY_LISTENING = 'Cambridge19_Test1_Listening';
 const KEY_READING    = 'Cambridge19_Test1_Reading';
 const KEY_WRITING_T1 = 'task1Input';
 const KEY_WRITING_T2 = 'task2Input';
 
+// --- HELPER: Get paired answer (check both single-q and double-q formats) ---
+function getPairedAnswer(prefix, combinedKey, qNumInPair) {
+    let val = localStorage.getItem(`${prefix}_${combinedKey}`);
+    if (!val) val = localStorage.getItem(`${prefix}_q${combinedKey}`);
+    if (!val) val = localStorage.getItem(`${prefix}_qq${combinedKey}`);
+    if (!val) return '';
+    const parts = val.split(',');
+    return parts[qNumInPair] || '';
+}
+
+// --- GET SAVED ANSWER — handles ALL paired questions across Listening & Reading ---
 function getSavedAnswer(prefix, qNum) {
+    // === LISTENING PAIRED QUESTIONS ===
+    // Q21 & Q22 — stored together
+    if (qNum === 21 || qNum === 22) {
+        return getPairedAnswer(prefix, 'q21q22', qNum === 21 ? 0 : 1);
+    }
+    // Q23 & Q24 — stored together
+    if (qNum === 23 || qNum === 24) {
+        return getPairedAnswer(prefix, 'q23q24', qNum === 23 ? 0 : 1);
+    }
+    
+    // === READING PAIRED QUESTIONS ===
+    // Q20 & Q21 — stored together
     if (qNum === 20 || qNum === 21) {
-        // Check BOTH key versions — handles old double-q and new single-q format
-        let combined = localStorage.getItem(`${prefix}_q20q21`);   // correct format
-        if (!combined) combined = localStorage.getItem(`${prefix}_qq20q21`); // old bugged format
-        if (!combined) return '';
-        const selected = combined.split(',');
-        return qNum === 20 ? (selected[0] || '') : (selected[1] || '');
+        return getPairedAnswer(prefix, 'q20q21', qNum === 20 ? 0 : 1);
     }
+    // Q22 & Q23 — stored together
     if (qNum === 22 || qNum === 23) {
-        let combined = localStorage.getItem(`${prefix}_q22q23`);
-        if (!combined) combined = localStorage.getItem(`${prefix}_qq22q23`);
-        if (!combined) return '';
-        const selected = combined.split(',');
-        return qNum === 22 ? (selected[0] || '') : (selected[1] || '');
+        return getPairedAnswer(prefix, 'q22q23', qNum === 22 ? 0 : 1);
     }
+    
+    // Standard single-key questions
     const val = localStorage.getItem(`${prefix}_q${qNum}`);
     return val ? val.trim() : '';
 }
 
+// --- MAKE ROW ---
 function makeRow(qNum, answer) {
     const display = answer || '<span class="empty">— No answer provided —</span>';
-    return `<div class="answer-row"><span class="q-num">${qNum}</span><span class="user-ans"><strong>Your Answer:</strong> ${display}</span></div>`;
+    return `
+        <div class="answer-row">
+            <span class="q-num">${qNum}</span>
+            <span class="user-ans"><strong>Your Answer:</strong> ${display}</span>
+        </div>
+    `;
 }
 
+// --- RENDER SECTION ---
 function renderSection(containerId, prefix, startQ, endQ) {
     const container = document.getElementById(containerId);
     let html = '';
@@ -93,36 +121,73 @@ function renderSection(containerId, prefix, startQ, endQ) {
     container.innerHTML = html;
 }
 
+// --- RENDER WRITING TASK ---
 function renderWritingBox(containerId, storageKey) {
     const container = document.getElementById(containerId);
     const content = localStorage.getItem(storageKey);
-    container.innerHTML = content?.trim() ? content : '<span class="empty">— No response submitted —</span>';
+    if (!content || !content.trim()) {
+        container.innerHTML = '<span class="empty">— No response submitted —</span>';
+    } else {
+        container.textContent = content;
+    }
 }
 
+// --- DOWNLOAD FUNCTION ---
 function downloadAnswers() {
-    let text = 'YOUR ANSWERS — Cambridge 19 Test 1\nGenerated: ' + new Date().toLocaleString() + '\n' + '='.repeat(50) + '\n\n';
-    text += '🎧 LISTENING\n' + '-'.repeat(30) + '\n';
-    for (let q = 1; q <= 40; q++) text += `Q${String(q).padStart(2,' ')}: ${getSavedAnswer(KEY_LISTENING, q) || '— No answer —'}\n`;
-    text += '\n📖 READING\n' + '-'.repeat(30) + '\n';
-    for (let q = 1; q <= 40; q++) text += `Q${String(q).padStart(2,' ')}: ${getSavedAnswer(KEY_READING, q) || '— No answer —'}\n`;
-    text += '\n✍️ WRITING\n' + '-'.repeat(30) + '\nTask 1:\n' + (localStorage.getItem(KEY_WRITING_T1) || '— No response —') + '\n\nTask 2:\n' + (localStorage.getItem(KEY_WRITING_T2) || '— No response —') + '\n';
+    let text = 'YOUR ANSWERS — Cambridge 19 Test 1\n';
+    text += 'Generated: ' + new Date().toLocaleString() + '\n';
+    text += '='.repeat(50) + '\n\n';
     
-    const blob = new Blob([text], {type:'text/plain;charset=utf-8'});
+    // Listening
+    text += '🎧 LISTENING\n';
+    text += '-'.repeat(30) + '\n';
+    for (let q = 1; q <= 40; q++) {
+        const ans = getSavedAnswer(KEY_LISTENING, q) || '— No answer —';
+        text += `Q${String(q).padStart(2, ' ')}: ${ans}\n`;
+    }
+    text += '\n';
+    
+    // Reading
+    text += '📖 READING\n';
+    text += '-'.repeat(30) + '\n';
+    for (let q = 1; q <= 40; q++) {
+        const ans = getSavedAnswer(KEY_READING, q) || '— No answer —';
+        text += `Q${String(q).padStart(2, ' ')}: ${ans}\n`;
+    }
+    text += '\n';
+    
+    // Writing
+    text += '✍️ WRITING\n';
+    text += '-'.repeat(30) + '\n';
+    text += 'Task 1:\n';
+    text += localStorage.getItem(KEY_WRITING_T1) || '— No response —';
+    text += '\n\nTask 2:\n';
+    text += localStorage.getItem(KEY_WRITING_T2) || '— No response —';
+    text += '\n';
+    
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url; a.download = 'Cambridge19_Test1_Your_Answers.txt';
-    document.body.appendChild(a); a.click();
-    document.body.removeChild(a); URL.revokeObjectURL(url);
+    a.href = url;
+    a.download = 'Cambridge19_Test1_Your_Answers.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 }
 
+// --- LOAD EVERYTHING ---
 document.addEventListener('DOMContentLoaded', () => {
+    // Listening
     renderSection('listening-p1', KEY_LISTENING, 1, 10);
     renderSection('listening-p2', KEY_LISTENING, 11, 20);
     renderSection('listening-p3', KEY_LISTENING, 21, 30);
     renderSection('listening-p4', KEY_LISTENING, 31, 40);
+    // Reading
     renderSection('reading-p1', KEY_READING, 1, 13);
     renderSection('reading-p2', KEY_READING, 14, 26);
     renderSection('reading-p3', KEY_READING, 27, 40);
+    // Writing
     renderWritingBox('writing-task1', KEY_WRITING_T1);
     renderWritingBox('writing-task2', KEY_WRITING_T2);
 });
