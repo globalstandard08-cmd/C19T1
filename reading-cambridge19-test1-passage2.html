@@ -484,6 +484,7 @@
 const STORAGE_KEY = 'Cambridge19_Test1_Reading';
 const passageId = 'reading-cambridge19-test1-passage2';
 let currentRange = null, activeHighlight = null, currentQuestionNum = 14;
+
 function setCurrentQuestion(qNum) {
     document.querySelectorAll('.q-row.current').forEach(r => r.classList.remove('current'));
     document.querySelectorAll('.q-indicator.current').forEach(b => b.classList.remove('current'));
@@ -491,21 +492,26 @@ function setCurrentQuestion(qNum) {
     document.getElementById(`q${qNum}`)?.classList.add('current');
     document.querySelector(`.q-indicator[data-q="${qNum}"]`)?.classList.add('current');
 }
+
 function updateStatus() {
+    const q2021 = localStorage.getItem(`${STORAGE_KEY}_q20q21`) || '';
+    const q2223 = localStorage.getItem(`${STORAGE_KEY}_q22q23`) || '';
+    
     for (let q = 1; q <= 40; q++) {
         const btn = document.querySelector(`.q-indicator[data-q="${q}"]`);
         if (!btn) continue;
         let val = '';
         if (q === 20 || q === 21) {
-            val = localStorage.getItem(`${STORAGE_KEY}_q20q21`) || '';
+            val = q2021;
         } else if (q === 22 || q === 23) {
-            val = localStorage.getItem(`${STORAGE_KEY}_q22q23`) || '';
+            val = q2223;
         } else {
             val = localStorage.getItem(`${STORAGE_KEY}_q${q}`) || '';
         }
         btn.classList.toggle('answered', val.length > 0);
     }
 }
+
 document.querySelectorAll('.q-indicator').forEach(btn => {
     btn.addEventListener('click', () => {
         const qNum = parseInt(btn.dataset.q);
@@ -525,6 +531,7 @@ document.querySelectorAll('.q-indicator').forEach(btn => {
         document.getElementById(`q${qNum}`)?.scrollIntoView({behavior:'smooth', block:'center'});
     });
 });
+
 function isSelectionValid(sel) {
     if (!sel || sel.isCollapsed || !sel.toString().trim()) return false;
     try {
@@ -536,6 +543,7 @@ function isSelectionValid(sel) {
         return inAllowedArea && !inBlocked;
     } catch { return false; }
 }
+
 function saveHighlightsData() {
     const highlights = [];
     document.querySelectorAll('.highlight').forEach((hl, idx) => {
@@ -543,6 +551,7 @@ function saveHighlightsData() {
     });
     localStorage.setItem(`${passageId}_highlights`, JSON.stringify(highlights));
 }
+
 function restoreNoteMarkers() {
     document.querySelectorAll('.highlight').forEach(hl => {
         if (hl.getAttribute('data-note') && !hl.querySelector('.note-marker')) {
@@ -552,9 +561,12 @@ function restoreNoteMarkers() {
         }
     });
 }
+
 const noteBox = document.getElementById('noteBox'), noteText = document.getElementById('noteText');
 let isDraggingNote = false, dragOffsetX = 0, dragOffsetY = 0;
+
 document.getElementById('noteClose').addEventListener('click', () => { noteBox.style.display = 'none'; activeHighlight = null; });
+
 noteText.addEventListener('input', () => {
     if (!activeHighlight) return;
     activeHighlight.setAttribute('data-note', noteText.value);
@@ -565,18 +577,22 @@ noteText.addEventListener('input', () => {
     if (!noteText.value) activeHighlight.querySelector('.note-marker')?.remove();
     saveHighlightsData();
 });
+
 document.addEventListener('mousedown', e => {
     if (!document.getElementById('noteDragHandle').contains(e.target)) return;
     isDraggingNote = true;
     const rc = noteBox.getBoundingClientRect();
     dragOffsetX = e.clientX - rc.left; dragOffsetY = e.clientY - rc.top;
 });
+
 document.addEventListener('mousemove', e => {
     if (!isDraggingNote) return;
     noteBox.style.left = (e.clientX - dragOffsetX) + 'px';
     noteBox.style.top = (e.clientY - dragOffsetY) + 'px';
 });
+
 document.addEventListener('mouseup', () => { isDraggingNote = false; });
+
 const contextMenu = document.getElementById('contextMenu');
 document.addEventListener('contextmenu', e => {
     const sel = window.getSelection();
@@ -595,7 +611,9 @@ document.addEventListener('contextmenu', e => {
         contextMenu.style.display = 'block'; activeHighlight = null;
     } else contextMenu.style.display = 'none';
 });
+
 document.addEventListener('click', e => { if (!contextMenu.contains(e.target)) contextMenu.style.display = 'none'; });
+
 document.getElementById('menuHighlight').addEventListener('click', () => {
     if (!currentRange) return;
     try {
@@ -605,6 +623,7 @@ document.getElementById('menuHighlight').addEventListener('click', () => {
     } catch { alert('Select smaller text.'); }
     contextMenu.style.display = 'none';
 });
+
 document.getElementById('menuAddNote').addEventListener('click', () => {
     contextMenu.style.display = 'none';
     if (!activeHighlight) {
@@ -622,6 +641,7 @@ document.getElementById('menuAddNote').addEventListener('click', () => {
     noteText.value = activeHighlight.getAttribute('data-note') || '';
     noteText.focus();
 });
+
 document.getElementById('menuRemove').addEventListener('click', () => {
     contextMenu.style.display = 'none'; noteBox.style.display = 'none';
     if (!activeHighlight) return;
@@ -629,7 +649,9 @@ document.getElementById('menuRemove').addEventListener('click', () => {
     p.replaceChild(document.createTextNode(activeHighlight.textContent), activeHighlight);
     p.normalize(); activeHighlight = null; saveHighlightsData();
 });
+
 function saveAnswer(q, val) { localStorage.setItem(`${STORAGE_KEY}_q${q}`, val); updateStatus(); }
+
 function clearAllData() {
     if (!confirm('⚠️ Clear ALL answers, highlights, notes? Cannot undo.')) return;
     for (let q = 14; q <= 26; q++) localStorage.removeItem(`${STORAGE_KEY}_q${q}`);
@@ -643,10 +665,13 @@ function clearAllData() {
     });
     noteBox.style.display = 'none'; location.reload();
 }
+
 document.getElementById('clearAllBtn').addEventListener('click', clearAllData);
+
 document.addEventListener('DOMContentLoaded', () => {
     restoreNoteMarkers();
     
+    // Q14-19 restore
     for (let q = 14; q <= 19; q++) {
         const inp = document.getElementById(`ans${q}`);
         if (!inp) continue;
@@ -659,10 +684,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
+    // Q20-21 restore — EXPLICIT, NO OVERWRITE
     const s2021 = localStorage.getItem(`${STORAGE_KEY}_q20q21`);
     if (s2021) {
         const selected = s2021.split(',');
-        document.querySelectorAll('input[name="q20q21"]').forEach(cb => cb.checked = selected.includes(cb.value));
+        document.querySelectorAll('input[name="q20q21"]').forEach(cb => {
+            cb.checked = selected.includes(cb.value);
+        });
     }
     document.querySelectorAll('input[name="q20q21"]').forEach(cb => {
         cb.addEventListener('change', () => {
@@ -671,10 +699,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     
+    // Q22-23 restore — EXPLICIT, NO OVERWRITE
     const s2223 = localStorage.getItem(`${STORAGE_KEY}_q22q23`);
     if (s2223) {
         const selected = s2223.split(',');
-        document.querySelectorAll('input[name="q22q23"]').forEach(cb => cb.checked = selected.includes(cb.value));
+        document.querySelectorAll('input[name="q22q23"]').forEach(cb => {
+            cb.checked = selected.includes(cb.value);
+        });
     }
     document.querySelectorAll('input[name="q22q23"]').forEach(cb => {
         cb.addEventListener('change', () => {
@@ -683,6 +714,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     
+    // Q24-26 restore
     for (let q = 24; q <= 26; q++) {
         const inp = document.getElementById(`ans${q}`);
         if (!inp) continue;
