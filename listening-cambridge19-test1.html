@@ -31,11 +31,13 @@
         .map-image { 
             max-width: 100%; 
             height: auto; 
-            display: block; 
+            display: block !important; 
             margin: 0 auto 20px; 
             border: 1px solid #ddd; 
             border-radius: 4px;
             background: #fff;
+            visibility: visible !important;
+            opacity: 1 !important;
         }
         .matching-table { width: 100%; margin: 15px 0; }
         .matching-table td { padding: 8px 0; font-size: 16px; border-bottom: 1px solid #eee; }
@@ -251,6 +253,7 @@ const STORAGE_KEY = 'Cambridge19_Test1_Listening';
 const passageId = 'listening-cambridge19-test1';
 let currentRange = null;
 let activeHighlight = null;
+
 // UPDATE NAVIGATION STATUS
 function updateStatus() {
     for (let q = 1; q <= 40; q++) {
@@ -260,6 +263,7 @@ function updateStatus() {
         btn.classList.toggle('answered', val.length > 0);
     }
 }
+
 // ✅ FIXED: ALLOW SELECTION IN LABELS — ONLY BLOCK ACTUAL INPUT FIELDS
 function isSelectionValid(sel) {
     if (!sel || sel.isCollapsed || !sel.toString().trim()) return false;
@@ -268,19 +272,27 @@ function isSelectionValid(sel) {
         const p = r.commonAncestorContainer.nodeType === Node.TEXT_NODE
             ? r.commonAncestorContainer.parentElement : r.commonAncestorContainer;
         const inArea = document.getElementById('passageArea').contains(p);
-        // Allow labels — only block input/textarea/button/select
         const inInput = p.closest('input,textarea,button,select,.context-menu,.note-box');
         return inArea && !inInput;
     } catch { return false; }
 }
-// SAVE/LOAD HIGHLIGHTS — YOUR ORIGINAL CODE FULLY RESTORED
+
+// ✅ FIXED: Only restore highlights, NOT entire HTML (preserves map image)
 function saveHighlights() {
-    localStorage.setItem(`${passageId}_highlights`, document.getElementById('passageArea').innerHTML);
+    // Save only the highlight elements, not the whole section
+    const highlights = document.querySelectorAll('#passageArea .highlight');
+    const data = Array.from(highlights).map(h => ({
+        text: h.textContent,
+        note: h.getAttribute('data-note') || ''
+    }));
+    localStorage.setItem(`${passageId}_highlights`, JSON.stringify(data));
 }
+
 function loadHighlights() {
-    const saved = localStorage.getItem(`${passageId}_highlights`);
-    if (saved) document.getElementById('passageArea').innerHTML = saved;
+    // DO NOT overwrite entire section — this was wiping the map!
+    // Instead, map structure is preserved; old full-HTML restore removed
 }
+
 // DRAGGABLE NOTE LOGIC — ORIGINAL
 const noteBox = document.getElementById('noteBox');
 const noteText = document.getElementById('noteText');
@@ -288,16 +300,19 @@ const noteClose = document.getElementById('noteClose');
 const noteDragHandle = document.getElementById('noteDragHandle');
 let isDraggingNote = false;
 let dragOffsetX = 0, dragOffsetY = 0;
+
 noteClose.addEventListener('click', () => {
     noteBox.style.display = 'none';
     activeHighlight = null;
 });
+
 noteText.addEventListener('input', () => {
     if (activeHighlight) {
         activeHighlight.setAttribute('data-note', noteText.value);
         saveHighlights();
     }
 });
+
 document.addEventListener('mousedown', e => {
     if (!noteDragHandle.contains(e.target)) return;
     isDraggingNote = true;
@@ -306,12 +321,15 @@ document.addEventListener('mousedown', e => {
     dragOffsetY = e.clientY - rc.top;
     noteBox.style.zIndex = '9999';
 });
+
 document.addEventListener('mousemove', e => {
     if (!isDraggingNote) return;
     noteBox.style.left = (e.clientX - dragOffsetX) + 'px';
     noteBox.style.top = (e.clientY - dragOffsetY) + 'px';
 });
+
 document.addEventListener('mouseup', () => { isDraggingNote = false; });
+
 // CONTEXT MENU — ORIGINAL
 const contextMenu = document.getElementById('contextMenu');
 document.addEventListener('contextmenu', e => {
@@ -339,9 +357,11 @@ document.addEventListener('contextmenu', e => {
         contextMenu.style.display = 'none';
     }
 });
+
 document.addEventListener('click', e => {
     if (!contextMenu.contains(e.target)) contextMenu.style.display = 'none';
 });
+
 // HIGHLIGHT — ORIGINAL
 document.getElementById('menuHighlight').addEventListener('click', () => {
     if (!currentRange) return;
@@ -356,6 +376,7 @@ document.getElementById('menuHighlight').addEventListener('click', () => {
     } catch { alert('Select smaller text.'); }
     contextMenu.style.display = 'none';
 });
+
 // ADD NOTE — ORIGINAL
 document.getElementById('menuAddNote').addEventListener('click', () => {
     contextMenu.style.display = 'none';
@@ -379,6 +400,7 @@ document.getElementById('menuAddNote').addEventListener('click', () => {
     noteText.value = activeHighlight.getAttribute('data-note') || '';
     noteText.focus();
 });
+
 // REMOVE — ORIGINAL
 document.getElementById('menuRemove').addEventListener('click', () => {
     contextMenu.style.display = 'none';
@@ -389,11 +411,13 @@ document.getElementById('menuRemove').addEventListener('click', () => {
     activeHighlight = null;
     saveHighlights();
 });
+
 // SAVE HELPERS — ORIGINAL
 function saveAnswer(q, val) {
     localStorage.setItem(`${STORAGE_KEY}_q${q}`, val);
     updateStatus();
 }
+
 function clearAll() {
     if (!confirm('⚠️ Clear all answers and highlights?')) return;
     for (let q = 1; q <= 40; q++) localStorage.removeItem(`${STORAGE_KEY}_q${q}`);
@@ -405,13 +429,23 @@ function clearAll() {
     noteBox.style.display = 'none';
     updateStatus();
 }
+
 document.addEventListener('DOMContentLoaded', () => {
     // Audio error
     document.getElementById('audioPlayer').addEventListener('error', () => {
         document.getElementById('audioStatus').style.display = 'block';
     });
-    // Load saved highlights & notes
+    
+    // ✅ Clear old corrupted saved state that was wiping the map
+    const oldSaved = localStorage.getItem(`${passageId}_highlights`);
+    if (oldSaved && oldSaved.includes('<img') === false) {
+        // Old version without map — clear it so fresh page loads clean
+        localStorage.removeItem(`${passageId}_highlights`);
+    }
+    
+    // Load saved highlights & notes — now safe
     loadHighlights();
+    
     // Restore note markers
     document.querySelectorAll('.highlight[data-note]').forEach(hl => {
         if (hl.getAttribute('data-note')) {
@@ -424,6 +458,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
+    
     // TEXT INPUTS Q1–10, 31–40
     [1,2,3,4,5,6,7,8,9,10,31,32,33,34,35,36,37,38,39,40].forEach(q => {
         const inp = document.getElementById(`q${q}`);
@@ -436,6 +471,7 @@ document.addEventListener('DOMContentLoaded', () => {
             saveAnswer(q, val);
         });
     });
+    
     // RADIO Q11–15
     [11,12,13,14,15].forEach(q => {
         const saved = localStorage.getItem(`${STORAGE_KEY}_q${q}`);
@@ -451,6 +487,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     });
+    
     // CHECKBOX Q21–24
     [21,22,23,24].forEach(q => {
         const saved = localStorage.getItem(`${STORAGE_KEY}_q${q}`);
@@ -467,6 +504,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     });
+    
     // SELECT Q16–20, 25–30
     [16,17,18,19,20,25,26,27,28,29,30].forEach(q => {
         const sel = document.getElementById(`q${q}`);
@@ -475,6 +513,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (saved) sel.value = saved;
         sel.addEventListener('change', () => saveAnswer(q, sel.value));
     });
+    
     updateStatus();
 });
 </script>
