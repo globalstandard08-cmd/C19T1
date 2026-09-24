@@ -529,7 +529,7 @@
             
             <div class="yn-legend">
                 <div><span class="yn-code">YES</span> if the statement agrees with the claims of the writer</div>
-                <div><span class="yn-code">NO</span> if the statement contradicts the claims of the writer</div>
+                <div><span class="yn-code">NO</span> if it contradicts the claims of the writer</div>
                 <div><span class="yn-code">NOT GIVEN</span> if it is impossible to say what the writer thinks about this</div>
             </div>
             
@@ -613,12 +613,10 @@
             <a href="writing-intro.html" class="nav-btn writing-btn">Next → Writing</a>
         </div>
     </div>
-
 <script>
 const STORAGE_KEY = 'Cambridge19_Test1_Reading';
 const passageId = 'reading-cambridge19-test1-passage3';
 let currentRange = null, activeHighlight = null, currentQuestionNum = 27;
-
 function setCurrentQuestion(qNum) {
     document.querySelectorAll('.q-row.current').forEach(r => r.classList.remove('current'));
     document.querySelectorAll('.q-indicator.current').forEach(b => b.classList.remove('current'));
@@ -626,7 +624,6 @@ function setCurrentQuestion(qNum) {
     document.getElementById(`q${qNum}`)?.classList.add('current');
     document.querySelector(`.q-indicator[data-q="${qNum}"]`)?.classList.add('current');
 }
-
 function updateStatus() {
     for (let q = 1; q <= 40; q++) {
         const btn = document.querySelector(`.q-indicator[data-q="${q}"]`);
@@ -635,7 +632,6 @@ function updateStatus() {
         btn.classList.toggle('answered', val.length > 0);
     }
 }
-
 document.querySelectorAll('.q-indicator').forEach(btn => {
     btn.addEventListener('click', () => {
         const qNum = parseInt(btn.dataset.q);
@@ -655,17 +651,16 @@ document.querySelectorAll('.q-indicator').forEach(btn => {
         document.getElementById(`q${qNum}`)?.scrollIntoView({behavior:'smooth', block:'center'});
     });
 });
-
 function isSelectionValid(sel) {
     if (!sel || sel.isCollapsed || !sel.toString().trim()) return false;
     try {
         const p = sel.getRangeAt(0).commonAncestorContainer.nodeType === Node.TEXT_NODE
             ? sel.getRangeAt(0).commonAncestorContainer.parentElement : sel.getRangeAt(0).commonAncestorContainer;
+        // Allow highlighting in passage AND questions area, including options/summary — only block inputs
         return (document.getElementById('passageArea').contains(p) || document.getElementById('questionsArea').contains(p))
-            && !p.closest('input,textarea,select,button,label,.context-menu,.note-box,.summary-box');
+            && !p.closest('input,textarea,select,button,.context-menu,.note-box');
     } catch { return false; }
 }
-
 function saveHighlightsData() {
     const highlights = [];
     document.querySelectorAll('.highlight').forEach((hl, idx) => {
@@ -673,7 +668,6 @@ function saveHighlightsData() {
     });
     localStorage.setItem(`${passageId}_highlights`, JSON.stringify(highlights));
 }
-
 function restoreNoteMarkers() {
     document.querySelectorAll('.highlight').forEach(hl => {
         if (hl.getAttribute('data-note') && !hl.querySelector('.note-marker')) {
@@ -683,7 +677,6 @@ function restoreNoteMarkers() {
         }
     });
 }
-
 const noteBox = document.getElementById('noteBox'), noteText = document.getElementById('noteText');
 let isDraggingNote = false, dragOffsetX = 0, dragOffsetY = 0;
 document.getElementById('noteClose').addEventListener('click', () => { noteBox.style.display = 'none'; activeHighlight = null; });
@@ -709,7 +702,6 @@ document.addEventListener('mousemove', e => {
     noteBox.style.top = (e.clientY - dragOffsetY) + 'px';
 });
 document.addEventListener('mouseup', () => { isDraggingNote = false; });
-
 const contextMenu = document.getElementById('contextMenu');
 document.addEventListener('contextmenu', e => {
     const sel = window.getSelection();
@@ -729,7 +721,6 @@ document.addEventListener('contextmenu', e => {
     } else contextMenu.style.display = 'none';
 });
 document.addEventListener('click', e => { if (!contextMenu.contains(e.target)) contextMenu.style.display = 'none'; });
-
 document.getElementById('menuHighlight').addEventListener('click', () => {
     if (!currentRange) return;
     try {
@@ -739,7 +730,6 @@ document.getElementById('menuHighlight').addEventListener('click', () => {
     } catch { alert('Select smaller text.'); }
     contextMenu.style.display = 'none';
 });
-
 document.getElementById('menuAddNote').addEventListener('click', () => {
     contextMenu.style.display = 'none';
     if (!activeHighlight) {
@@ -757,7 +747,6 @@ document.getElementById('menuAddNote').addEventListener('click', () => {
     noteText.value = activeHighlight.getAttribute('data-note') || '';
     noteText.focus();
 });
-
 document.getElementById('menuRemove').addEventListener('click', () => {
     contextMenu.style.display = 'none'; noteBox.style.display = 'none';
     if (!activeHighlight) return;
@@ -765,9 +754,7 @@ document.getElementById('menuRemove').addEventListener('click', () => {
     p.replaceChild(document.createTextNode(activeHighlight.textContent), activeHighlight);
     p.normalize(); activeHighlight = null; saveHighlightsData();
 });
-
 function saveAnswer(q, val) { localStorage.setItem(`${STORAGE_KEY}_q${q}`, val); updateStatus(); }
-
 function clearAllData() {
     if (!confirm('⚠️ Clear ALL answers, highlights, notes? Cannot undo.')) return;
     for (let q = 27; q <= 40; q++) localStorage.removeItem(`${STORAGE_KEY}_q${q}`);
@@ -781,7 +768,6 @@ function clearAllData() {
     noteBox.style.display = 'none'; location.reload();
 }
 document.getElementById('clearAllBtn').addEventListener('click', clearAllData);
-
 document.addEventListener('DOMContentLoaded', () => {
     restoreNoteMarkers();
     
