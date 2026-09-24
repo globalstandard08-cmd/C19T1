@@ -529,8 +529,12 @@ function isSelectionValid(sel) {
     try {
         const p = sel.getRangeAt(0).commonAncestorContainer.nodeType === Node.TEXT_NODE
             ? sel.getRangeAt(0).commonAncestorContainer.parentElement : sel.getRangeAt(0).commonAncestorContainer;
-        return (document.getElementById('passageArea').contains(p))
-            && !p.closest('input,textarea,button,label,.context-menu,.note-box,.mc-option,.summary-box');
+        // Allow highlighting in BOTH passage and questions area
+        const inAllowedArea = document.getElementById('passageArea').contains(p) || 
+                              document.getElementById('questionsArea').contains(p);
+        // Only block inputs, buttons, checkboxes — allow everything else
+        const inBlocked = p.closest('input,textarea,button,label,.context-menu,.note-box,.mc-option');
+        return inAllowedArea && !inBlocked;
     } catch { return false; }
 }
 function saveHighlightsData() {
