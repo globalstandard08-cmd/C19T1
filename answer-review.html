@@ -16,11 +16,13 @@
         .user-ans { flex: 1; padding: 8px 12px; background: #e6f0ff; border-radius: 4px; }
         .empty { color: #999; font-style: italic; }
         .writing-box { padding: 15px; background: #f9f9f9; border-radius: 6px; margin: 10px 0; white-space: pre-wrap; min-height: 120px; border: 1px solid #e0e0e0; }
-        .nav { margin-top: 30px; display: flex; gap: 15px; flex-wrap: wrap; }
-        .btn { padding: 10px 18px; border-radius: 4px; text-decoration: none; font-weight: bold; border: none; cursor: pointer; }
+        .nav { margin-top: 30px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+        .btn { padding: 10px 18px; border-radius: 4px; text-decoration: none; font-weight: bold; border: none; cursor: pointer; font-size: 15px; }
         .back { background: #6b7280; color: white; }
         .print { background: #1f3a5f; color: white; }
         .download { background: #10b981; color: white; }
+        .clear { background: #dc2626; color: white; }
+        .clear:hover { background: #b91c1c; }
     </style>
 </head>
 <body>
@@ -53,6 +55,7 @@
         <div class="nav">
             <a href="index.html" class="btn back">← Back to Home</a>
             <button class="btn download" onclick="downloadAnswers()">⬇️ Download (.txt)</button>
+            <button class="btn clear" onclick="clearAllData()">🗑️ Clear All Answers</button>
             <a href="#" class="btn print" onclick="window.print()">🖨️ Print / Save as PDF</a>
         </div>
     </div>
@@ -62,8 +65,9 @@ const KEY_LISTENING = 'Cambridge19_Test1_Listening';
 const KEY_READING    = 'Cambridge19_Test1_Reading';
 const KEY_WRITING_T1 = 'task1Input';
 const KEY_WRITING_T2 = 'task2Input';
+const PASSAGE_IDS = ['listening-cambridge19-test1', 'reading-cambridge19-test1-p1', 'reading-cambridge19-test1-p2', 'reading-cambridge19-test1-p3'];
 
-// --- HELPER: Get paired answer (checks single-q and double-q formats) ---
+// --- HELPER: Get paired answer ---
 function getPairedAnswer(prefix, combinedKey, index) {
     let val = localStorage.getItem(`${prefix}_${combinedKey}`);
     if (!val) val = localStorage.getItem(`${prefix}_q${combinedKey}`);
@@ -73,26 +77,21 @@ function getPairedAnswer(prefix, combinedKey, index) {
     return parts[index] || '';
 }
 
-// --- GET SAVED ANSWER — matches EXACTLY how each page saves ---
+// --- GET SAVED ANSWER ---
 function getSavedAnswer(prefix, qNum) {
-    // ============= LISTENING =============
-    // ALL Listening questions save INDIVIDUALLY — including Q21-24
+    // Listening — all individual keys
     if (prefix === KEY_LISTENING) {
         const val = localStorage.getItem(`${prefix}_q${qNum}`);
         return val ? val.trim() : '';
     }
-    
-    // ============= READING =============
-    // Q20 & Q21 — paired
+    // Reading paired keys
     if (qNum === 20 || qNum === 21) {
         return getPairedAnswer(prefix, 'q20q21', qNum === 20 ? 0 : 1);
     }
-    // Q22 & Q23 — paired
     if (qNum === 22 || qNum === 23) {
         return getPairedAnswer(prefix, 'q22q23', qNum === 22 ? 0 : 1);
     }
-    
-    // Standard single-key questions
+    // Standard single key
     const val = localStorage.getItem(`${prefix}_q${qNum}`);
     return val ? val.trim() : '';
 }
@@ -100,12 +99,7 @@ function getSavedAnswer(prefix, qNum) {
 // --- MAKE ROW ---
 function makeRow(qNum, answer) {
     const display = answer || '<span class="empty">— No answer provided —</span>';
-    return `
-        <div class="answer-row">
-            <span class="q-num">${qNum}</span>
-            <span class="user-ans"><strong>Your Answer:</strong> ${display}</span>
-        </div>
-    `;
+    return `<div class="answer-row"><span class="q-num">${qNum}</span><span class="user-ans"><strong>Your Answer:</strong> ${display}</span></div>`;
 }
 
 // --- RENDER SECTION ---
@@ -118,73 +112,66 @@ function renderSection(containerId, prefix, startQ, endQ) {
     container.innerHTML = html;
 }
 
-// --- RENDER WRITING TASK ---
+// --- RENDER WRITING ---
 function renderWritingBox(containerId, storageKey) {
     const container = document.getElementById(containerId);
     const content = localStorage.getItem(storageKey);
-    if (!content || !content.trim()) {
-        container.innerHTML = '<span class="empty">— No response submitted —</span>';
-    } else {
-        container.textContent = content;
-    }
+    container.innerHTML = content?.trim() ? content : '<span class="empty">— No response submitted —</span>';
 }
 
-// --- DOWNLOAD FUNCTION ---
+// --- DOWNLOAD ---
 function downloadAnswers() {
-    let text = 'YOUR ANSWERS — Cambridge 19 Test 1\n';
-    text += 'Generated: ' + new Date().toLocaleString() + '\n';
-    text += '='.repeat(50) + '\n\n';
+    let text = 'YOUR ANSWERS — Cambridge 19 Test 1\nGenerated: ' + new Date().toLocaleString() + '\n' + '='.repeat(50) + '\n\n';
+    text += '🎧 LISTENING\n' + '-'.repeat(30) + '\n';
+    for (let q = 1; q <= 40; q++) text += `Q${String(q).padStart(2,' ')}: ${getSavedAnswer(KEY_LISTENING, q) || '— No answer —'}\n`;
+    text += '\n📖 READING\n' + '-'.repeat(30) + '\n';
+    for (let q = 1; q <= 40; q++) text += `Q${String(q).padStart(2,' ')}: ${getSavedAnswer(KEY_READING, q) || '— No answer —'}\n`;
+    text += '\n✍️ WRITING\n' + '-'.repeat(30) + '\nTask 1:\n' + (localStorage.getItem(KEY_WRITING_T1) || '— No response —') + '\n\nTask 2:\n' + (localStorage.getItem(KEY_WRITING_T2) || '— No response —') + '\n';
     
-    // Listening
-    text += '🎧 LISTENING\n';
-    text += '-'.repeat(30) + '\n';
-    for (let q = 1; q <= 40; q++) {
-        const ans = getSavedAnswer(KEY_LISTENING, q) || '— No answer —';
-        text += `Q${String(q).padStart(2, ' ')}: ${ans}\n`;
-    }
-    text += '\n';
-    
-    // Reading
-    text += '📖 READING\n';
-    text += '-'.repeat(30) + '\n';
-    for (let q = 1; q <= 40; q++) {
-        const ans = getSavedAnswer(KEY_READING, q) || '— No answer —';
-        text += `Q${String(q).padStart(2, ' ')}: ${ans}\n`;
-    }
-    text += '\n';
-    
-    // Writing
-    text += '✍️ WRITING\n';
-    text += '-'.repeat(30) + '\n';
-    text += 'Task 1:\n';
-    text += localStorage.getItem(KEY_WRITING_T1) || '— No response —';
-    text += '\n\nTask 2:\n';
-    text += localStorage.getItem(KEY_WRITING_T2) || '— No response —';
-    text += '\n';
-    
-    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const blob = new Blob([text], {type:'text/plain;charset=utf-8'});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url;
-    a.download = 'Cambridge19_Test1_Your_Answers.txt';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    a.href = url; a.download = 'Cambridge19_Test1_Your_Answers.txt';
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a); URL.revokeObjectURL(url);
 }
 
-// --- LOAD EVERYTHING ---
+// --- CLEAR ALL — COMPLETE WIPE FOR NEXT TEST TAKER ---
+function clearAllData() {
+    if (!confirm('⚠️ Clear ALL answers, highlights, notes, writing?\n\nThis cannot be undone. Only do this before starting fresh.')) {
+        return;
+    }
+    
+    // Clear Listening answers
+    for (let q = 1; q <= 40; q++) localStorage.removeItem(`${KEY_LISTENING}_q${q}`);
+    
+    // Clear Reading answers — single and paired formats
+    for (let q = 1; q <= 40; q++) localStorage.removeItem(`${KEY_READING}_q${q}`);
+    localStorage.removeItem(`${KEY_READING}_q20q21`);
+    localStorage.removeItem(`${KEY_READING}_qq20q21`);
+    localStorage.removeItem(`${KEY_READING}_q22q23`);
+    localStorage.removeItem(`${KEY_READING}_qq22q23`);
+    
+    // Clear highlights/notes from all pages
+    PASSAGE_IDS.forEach(id => localStorage.removeItem(`${id}_highlights`));
+    
+    // Clear Writing
+    localStorage.removeItem(KEY_WRITING_T1);
+    localStorage.removeItem(KEY_WRITING_T2);
+    
+    alert('✅ All cleared. Ready for next test taker.');
+    location.reload();
+}
+
+// --- LOAD ---
 document.addEventListener('DOMContentLoaded', () => {
-    // Listening — ALL individual keys including Q21-24 ✅
     renderSection('listening-p1', KEY_LISTENING, 1, 10);
     renderSection('listening-p2', KEY_LISTENING, 11, 20);
     renderSection('listening-p3', KEY_LISTENING, 21, 30);
     renderSection('listening-p4', KEY_LISTENING, 31, 40);
-    // Reading — paired keys ✅
     renderSection('reading-p1', KEY_READING, 1, 13);
     renderSection('reading-p2', KEY_READING, 14, 26);
     renderSection('reading-p3', KEY_READING, 27, 40);
-    // Writing
     renderWritingBox('writing-task1', KEY_WRITING_T1);
     renderWritingBox('writing-task2', KEY_WRITING_T2);
 });
