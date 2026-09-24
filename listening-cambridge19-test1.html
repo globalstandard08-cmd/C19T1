@@ -28,12 +28,13 @@
         .mcq-option { display: flex; align-items: flex-start; gap: 10px; margin: 10px 0; padding: 6px 0; font-size: 16px; }
         .mcq-option input { margin-top: 3px; cursor: pointer; }
         .mcq-option.checked label { font-weight: 500; }
+        .mcq-option label { cursor: text; }
         .map-placeholder { border: 1px solid #999; background: #fff; padding: 20px; min-height: 300px; display: flex; align-items: center; justify-content: center; color: #666; }
         .matching-table { width: 100%; margin: 15px 0; }
         .matching-table td { padding: 8px 0; font-size: 16px; border-bottom: 1px solid #eee; }
         .matching-select { padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 15px; }
         
-        /* HIGHLIGHT + NOTE */
+        /* HIGHLIGHT + NOTE — WORKS EVERYWHERE including MCQ labels */
         .highlight { background-color: #ffd700; padding: 2px 4px; border-radius: 2px; cursor: pointer; display: inline; color: #000; position: relative; }
         .note-marker { position: absolute; top: -8px; right: -8px; width: 18px; height: 18px; background: #1f3a5f; color: white; border-radius: 50%; font-size: 11px; font-weight: bold; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; }
         .context-menu { position: absolute; background: #fff; border: 1px solid #ccc; border-radius: 4px; box-shadow: 0 2px 12px rgba(0,0,0,0.15); z-index: 9999; display: none; min-width: 180px; }
@@ -71,7 +72,6 @@
         <div id="menuAddNote">📝 Add Note</div>
         <div id="menuRemove">❌ Remove Highlight & Note</div>
     </div>
-
     <!-- Draggable Note Box -->
     <div class="note-box" id="noteBox">
         <div class="note-header" id="noteDragHandle">
@@ -80,14 +80,12 @@
         </div>
         <textarea class="note-textarea" id="noteText" placeholder="Type your note here…"></textarea>
     </div>
-
     <div class="container">
         <div class="logo-section"><img src="ielts-logo.png" alt="IELTS Logo"></div>
         <div class="header-bar">
             <span>LISTENING — CAMBRIDGE 19 TEST 1</span>
             <span style="font-size:15px; opacity:0.9;">Exam Mode</span>
         </div>
-
         <div class="audio-player">
             <h3>Play Full Recording</h3>
             <audio controls preload="auto" id="audioPlayer">
@@ -97,9 +95,7 @@
             
             <p id="audioStatus">⚠️ Audio file unavailable — check file or link.</p>
         </div>
-
         <div class="content" id="passageArea">
-
 <!-- ========== PART 1 ========== -->
 <h2>PART 1 — Questions 1–10</h2>
 <div class="instruction"><strong>Questions 1–10</strong><br>Complete the notes below.<br>Write <strong>ONE WORD AND/OR A NUMBER</strong> for each answer.</div>
@@ -123,7 +119,6 @@
     <div class="question-line"><span>Cost per child: £</span><span class="q-number">9.</span><input type="text" class="input-field" id="q9" placeholder="Answer"></div>
     <div class="question-line"><span>Adults, such as</span><span class="q-number">10.</span><input type="text" class="input-field" id="q10" placeholder="Answer"><span>, free</span></div>
 </div>
-
 <!-- ========== PART 2 ========== -->
 <h2>PART 2 — Questions 11–20</h2>
 <div class="instruction"><strong>Questions 11–15</strong><br>Choose the correct letter, <strong>A, B or C</strong>.</div>
@@ -132,28 +127,23 @@
     <div class="mcq-option" data-q="11" data-val="A"><input type="radio" name="q11" id="q11a" value="A"><label for="q11a">A going to a theme park.</label></div>
     <div class="mcq-option" data-q="11" data-val="B"><input type="radio" name="q11" id="q11b" value="B"><label for="q11b">B experiencing a river trip.</label></div>
     <div class="mcq-option" data-q="11" data-val="C"><input type="radio" name="q11" id="q11c" value="C"><label for="q11c">C visiting a cheese factory.</label></div>
-
     <p style="font-weight:bold; margin:20px 0 8px;">12 What will happen in Stanthorpe to mark the 25th anniversary?</p>
     <div class="mcq-option" data-q="12" data-val="A"><input type="radio" name="q12" id="q12a" value="A"><label for="q12a">A A tree will be planted.</label></div>
     <div class="mcq-option" data-q="12" data-val="B"><input type="radio" name="q12" id="q12b" value="B"><label for="q12b">B A garden seat will be bought.</label></div>
     <div class="mcq-option" data-q="12" data-val="C"><input type="radio" name="q12" id="q12c" value="C"><label for="q12c">C A footbridge will be built.</label></div>
-
     <p style="font-weight:bold; margin:20px 0 8px;">13 Which event raised most funds this year?</p>
     <div class="mcq-option" data-q="13" data-val="A"><input type="radio" name="q13" id="q13a" value="A"><label for="q13a">A the film show</label></div>
     <div class="mcq-option" data-q="13" data-val="B"><input type="radio" name="q13" id="q13b" value="B"><label for="q13b">B the pancake evening</label></div>
     <div class="mcq-option" data-q="13" data-val="C"><input type="radio" name="q13" id="q13c" value="C"><label for="q13c">C the cookery demonstration</label></div>
-
     <p style="font-weight:bold; margin:20px 0 8px;">14 For the first evening host families are advised to</p>
     <div class="mcq-option" data-q="14" data-val="A"><input type="radio" name="q14" id="q14a" value="A"><label for="q14a">A take them for a walk round the town.</label></div>
     <div class="mcq-option" data-q="14" data-val="B"><input type="radio" name="q14" id="q14b" value="B"><label for="q14b">B go to a local restaurant.</label></div>
     <div class="mcq-option" data-q="14" data-val="C"><input type="radio" name="q14" id="q14c" value="C"><label for="q14c">C have a meal at home.</label></div>
-
     <p style="font-weight:bold; margin:20px 0 8px;">15 On Saturday evening there will be the chance to</p>
     <div class="mcq-option" data-q="15" data-val="A"><input type="radio" name="q15" id="q15a" value="A"><label for="q15a">A listen to a concert.</label></div>
     <div class="mcq-option" data-q="15" data-val="B"><input type="radio" name="q15" id="q15b" value="B"><label for="q15b">B watch a match.</label></div>
     <div class="mcq-option" data-q="15" data-val="C"><input type="radio" name="q15" id="q15c" value="C"><label for="q15c">C take part in a competition.</label></div>
 </div>
-
 <div class="instruction"><strong>Questions 16–20</strong><br>Label the map below. Write the correct letter <strong>A–H</strong>.</div>
 <div class="map-block">
     <p style="font-weight:bold; text-align:center; margin-bottom:15px; color:#1f3a5f;">Farley House</p>
@@ -166,7 +156,6 @@
         <tr><td class="q-number">20</td><td>Temple of the Four Winds</td><td><select class="matching-select" id="q20" data-q="20"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select></td></tr>
     </table>
 </div>
-
 <!-- ========== PART 3 ========== -->
 <h2>PART 3 — Questions 21–30</h2>
 <div class="instruction"><strong>Questions 21–22</strong><br>Choose <strong>TWO</strong> letters <strong>A–E</strong>.</div>
@@ -178,7 +167,6 @@
     <div class="mcq-option" data-q="21"><input type="checkbox" name="q21" id="q21d" value="D"><label for="q21d">D designs & colours</label></div>
     <div class="mcq-option" data-q="21"><input type="checkbox" name="q21" id="q21e" value="E"><label for="q21e">E 3-D printing</label></div>
 </div>
-
 <div class="instruction"><strong>Questions 23–24</strong><br>Choose <strong>TWO</strong> letters <strong>A–E</strong>.</div>
 <div class="mcq-block">
     <p>Which TWO ways could touch-sensitive sensors be developed?</p>
@@ -188,7 +176,6 @@
     <div class="mcq-option" data-q="23"><input type="checkbox" name="q23" id="q23d" value="D"><label for="q23d">D for blind users</label></div>
     <div class="mcq-option" data-q="23"><input type="checkbox" name="q23" id="q23e" value="E"><label for="q23e">E weight indicators</label></div>
 </div>
-
 <div class="instruction"><strong>Questions 25–30</strong><br>Match trends to opinions <strong>A–H</strong>.</div>
 <div class="matching-block">
     <table style="margin:0 auto 20px; border:1px solid #ccc; padding:10px; background:#fff;">
@@ -210,7 +197,6 @@
         <tr><td class="q-number">30</td><td>Mushroom remedies</td><td><select class="matching-select" id="q30" data-q="30"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select></td></tr>
     </table>
 </div>
-
 <!-- ========== PART 4 ========== -->
 <h2>PART 4 — Questions 31–40</h2>
 <div class="instruction"><strong>Questions 31–40</strong><br>Complete the notes. Write <strong>ONE WORD ONLY</strong>.</div>
@@ -230,7 +216,6 @@
     <div class="question-line"><span>— decline in</span><span class="q-number">39.</span><input type="text" class="input-field" id="q39" placeholder="Answer"><span>quality</span></div>
     <div class="question-line"><span>— increase in</span><span class="q-number">40.</span><input type="text" class="input-field" id="q40" placeholder="Answer"></div>
 </div>
-
 <!-- Status Bar -->
 <div class="question-status">
     <span class="part-label">Part 1</span>
@@ -242,17 +227,13 @@
     <div class="part-separator"></div><span class="part-label">Part 4</span>
     <div class="q-indicator" data-q="31">31</div><div class="q-indicator" data-q="32">32</div><div class="q-indicator" data-q="33">33</div><div class="q-indicator" data-q="34">34</div><div class="q-indicator" data-q="35">35</div><div class="q-indicator" data-q="36">36</div><div class="q-indicator" data-q="37">37</div><div class="q-indicator" data-q="38">38</div><div class="q-indicator" data-q="39">39</div><div class="q-indicator" data-q="40">40</div>
 </div>
-
 <button class="clear-btn" onclick="clearAll()">🗑️ Clear All Answers & Highlights</button>
-
 <div class="nav-container">
     <a href="index.html" class="back-main-btn">← Home</a>
     <a href="reading-intro.html" class="next-btn">Next: Reading →</a>
 </div>
-
         </div><!-- /content -->
     </div><!-- /container -->
-
 <script>
 const STORAGE_KEY = 'Cambridge19_Test1_Listening';
 const passageId = 'listening-cambridge19-test1';
@@ -269,7 +250,7 @@ function updateStatus() {
     }
 }
 
-// SELECTION VALIDATION
+// ✅ FIXED: Allow selection in labels, only block actual input fields
 function isSelectionValid(sel) {
     if (!sel || sel.isCollapsed || !sel.toString().trim()) return false;
     try {
@@ -277,18 +258,78 @@ function isSelectionValid(sel) {
         const p = r.commonAncestorContainer.nodeType === Node.TEXT_NODE
             ? r.commonAncestorContainer.parentElement : r.commonAncestorContainer;
         const inArea = document.getElementById('passageArea').contains(p);
-        const inInput = p.closest('input,textarea,button,label,.context-menu,.note-box');
+        // Only exclude actual input elements, NOT labels
+        const inInput = p.closest('input,textarea,button,select,.context-menu,.note-box');
         return inArea && !inInput;
     } catch { return false; }
 }
 
-// SAVE/LOAD HIGHLIGHTS
-function saveHighlights() {
-    localStorage.setItem(`${passageId}_highlights`, document.getElementById('passageArea').innerHTML);
+// ✅ FIXED: Save highlights separately (NOT full innerHTML) — preserves event listeners
+function getHighlightsData() {
+    const highlights = [];
+    document.querySelectorAll('.highlight').forEach(hl => {
+        highlights.push({
+            text: hl.textContent,
+            note: hl.getAttribute('data-note') || '',
+            path: getElementPath(hl)
+        });
+    });
+    return JSON.stringify(highlights);
 }
+
+function getElementPath(el) {
+    // Simple unique path for restoration
+    const parent = el.parentElement;
+    if (!parent || parent.id === 'passageArea') return `${parent?.tagName || ''}:${Array.from(parent?.children || []).indexOf(el)}`;
+    return getElementPath(parent) + '>' + `${el.tagName}:${Array.from(el.parentElement.children).indexOf(el)}`;
+}
+
+function saveHighlights() {
+    localStorage.setItem(`${passageId}_highlights`, getHighlightsData());
+}
+
 function loadHighlights() {
+    // Full innerHTML replacement breaks listeners — skip on first load, use smarter restore
     const saved = localStorage.getItem(`${passageId}_highlights`);
-    if (saved) document.getElementById('passageArea').innerHTML = saved;
+    if (!saved) return;
+    try {
+        const highlights = JSON.parse(saved);
+        // Restore highlights by matching text content
+        highlights.forEach(h => {
+            restoreSingleHighlight(h.text, h.note);
+        });
+    } catch {
+        // Fallback to old method if JSON fails
+        const raw = localStorage.getItem(`${passageId}_highlights_html`);
+        if (raw) document.getElementById('passageArea').innerHTML = raw;
+    }
+}
+
+function restoreSingleHighlight(textContent, noteText) {
+    const area = document.getElementById('passageArea');
+    const walker = document.createTreeWalker(area, NodeFilter.SHOW_TEXT, null);
+    let found = false;
+    while (walker.nextNode()) {
+        const node = walker.currentNode;
+        if (node.textContent.includes(textContent) && !node.parentElement.closest('.highlight') && node.parentElement.tagName !== 'LABEL' || node.parentElement.tagName === 'LABEL') {
+            const range = document.createRange();
+            const startIdx = node.textContent.indexOf(textContent);
+            if (startIdx === -1) continue;
+            found = true;
+            range.setStart(node, startIdx);
+            range.setEnd(node, startIdx + textContent.length);
+            const sp = document.createElement('span');
+            sp.className = 'highlight';
+            if (noteText) sp.setAttribute('data-note', noteText);
+            try {
+                range.surroundContents(sp);
+            } catch {
+                sp.textContent = textContent;
+                node.parentNode.replaceChild(sp, node);
+            }
+            break;
+        }
+    }
 }
 
 // DRAGGABLE NOTE LOGIC
@@ -319,11 +360,13 @@ document.addEventListener('mousedown', e => {
     dragOffsetY = e.clientY - rc.top;
     noteBox.style.zIndex = '9999';
 });
+
 document.addEventListener('mousemove', e => {
     if (!isDraggingNote) return;
     noteBox.style.left = (e.clientX - dragOffsetX) + 'px';
     noteBox.style.top = (e.clientY - dragOffsetY) + 'px';
 });
+
 document.addEventListener('mouseup', () => { isDraggingNote = false; });
 
 // CONTEXT MENU
@@ -340,6 +383,7 @@ document.addEventListener('contextmenu', e => {
         contextMenu.style.left = (rc.left + window.scrollX) + 'px';
         contextMenu.style.top = (rc.bottom + window.scrollY + 5) + 'px';
         contextMenu.style.display = 'block';
+        currentRange = null;
     }
     else if (isSelectionValid(sel)) {
         e.preventDefault();
@@ -359,7 +403,7 @@ document.addEventListener('click', e => {
     if (!contextMenu.contains(e.target)) contextMenu.style.display = 'none';
 });
 
-// HIGHLIGHT
+// ✅ HIGHLIGHT — now works on MCQ labels too
 document.getElementById('menuHighlight').addEventListener('click', () => {
     if (!currentRange) return;
     try {
@@ -378,7 +422,6 @@ document.getElementById('menuHighlight').addEventListener('click', () => {
 document.getElementById('menuAddNote').addEventListener('click', () => {
     contextMenu.style.display = 'none';
     
-    // If no highlight yet → create one first
     if (!activeHighlight) {
         if (!currentRange) return;
         try {
@@ -393,7 +436,6 @@ document.getElementById('menuAddNote').addEventListener('click', () => {
         } catch { alert('Select smaller text.'); return; }
     }
     
-    // Show note box
     const rc = activeHighlight.getBoundingClientRect();
     noteBox.style.left = (rc.right + window.scrollX + 10) + 'px';
     noteBox.style.top = (rc.top + window.scrollY) + 'px';
@@ -423,10 +465,14 @@ function clearAll() {
     if (!confirm('⚠️ Clear all answers and highlights?')) return;
     for (let q = 1; q <= 40; q++) localStorage.removeItem(`${STORAGE_KEY}_q${q}`);
     localStorage.removeItem(`${passageId}_highlights`);
+    localStorage.removeItem(`${passageId}_highlights_html`);
     document.querySelectorAll('.input-field').forEach(i => { i.value = ''; i.classList.remove('filled'); });
     document.querySelectorAll('input[type=radio], input[type=checkbox]').forEach(i => i.checked = false);
     document.querySelectorAll('.mcq-option').forEach(o => o.classList.remove('checked'));
     document.querySelectorAll('.matching-select').forEach(s => s.selectedIndex = 0);
+    document.querySelectorAll('.highlight').forEach(hl => {
+        hl.parentNode.replaceChild(document.createTextNode(hl.textContent), hl);
+    });
     noteBox.style.display = 'none';
     updateStatus();
 }
@@ -436,23 +482,31 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('audioPlayer').addEventListener('error', () => {
         document.getElementById('audioStatus').style.display = 'block';
     });
-
-    // Load saved highlights & notes
-    loadHighlights();
-
+    
     // Restore note markers
-    document.querySelectorAll('.highlight[data-note]').forEach(hl => {
-        if (hl.getAttribute('data-note')) {
-            let marker = hl.querySelector('.note-marker');
-            if (!marker) {
-                marker = document.createElement('span');
-                marker.className = 'note-marker';
-                marker.textContent = '!';
-                hl.appendChild(marker);
+    setTimeout(() => {
+        document.querySelectorAll('.highlight[data-note]').forEach(hl => {
+            if (hl.getAttribute('data-note')) {
+                let marker = hl.querySelector('.note-marker');
+                if (!marker) {
+                    marker = document.createElement('span');
+                    marker.className = 'note-marker';
+                    marker.textContent = '!';
+                    marker.addEventListener('click', e => {
+                        e.stopPropagation();
+                        activeHighlight = hl;
+                        noteBox.style.left = (e.pageX + 10) + 'px';
+                        noteBox.style.top = (e.pageY) + 'px';
+                        noteBox.style.display = 'block';
+                        noteText.value = hl.getAttribute('data-note') || '';
+                        noteText.focus();
+                    });
+                    hl.appendChild(marker);
+                }
             }
-        }
-    });
-
+        });
+    }, 50);
+    
     // TEXT INPUTS Q1–10, 31–40
     [1,2,3,4,5,6,7,8,9,10,31,32,33,34,35,36,37,38,39,40].forEach(q => {
         const inp = document.getElementById(`q${q}`);
@@ -465,7 +519,7 @@ document.addEventListener('DOMContentLoaded', () => {
             saveAnswer(q, val);
         });
     });
-
+    
     // RADIO Q11–15
     [11,12,13,14,15].forEach(q => {
         const saved = localStorage.getItem(`${STORAGE_KEY}_q${q}`);
@@ -481,7 +535,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     });
-
+    
     // CHECKBOX Q21–24
     [21,22,23,24].forEach(q => {
         const saved = localStorage.getItem(`${STORAGE_KEY}_q${q}`);
@@ -498,18 +552,9 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     });
-
+    
     // SELECT Q16–20, 25–30
     [16,17,18,19,20,25,26,27,28,29,30].forEach(q => {
         const sel = document.getElementById(`q${q}`);
         if (!sel) return;
         const saved = localStorage.getItem(`${STORAGE_KEY}_q${q}`);
-        if (saved) sel.value = saved;
-        sel.addEventListener('change', () => saveAnswer(q, sel.value));
-    });
-
-    updateStatus();
-});
-</script>
-</body>
-</html>
