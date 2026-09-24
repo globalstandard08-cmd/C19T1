@@ -110,9 +110,9 @@
         </div>
     </div>
 <script>
-// ✅ STORAGE KEYS — exactly matching your files
-const LISTENING_KEY = 'Listening_Test';
-const READING_KEY = 'Reading_Test';
+// ✅ MATCH YOUR ACTUAL SAVE KEYS — lowercase prefix
+const LISTENING_KEY = 'listening';
+const READING_KEY = 'reading';
 
 // ✅ LISTENING LOADER
 function loadListeningAnswers(containerId, startQ, endQ) {
@@ -130,7 +130,7 @@ function loadListeningAnswers(containerId, startQ, endQ) {
     container.innerHTML = found ? html : '<span class="empty">⚠️ No answers found. Answer a question first.</span>';
 }
 
-// ✅ READING LOADER — matches your Cambridge 19 Test 1 files
+// ✅ READING LOADER — checks BOTH JSON object and direct keys
 function loadReadingAnswers(containerId, startQ, endQ) {
     const container = document.getElementById(containerId);
     const allAnswers = JSON.parse(localStorage.getItem(READING_KEY) || '{}');
@@ -151,7 +151,7 @@ function loadReadingAnswers(containerId, startQ, endQ) {
     container.innerHTML = found ? html : '<span class="empty">⚠️ No answers found. Answer a question first.</span>';
 }
 
-// ✅ WRITING LOADER — matches your Task 1 & 2 keys
+// ✅ WRITING LOADER — keys match your task files
 function loadWriting(taskKey, containerId, minWords) {
     const container = document.getElementById(containerId);
     const text = localStorage.getItem(taskKey) || '';
@@ -166,20 +166,20 @@ function loadWriting(taskKey, containerId, minWords) {
 }
 
 window.onload = function() {
-    // ✅ LISTENING — listening-cambridge19-test1.html
+    // ✅ LISTENING
     loadListeningAnswers('listening', 1, 40);
     
-    // ✅ READING — matches your exact file set
-    loadReadingAnswers('reading1', 1, 13);   // reading-cambridge19-test1-passage1.html
-    loadReadingAnswers('reading2', 14, 26);   // reading-cambridge19-test1-passage2.html
-    loadReadingAnswers('reading3', 27, 40);   // reading-cambridge19-test1-passage3.html
+    // ✅ READING by passage
+    loadReadingAnswers('reading1', 1, 13);
+    loadReadingAnswers('reading2', 14, 26);
+    loadReadingAnswers('reading3', 27, 40);
     
-    // ✅ WRITING — matches your Task files
-    loadWriting('task1Input', 'writingTask1', 150);  // writing-cambridge19-test1-task1.html
-    loadWriting('task2Input', 'writingTask2', 250);  // writing-cambridge19-test1-task2.html
+    // ✅ WRITING
+    loadWriting('task1Input', 'writingTask1', 150);
+    loadWriting('task2Input', 'writingTask2', 250);
 };
 
-// ✅ CLEAR EVERYTHING
+// ✅ CLEAR EVERYTHING — matches all keys
 function clearAllTestAnswers() {
     if (!confirm('⚠️ Are you SURE you want to clear EVERYTHING?\n\nListening (Q1–Q40) + Reading (Q1–Q40) + Writing Task 1 & 2\n\nThis cannot be undone!')) return;
     
