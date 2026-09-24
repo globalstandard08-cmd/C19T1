@@ -60,10 +60,11 @@
     </div>
 
 <script>
-// --- STORAGE KEYS — MATCH YOUR FILES ---
+// --- STORAGE KEYS — MATCH YOUR FILES EXACTLY ---
 const KEY_LISTENING = 'Cambridge19_Test1_Listening';
 const KEY_READING    = 'Cambridge19_Test1_Reading';
-const KEY_WRITING    = 'Cambridge19_Test1_Writing';
+const KEY_WRITING_T1 = 'task1Input';   // ✅ Matches your Task 1
+const KEY_WRITING_T2 = 'task2Input';   // ✅ Matches your Task 2
 
 // --- GET SAVED ANSWER ---
 function getSavedAnswer(prefix, qNum) {
@@ -71,7 +72,7 @@ function getSavedAnswer(prefix, qNum) {
     return val ? val.trim() : '';
 }
 
-// --- BUILD ROW — ONLY SHOW USER'S ANSWER ---
+// --- MAKE ROW — ONLY SHOW USER'S ANSWER ---
 function makeRow(qNum, answer) {
     const display = answer || '<span class="empty">— No answer provided —</span>';
     return `
@@ -87,16 +88,15 @@ function renderSection(containerId, prefix, startQ, endQ) {
     const container = document.getElementById(containerId);
     let html = '';
     for (let q = startQ; q <= endQ; q++) {
-        const ans = getSavedAnswer(prefix, q);
-        html += makeRow(q, ans);
+        html += makeRow(q, getSavedAnswer(prefix, q));
     }
     container.innerHTML = html;
 }
 
 // --- RENDER WRITING TASK ---
-function renderWriting(containerId, taskKey) {
+function renderWritingBox(containerId, storageKey) {
     const container = document.getElementById(containerId);
-    const content = localStorage.getItem(`${KEY_WRITING}_${taskKey}`);
+    const content = localStorage.getItem(storageKey);
     if (!content || !content.trim()) {
         container.innerHTML = '<span class="empty">— No response submitted —</span>';
     } else {
@@ -104,7 +104,7 @@ function renderWriting(containerId, taskKey) {
     }
 }
 
-// --- DISPLAY EVERYTHING ---
+// --- LOAD EVERYTHING ---
 document.addEventListener('DOMContentLoaded', () => {
     // Listening
     renderSection('listening-p1', KEY_LISTENING, 1, 10);
@@ -117,13 +117,13 @@ document.addEventListener('DOMContentLoaded', () => {
     renderSection('reading-p2', KEY_READING, 14, 26);
     renderSection('reading-p3', KEY_READING, 27, 40);
 
-    // Writing — task1 and task2
-    renderWriting('writing-task1', 'task1');
-    renderWriting('writing-task2', 'task2');
+    // Writing — NOW BOTH MATCH YOUR KEYS!
+    renderWritingBox('writing-task1', KEY_WRITING_T1);
+    renderWritingBox('writing-task2', KEY_WRITING_T2);
     
-    // Debug — check console if still not showing
-    console.log('Writing T1:', localStorage.getItem(`${KEY_WRITING}_task1`));
-    console.log('Writing T2:', localStorage.getItem(`${KEY_WRITING}_task2`));
+    // Debug — check browser console if still missing
+    console.log('Task 1 found:', !!localStorage.getItem(KEY_WRITING_T1));
+    console.log('Task 2 found:', !!localStorage.getItem(KEY_WRITING_T2));
 });
 </script>
 </body>
