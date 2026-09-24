@@ -530,10 +530,8 @@ function isSelectionValid(sel) {
     try {
         const p = sel.getRangeAt(0).commonAncestorContainer.nodeType === Node.TEXT_NODE
             ? sel.getRangeAt(0).commonAncestorContainer.parentElement : sel.getRangeAt(0).commonAncestorContainer;
-        // Allow highlighting in BOTH passage and questions area
         const inAllowedArea = document.getElementById('passageArea').contains(p) || 
                               document.getElementById('questionsArea').contains(p);
-        // Only block input fields, buttons, menus — allow mc-option text
         const inBlocked = p.closest('input,textarea,button,.context-menu,.note-box');
         return inAllowedArea && !inBlocked;
     } catch { return false; }
@@ -635,6 +633,8 @@ function saveAnswer(q, val) { localStorage.setItem(`${STORAGE_KEY}_q${q}`, val);
 function clearAllData() {
     if (!confirm('⚠️ Clear ALL answers, highlights, notes? Cannot undo.')) return;
     for (let q = 14; q <= 26; q++) localStorage.removeItem(`${STORAGE_KEY}_q${q}`);
+    localStorage.removeItem(`${STORAGE_KEY}_q20q21`);
+    localStorage.removeItem(`${STORAGE_KEY}_q22q23`);
     localStorage.removeItem(`${passageId}_highlights`);
     document.querySelectorAll('input[type=checkbox]').forEach(i => i.checked = false);
     document.querySelectorAll('.input-answer').forEach(i => { i.value = ''; i.classList.remove('filled'); });
