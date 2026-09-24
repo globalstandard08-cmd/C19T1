@@ -3,202 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Answers Review — Cambridge 19 Test 1</title>
+    <title>Review Answers — Cambridge 19 Test 1</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; background:#f5f7fa; line-height:1.6; }
-        .container { max-width: 900px; margin: 0 auto; background:white; padding:30px; border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,0.1); }
-        h1 { text-align:center; color:#1f3a5f; margin-bottom:30px; }
-        h2 { color:#2c5aa0; border-bottom:2px solid #e0e7ff; padding-bottom:8px; margin-top:35px; }
-        .answer-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap:10px; margin:15px 0; }
-        .answer-box { padding:10px; border-radius:6px; background:#f0f4ff; border:1px solid #d4deff; text-align:center; }
-        .q-label { font-weight:bold; color:#1f3a5f; font-size:14px; }
-        .a-value { margin-top:5px; font-size:16px; color:#222; min-height:24px; }
-        .empty { color:#999; font-style:italic; }
-        .status { background:#e6ffea; border:1px solid #b3ffc2; padding:15px; border-radius:8px; margin-bottom:20px; text-align:center; font-weight:bold; color:#006622; }
-        
-        /* Writing panels */
-        .writing-panel {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 18px;
-            margin: 15px 0;
-            white-space: pre-wrap;
-            line-height: 1.7;
-            color: #1a1a1a;
-        }
-        .word-info {
-            font-size: 14px;
-            color: #4a5568;
-            margin-top: 8px;
-        }
-        .no-answer {
-            color: #999;
-            font-style: italic;
-            padding: 15px;
-            text-align: center;
-        }
-        .clear-all-section {
-            text-align: center;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid #e2e8f0;
-        }
-        .clear-all-btn {
-            padding: 10px 20px;
-            background: #fff0f0;
-            border: 1px solid #fecaca;
-            color: #dc2626;
-            font-size: 15px;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-        .clear-all-btn:hover {
-            background: #fee2e2;
-        }
-        .home-btn {
-            display:inline-block; 
-            padding:10px 20px; 
-            background:#1f3a5f; 
-            color:white; 
-            font-size:15px; 
-            border-radius:6px; 
-            text-decoration:none; 
-            font-weight:bold;
-            margin-top: 12px;
-        }
-        .home-btn:hover {
-            background:#2c5aa0;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background: #f4f6f9; padding: 20px; line-height: 1.7; }
+        .container { max-width: 900px; margin: 0 auto; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 30px; }
+        h1 { color: #1f3a5f; margin-bottom: 25px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        h2 { color: #1f3a5f; margin: 25px 0 15px; font-size: 18px; }
+        .answer-row { display: flex; padding: 10px 12px; border-bottom: 1px solid #eee; align-items: center; }
+        .q-num { width: 40px; font-weight: bold; color: #1f3a5f; }
+        .user-ans { flex: 1; padding: 6px 10px; background: #e6f0ff; border-radius: 4px; margin: 0 10px; }
+        .correct-ans { flex: 1; padding: 6px 10px; background: #e8f5e9; border-radius: 4px; }
+        .status { width: 80px; text-align: center; font-weight: bold; }
+        .correct { color: #10b981; }
+        .incorrect { color: #dc2626; }
+        .empty { color: #999; font-style: italic; }
+        .nav { margin-top: 30px; display: flex; gap: 15px; }
+        .btn { padding: 10px 18px; border-radius: 4px; text-decoration: none; font-weight: bold; }
+        .back { background: #6b7280; color: white; }
+        .print { background: #1f3a5f; color: white; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>📋 All Answers — Cambridge 19 Test 1</h1>
-        
-        <div class="status">✅ Auto-loaded from Listening, Reading & Writing</div>
-        
-        <!-- LISTENING -->
-        <h2>👂 Listening — Q1–Q40</h2>
-        <div id="listening" class="answer-grid"><span class="empty">Loading...</span></div>
-        
-        <!-- READING PASSAGE 1 -->
-        <h2>📖 Reading Passage 1 — Q1–Q13</h2>
-        <div id="reading1" class="answer-grid"><span class="empty">Loading...</span></div>
-        
-        <!-- READING PASSAGE 2 -->
-        <h2>📖 Reading Passage 2 — Q14–Q26</h2>
-        <div id="reading2" class="answer-grid"><span class="empty">Loading...</span></div>
-        
-        <!-- READING PASSAGE 3 -->
-        <h2>📖 Reading Passage 3 — Q27–Q40</h2>
-        <div id="reading3" class="answer-grid"><span class="empty">Loading...</span></div>
-        
-        <!-- WRITING TASK 1 -->
-        <h2>✍️ Writing Task 1</h2>
-        <div id="writingTask1" class="writing-panel">Loading...</div>
-        
-        <!-- WRITING TASK 2 -->
-        <h2>✍️ Writing Task 2</h2>
-        <div id="writingTask2" class="writing-panel">Loading...</div>
-        
-        <!-- CLEAR ALL & HOME -->
-        <div class="clear-all-section">
-            <button class="clear-all-btn" onclick="clearAllTestAnswers()">🗑️ Clear ALL Answers & Restart Test</button>
-            <br>
-            <a href="index.html" class="home-btn">🏠 Home — Go to Main Page</a>
+        <h1>📋 Your Answers — Cambridge 19 Test 1 — Listening</h1>
+
+        <h2>Part 1 — Questions 1–10</h2>
+        <div id="part1"></div>
+
+        <h2>Part 2 — Questions 11–20</h2>
+        <div id="part2"></div>
+
+        <h2>Part 3 — Questions 21–30</h2>
+        <div id="part3"></div>
+
+        <h2>Part 4 — Questions 31–40</h2>
+        <div id="part4"></div>
+
+        <div class="nav">
+            <a href="listening-cambridge19-test1.html" class="btn back">← Back to Test</a>
+            <a href="#" class="btn print" onclick="window.print()">🖨️ Print / Save as PDF</a>
         </div>
     </div>
+
 <script>
-// ✅ MATCH YOUR ACTUAL SAVE KEYS — lowercase prefix
-const LISTENING_KEY = 'listening';
-const READING_KEY = 'reading';
+// ⚠️ MUST MATCH EXACT STORAGE KEY FROM YOUR LISTENING PAGE
+const STORAGE_KEY = 'Cambridge19_Test1_Listening';
 
-// ✅ LISTENING LOADER
-function loadListeningAnswers(containerId, startQ, endQ) {
-    const container = document.getElementById(containerId);
-    let html = '';
-    let found = false;
-    for (let q = startQ; q <= endQ; q++) {
-        const ans = localStorage.getItem(LISTENING_KEY + '_q' + q) || '';
-        if (ans) found = true;
-        html += `<div class="answer-box">
-            <div class="q-label">Q${q}</div>
-            <div class="a-value">${ans || '<span class="empty">—</span>'}</div>
-        </div>`;
-    }
-    container.innerHTML = found ? html : '<span class="empty">⚠️ No answers found. Answer a question first.</span>';
-}
-
-// ✅ READING LOADER — checks BOTH JSON object and direct keys
-function loadReadingAnswers(containerId, startQ, endQ) {
-    const container = document.getElementById(containerId);
-    const allAnswers = JSON.parse(localStorage.getItem(READING_KEY) || '{}');
-    let html = '';
-    let found = false;
-    
-    for (let q = startQ; q <= endQ; q++) {
-        let ans = allAnswers[`q${q}`];
-        if (!ans || ans.trim() === '') {
-            ans = localStorage.getItem(READING_KEY + '_q' + q) || '';
-        }
-        if (ans && ans.trim() !== '') found = true;
-        html += `<div class="answer-box">
-            <div class="q-label">Q${q}</div>
-            <div class="a-value">${ans || '<span class="empty">—</span>'}</div>
-        </div>`;
-    }
-    container.innerHTML = found ? html : '<span class="empty">⚠️ No answers found. Answer a question first.</span>';
-}
-
-// ✅ WRITING LOADER — keys match your task files
-function loadWriting(taskKey, containerId, minWords) {
-    const container = document.getElementById(containerId);
-    const text = localStorage.getItem(taskKey) || '';
-    if (!text) {
-        container.innerHTML = '<div class="no-answer">⚠️ No writing answer saved yet</div>';
-        return;
-    }
-    const words = text.trim().replace(/\s+/g, ' ').split(' ').filter(w => w.length > 0).length;
-    const statusColor = words >= minWords ? '#10b981' : '#dc2626';
-    container.innerHTML = text + 
-        `<div class="word-info">Word count: <strong style="color:${statusColor}">${words}</strong> / ${minWords} minimum</div>`;
-}
-
-window.onload = function() {
-    // ✅ LISTENING
-    loadListeningAnswers('listening', 1, 40);
-    
-    // ✅ READING by passage
-    loadReadingAnswers('reading1', 1, 13);
-    loadReadingAnswers('reading2', 14, 26);
-    loadReadingAnswers('reading3', 27, 40);
-    
-    // ✅ WRITING
-    loadWriting('task1Input', 'writingTask1', 150);
-    loadWriting('task2Input', 'writingTask2', 250);
+// Official answer key — verify these match Cambridge 19
+const ANSWERS = {
+    1: '195',
+    2: 'stream',
+    3: 'evidence',
+    4: 'map',
+    5: 'history',
+    6: 'instruments',
+    7: 'achievement',
+    8: 'skills',
+    9: '6.50',
+    10: 'teachers',
+    11: 'C',
+    12: 'A',
+    13: 'C',
+    14: 'C',
+    15: 'A',
+    16: 'G',
+    17: 'E',
+    18: 'F',
+    19: 'H',
+    20: 'D',
+    21: 'B,D',
+    22: '',
+    23: 'A,D',
+    24: '',
+    25: 'F',
+    26: 'G',
+    27: 'C',
+    28: 'B',
+    29: 'H',
+    30: 'E',
+    31: 'fenced',
+    32: 'grandson',
+    33: 'artifacts',
+    34: 'farming',
+    35: 'circular',
+    36: 'tools',
+    37: 'family',
+    38: 'winter',
+    39: 'soil',
+    40: 'rainfall'
 };
 
-// ✅ CLEAR EVERYTHING — matches all keys
-function clearAllTestAnswers() {
-    if (!confirm('⚠️ Are you SURE you want to clear EVERYTHING?\n\nListening (Q1–Q40) + Reading (Q1–Q40) + Writing Task 1 & 2\n\nThis cannot be undone!')) return;
-    
-    // Clear Listening
-    for (let q = 1; q <= 40; q++) {
-        localStorage.removeItem(LISTENING_KEY + '_q' + q);
-    }
-    // Clear Reading
-    localStorage.removeItem(READING_KEY);
-    for (let q = 1; q <= 40; q++) {
-        localStorage.removeItem(READING_KEY + '_q' + q);
-    }
-    // Clear Writing
-    localStorage.removeItem('task1Input');
-    localStorage.removeItem('task2Input');
-    
-    alert('✅ ALL answers cleared! Page will refresh.');
-    location.reload();
+function getAnswer(qNum) {
+    return (localStorage.getItem(`${STORAGE_KEY}_q${qNum}`) || '').trim();
 }
+
+function renderQuestion(qNum) {
+    const userAns = getAnswer(qNum);
+    const correctAns = ANSWERS[qNum] || '';
+    
+    let statusHtml = '';
+    let userDisplay = userAns || '<span class="empty">No answer provided</span>';
+    
+    if (!userAns) {
+        statusHtml = '<span class="status empty">—</span>';
+    } else if (userAns.toUpperCase() === correctAns.toUpperCase()) {
+        statusHtml = '<span class="status correct">✓ CORRECT</span>';
+    } else {
+        statusHtml = '<span class="status incorrect">✗ INCORRECT</span>';
+    }
+    
+    return `
+        <div class="answer-row">
+            <span class="q-num">${qNum}</span>
+            <span class="user-ans"><strong>Your Answer:</strong> ${userDisplay}</span>
+            <span class="correct-ans"><strong>Correct Answer:</strong> ${correctAns || '—'}</span>
+            ${statusHtml}
+        </div>
+    `;
+}
+
+function renderPart(containerId, startQ, endQ) {
+    const container = document.getElementById(containerId);
+    let html = '';
+    for (let q = startQ; q <= endQ; q++) {
+        html += renderQuestion(q);
+    }
+    container.innerHTML = html;
+}
+
+// Run on load
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('Storage Key used:', STORAGE_KEY);
+    console.log('Sample Q1 value:', localStorage.getItem(`${STORAGE_KEY}_q1`)); // Debug — check browser console
+    
+    renderPart('part1', 1, 10);
+    renderPart('part2', 11, 20);
+    renderPart('part3', 21, 30);
+    renderPart('part4', 31, 40);
+});
 </script>
 </body>
 </html>
