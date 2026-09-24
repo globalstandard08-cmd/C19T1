@@ -47,10 +47,10 @@
     </div>
 
 <script>
-// ⚠️ MUST MATCH EXACT STORAGE KEY FROM YOUR LISTENING PAGE
+// MUST MATCH EXACT STORAGE KEY FROM YOUR LISTENING PAGE
 const STORAGE_KEY = 'Cambridge19_Test1_Listening';
 
-// Official answer key — verify these match Cambridge 19
+// Official answer key — verify these match your Cambridge 19 edition
 const ANSWERS = {
     1: '195',
     2: 'stream',
@@ -95,21 +95,27 @@ const ANSWERS = {
 };
 
 function getAnswer(qNum) {
-    return (localStorage.getItem(`${STORAGE_KEY}_q${qNum}`) || '').trim();
+    const stored = localStorage.getItem(`${STORAGE_KEY}_q${qNum}`);
+    return stored ? stored.trim() : '';
 }
 
 function renderQuestion(qNum) {
     const userAns = getAnswer(qNum);
     const correctAns = ANSWERS[qNum] || '';
     
-    let statusHtml = '';
-    let userDisplay = userAns || '<span class="empty">No answer provided</span>';
+    let userDisplay, statusHtml;
     
     if (!userAns) {
+        // ⚠️ QUESTION LEFT BLANK — show exactly that
+        userDisplay = '<span class="empty">— No answer provided —</span>';
         statusHtml = '<span class="status empty">—</span>';
     } else if (userAns.toUpperCase() === correctAns.toUpperCase()) {
+        // Correct answer
+        userDisplay = userAns;
         statusHtml = '<span class="status correct">✓ CORRECT</span>';
     } else {
+        // Incorrect answer
+        userDisplay = userAns;
         statusHtml = '<span class="status incorrect">✗ INCORRECT</span>';
     }
     
@@ -132,11 +138,7 @@ function renderPart(containerId, startQ, endQ) {
     container.innerHTML = html;
 }
 
-// Run on load
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Storage Key used:', STORAGE_KEY);
-    console.log('Sample Q1 value:', localStorage.getItem(`${STORAGE_KEY}_q1`)); // Debug — check browser console
-    
     renderPart('part1', 1, 10);
     renderPart('part2', 11, 20);
     renderPart('part3', 21, 30);
