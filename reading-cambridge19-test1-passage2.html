@@ -412,7 +412,7 @@
             <h3>Questions 24–26</h3>
             <div class="instruction">Complete the summary below.<br>Choose <strong>ONE WORD ONLY</strong> from the passage for each answer.<br>Write your answers in boxes 24–26 on your answer sheet.</div>
             
-            <div class="summary-box">
+            <div class="summary-box" id="summaryBox">
                 <h4>Ancient Rome and piracy</h4>
                 <p>Piracy was an issue ancient Rome had to deal with, but it also brought some benefits for Rome. For example, pirates supplied slaves that were important for Rome's industries. However, attacks on vessels transporting 
                     <input type="text" class="input-answer short" id="ans24" placeholder="24"> 
@@ -479,12 +479,10 @@
             <a href="reading-cambridge19-test1-passage3.html" class="nav-btn">Next→</a>
         </div>
     </div>
-
 <script>
 const STORAGE_KEY = 'Cambridge19_Test1_Reading';
 const passageId = 'reading-cambridge19-test1-passage2';
 let currentRange = null, activeHighlight = null, currentQuestionNum = 14;
-
 function setCurrentQuestion(qNum) {
     document.querySelectorAll('.q-row.current').forEach(r => r.classList.remove('current'));
     document.querySelectorAll('.q-indicator.current').forEach(b => b.classList.remove('current'));
@@ -492,16 +490,21 @@ function setCurrentQuestion(qNum) {
     document.getElementById(`q${qNum}`)?.classList.add('current');
     document.querySelector(`.q-indicator[data-q="${qNum}"]`)?.classList.add('current');
 }
-
 function updateStatus() {
     for (let q = 1; q <= 40; q++) {
         const btn = document.querySelector(`.q-indicator[data-q="${q}"]`);
         if (!btn) continue;
-        const val = localStorage.getItem(`${STORAGE_KEY}_q${q}`) || '';
+        let val = '';
+        if (q === 20 || q === 21) {
+            val = localStorage.getItem(`${STORAGE_KEY}_q20q21`) || '';
+        } else if (q === 22 || q === 23) {
+            val = localStorage.getItem(`${STORAGE_KEY}_q22q23`) || '';
+        } else {
+            val = localStorage.getItem(`${STORAGE_KEY}_q${q}`) || '';
+        }
         btn.classList.toggle('answered', val.length > 0);
     }
 }
-
 document.querySelectorAll('.q-indicator').forEach(btn => {
     btn.addEventListener('click', () => {
         const qNum = parseInt(btn.dataset.q);
@@ -521,17 +524,15 @@ document.querySelectorAll('.q-indicator').forEach(btn => {
         document.getElementById(`q${qNum}`)?.scrollIntoView({behavior:'smooth', block:'center'});
     });
 });
-
 function isSelectionValid(sel) {
     if (!sel || sel.isCollapsed || !sel.toString().trim()) return false;
     try {
         const p = sel.getRangeAt(0).commonAncestorContainer.nodeType === Node.TEXT_NODE
             ? sel.getRangeAt(0).commonAncestorContainer.parentElement : sel.getRangeAt(0).commonAncestorContainer;
-        return (document.getElementById('passageArea').contains(p) || document.getElementById('questionsArea').contains(p))
+        return (document.getElementById('passageArea').contains(p))
             && !p.closest('input,textarea,button,label,.context-menu,.note-box,.mc-option,.summary-box');
     } catch { return false; }
 }
-
 function saveHighlightsData() {
     const highlights = [];
     document.querySelectorAll('.highlight').forEach((hl, idx) => {
@@ -539,7 +540,6 @@ function saveHighlightsData() {
     });
     localStorage.setItem(`${passageId}_highlights`, JSON.stringify(highlights));
 }
-
 function restoreNoteMarkers() {
     document.querySelectorAll('.highlight').forEach(hl => {
         if (hl.getAttribute('data-note') && !hl.querySelector('.note-marker')) {
@@ -549,7 +549,6 @@ function restoreNoteMarkers() {
         }
     });
 }
-
 const noteBox = document.getElementById('noteBox'), noteText = document.getElementById('noteText');
 let isDraggingNote = false, dragOffsetX = 0, dragOffsetY = 0;
 document.getElementById('noteClose').addEventListener('click', () => { noteBox.style.display = 'none'; activeHighlight = null; });
@@ -575,7 +574,6 @@ document.addEventListener('mousemove', e => {
     noteBox.style.top = (e.clientY - dragOffsetY) + 'px';
 });
 document.addEventListener('mouseup', () => { isDraggingNote = false; });
-
 const contextMenu = document.getElementById('contextMenu');
 document.addEventListener('contextmenu', e => {
     const sel = window.getSelection();
@@ -595,7 +593,6 @@ document.addEventListener('contextmenu', e => {
     } else contextMenu.style.display = 'none';
 });
 document.addEventListener('click', e => { if (!contextMenu.contains(e.target)) contextMenu.style.display = 'none'; });
-
 document.getElementById('menuHighlight').addEventListener('click', () => {
     if (!currentRange) return;
     try {
@@ -605,7 +602,6 @@ document.getElementById('menuHighlight').addEventListener('click', () => {
     } catch { alert('Select smaller text.'); }
     contextMenu.style.display = 'none';
 });
-
 document.getElementById('menuAddNote').addEventListener('click', () => {
     contextMenu.style.display = 'none';
     if (!activeHighlight) {
@@ -623,7 +619,6 @@ document.getElementById('menuAddNote').addEventListener('click', () => {
     noteText.value = activeHighlight.getAttribute('data-note') || '';
     noteText.focus();
 });
-
 document.getElementById('menuRemove').addEventListener('click', () => {
     contextMenu.style.display = 'none'; noteBox.style.display = 'none';
     if (!activeHighlight) return;
@@ -631,9 +626,7 @@ document.getElementById('menuRemove').addEventListener('click', () => {
     p.replaceChild(document.createTextNode(activeHighlight.textContent), activeHighlight);
     p.normalize(); activeHighlight = null; saveHighlightsData();
 });
-
 function saveAnswer(q, val) { localStorage.setItem(`${STORAGE_KEY}_q${q}`, val); updateStatus(); }
-
 function clearAllData() {
     if (!confirm('⚠️ Clear ALL answers, highlights, notes? Cannot undo.')) return;
     for (let q = 14; q <= 26; q++) localStorage.removeItem(`${STORAGE_KEY}_q${q}`);
@@ -646,7 +639,6 @@ function clearAllData() {
     noteBox.style.display = 'none'; location.reload();
 }
 document.getElementById('clearAllBtn').addEventListener('click', clearAllData);
-
 document.addEventListener('DOMContentLoaded', () => {
     restoreNoteMarkers();
     
@@ -663,7 +655,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     const s2021 = localStorage.getItem(`${STORAGE_KEY}_q20q21`);
-    if (s2021) document.querySelectorAll('input[name="q20q21"]').forEach(cb => cb.checked = s2021.split(',').includes(cb.value));
+    if (s2021) {
+        const selected = s2021.split(',');
+        document.querySelectorAll('input[name="q20q21"]').forEach(cb => cb.checked = selected.includes(cb.value));
+    }
     document.querySelectorAll('input[name="q20q21"]').forEach(cb => {
         cb.addEventListener('change', () => {
             const sel = Array.from(document.querySelectorAll('input[name="q20q21"]:checked')).map(c => c.value);
@@ -672,7 +667,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     const s2223 = localStorage.getItem(`${STORAGE_KEY}_q22q23`);
-    if (s2223) document.querySelectorAll('input[name="q22q23"]').forEach(cb => cb.checked = s2223.split(',').includes(cb.value));
+    if (s2223) {
+        const selected = s2223.split(',');
+        document.querySelectorAll('input[name="q22q23"]').forEach(cb => cb.checked = selected.includes(cb.value));
+    }
     document.querySelectorAll('input[name="q22q23"]').forEach(cb => {
         cb.addEventListener('change', () => {
             const sel = Array.from(document.querySelectorAll('input[name="q22q23"]:checked')).map(c => c.value);
