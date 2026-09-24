@@ -28,13 +28,12 @@
         .mcq-option { display: flex; align-items: flex-start; gap: 10px; margin: 10px 0; padding: 6px 0; font-size: 16px; }
         .mcq-option input { margin-top: 3px; cursor: pointer; }
         .mcq-option.checked label { font-weight: 500; }
-        .mcq-option label { cursor: text; }
         .map-placeholder { border: 1px solid #999; background: #fff; padding: 20px; min-height: 300px; display: flex; align-items: center; justify-content: center; color: #666; }
         .matching-table { width: 100%; margin: 15px 0; }
         .matching-table td { padding: 8px 0; font-size: 16px; border-bottom: 1px solid #eee; }
         .matching-select { padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 15px; }
         
-        /* HIGHLIGHT + NOTE — WORKS EVERYWHERE including MCQ labels */
+        /* HIGHLIGHT + NOTE — WORKS ON ALL TEXT INCLUDING OPTIONS */
         .highlight { background-color: #ffd700; padding: 2px 4px; border-radius: 2px; cursor: pointer; display: inline; color: #000; position: relative; }
         .note-marker { position: absolute; top: -8px; right: -8px; width: 18px; height: 18px; background: #1f3a5f; color: white; border-radius: 50%; font-size: 11px; font-weight: bold; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; }
         .context-menu { position: absolute; background: #fff; border: 1px solid #ccc; border-radius: 4px; box-shadow: 0 2px 12px rgba(0,0,0,0.15); z-index: 9999; display: none; min-width: 180px; }
@@ -250,7 +249,7 @@ function updateStatus() {
     }
 }
 
-// ✅ FIXED: Allow selection in labels, only block actual input fields
+// ✅ FIXED: ALLOW SELECTION IN LABELS — ONLY BLOCK ACTUAL INPUT FIELDS
 function isSelectionValid(sel) {
     if (!sel || sel.isCollapsed || !sel.toString().trim()) return false;
     try {
@@ -258,81 +257,22 @@ function isSelectionValid(sel) {
         const p = r.commonAncestorContainer.nodeType === Node.TEXT_NODE
             ? r.commonAncestorContainer.parentElement : r.commonAncestorContainer;
         const inArea = document.getElementById('passageArea').contains(p);
-        // Only exclude actual input elements, NOT labels
+        // Allow labels — only block input/textarea/button/select
         const inInput = p.closest('input,textarea,button,select,.context-menu,.note-box');
         return inArea && !inInput;
     } catch { return false; }
 }
 
-// ✅ FIXED: Save highlights separately (NOT full innerHTML) — preserves event listeners
-function getHighlightsData() {
-    const highlights = [];
-    document.querySelectorAll('.highlight').forEach(hl => {
-        highlights.push({
-            text: hl.textContent,
-            note: hl.getAttribute('data-note') || '',
-            path: getElementPath(hl)
-        });
-    });
-    return JSON.stringify(highlights);
-}
-
-function getElementPath(el) {
-    // Simple unique path for restoration
-    const parent = el.parentElement;
-    if (!parent || parent.id === 'passageArea') return `${parent?.tagName || ''}:${Array.from(parent?.children || []).indexOf(el)}`;
-    return getElementPath(parent) + '>' + `${el.tagName}:${Array.from(el.parentElement.children).indexOf(el)}`;
-}
-
+// SAVE/LOAD HIGHLIGHTS — YOUR ORIGINAL CODE FULLY RESTORED
 function saveHighlights() {
-    localStorage.setItem(`${passageId}_highlights`, getHighlightsData());
+    localStorage.setItem(`${passageId}_highlights`, document.getElementById('passageArea').innerHTML);
 }
-
 function loadHighlights() {
-    // Full innerHTML replacement breaks listeners — skip on first load, use smarter restore
     const saved = localStorage.getItem(`${passageId}_highlights`);
-    if (!saved) return;
-    try {
-        const highlights = JSON.parse(saved);
-        // Restore highlights by matching text content
-        highlights.forEach(h => {
-            restoreSingleHighlight(h.text, h.note);
-        });
-    } catch {
-        // Fallback to old method if JSON fails
-        const raw = localStorage.getItem(`${passageId}_highlights_html`);
-        if (raw) document.getElementById('passageArea').innerHTML = raw;
-    }
+    if (saved) document.getElementById('passageArea').innerHTML = saved;
 }
 
-function restoreSingleHighlight(textContent, noteText) {
-    const area = document.getElementById('passageArea');
-    const walker = document.createTreeWalker(area, NodeFilter.SHOW_TEXT, null);
-    let found = false;
-    while (walker.nextNode()) {
-        const node = walker.currentNode;
-        if (node.textContent.includes(textContent) && !node.parentElement.closest('.highlight') && node.parentElement.tagName !== 'LABEL' || node.parentElement.tagName === 'LABEL') {
-            const range = document.createRange();
-            const startIdx = node.textContent.indexOf(textContent);
-            if (startIdx === -1) continue;
-            found = true;
-            range.setStart(node, startIdx);
-            range.setEnd(node, startIdx + textContent.length);
-            const sp = document.createElement('span');
-            sp.className = 'highlight';
-            if (noteText) sp.setAttribute('data-note', noteText);
-            try {
-                range.surroundContents(sp);
-            } catch {
-                sp.textContent = textContent;
-                node.parentNode.replaceChild(sp, node);
-            }
-            break;
-        }
-    }
-}
-
-// DRAGGABLE NOTE LOGIC
+// DRAGGABLE NOTE LOGIC — ORIGINAL
 const noteBox = document.getElementById('noteBox');
 const noteText = document.getElementById('noteText');
 const noteClose = document.getElementById('noteClose');
@@ -344,14 +284,12 @@ noteClose.addEventListener('click', () => {
     noteBox.style.display = 'none';
     activeHighlight = null;
 });
-
 noteText.addEventListener('input', () => {
     if (activeHighlight) {
         activeHighlight.setAttribute('data-note', noteText.value);
         saveHighlights();
     }
 });
-
 document.addEventListener('mousedown', e => {
     if (!noteDragHandle.contains(e.target)) return;
     isDraggingNote = true;
@@ -360,18 +298,15 @@ document.addEventListener('mousedown', e => {
     dragOffsetY = e.clientY - rc.top;
     noteBox.style.zIndex = '9999';
 });
-
 document.addEventListener('mousemove', e => {
     if (!isDraggingNote) return;
     noteBox.style.left = (e.clientX - dragOffsetX) + 'px';
     noteBox.style.top = (e.clientY - dragOffsetY) + 'px';
 });
-
 document.addEventListener('mouseup', () => { isDraggingNote = false; });
 
-// CONTEXT MENU
+// CONTEXT MENU — ORIGINAL
 const contextMenu = document.getElementById('contextMenu');
-
 document.addEventListener('contextmenu', e => {
     const sel = window.getSelection();
     const targetHl = e.target.closest('.highlight');
@@ -383,7 +318,6 @@ document.addEventListener('contextmenu', e => {
         contextMenu.style.left = (rc.left + window.scrollX) + 'px';
         contextMenu.style.top = (rc.bottom + window.scrollY + 5) + 'px';
         contextMenu.style.display = 'block';
-        currentRange = null;
     }
     else if (isSelectionValid(sel)) {
         e.preventDefault();
@@ -398,12 +332,11 @@ document.addEventListener('contextmenu', e => {
         contextMenu.style.display = 'none';
     }
 });
-
 document.addEventListener('click', e => {
     if (!contextMenu.contains(e.target)) contextMenu.style.display = 'none';
 });
 
-// ✅ HIGHLIGHT — now works on MCQ labels too
+// HIGHLIGHT — ORIGINAL
 document.getElementById('menuHighlight').addEventListener('click', () => {
     if (!currentRange) return;
     try {
@@ -418,10 +351,9 @@ document.getElementById('menuHighlight').addEventListener('click', () => {
     contextMenu.style.display = 'none';
 });
 
-// ADD NOTE
+// ADD NOTE — ORIGINAL
 document.getElementById('menuAddNote').addEventListener('click', () => {
     contextMenu.style.display = 'none';
-    
     if (!activeHighlight) {
         if (!currentRange) return;
         try {
@@ -435,7 +367,6 @@ document.getElementById('menuAddNote').addEventListener('click', () => {
             saveHighlights();
         } catch { alert('Select smaller text.'); return; }
     }
-    
     const rc = activeHighlight.getBoundingClientRect();
     noteBox.style.left = (rc.right + window.scrollX + 10) + 'px';
     noteBox.style.top = (rc.top + window.scrollY) + 'px';
@@ -444,7 +375,7 @@ document.getElementById('menuAddNote').addEventListener('click', () => {
     noteText.focus();
 });
 
-// REMOVE
+// REMOVE — ORIGINAL
 document.getElementById('menuRemove').addEventListener('click', () => {
     contextMenu.style.display = 'none';
     noteBox.style.display = 'none';
@@ -455,24 +386,19 @@ document.getElementById('menuRemove').addEventListener('click', () => {
     saveHighlights();
 });
 
-// SAVE HELPERS
+// SAVE HELPERS — ORIGINAL
 function saveAnswer(q, val) {
     localStorage.setItem(`${STORAGE_KEY}_q${q}`, val);
     updateStatus();
 }
-
 function clearAll() {
     if (!confirm('⚠️ Clear all answers and highlights?')) return;
     for (let q = 1; q <= 40; q++) localStorage.removeItem(`${STORAGE_KEY}_q${q}`);
     localStorage.removeItem(`${passageId}_highlights`);
-    localStorage.removeItem(`${passageId}_highlights_html`);
     document.querySelectorAll('.input-field').forEach(i => { i.value = ''; i.classList.remove('filled'); });
     document.querySelectorAll('input[type=radio], input[type=checkbox]').forEach(i => i.checked = false);
     document.querySelectorAll('.mcq-option').forEach(o => o.classList.remove('checked'));
     document.querySelectorAll('.matching-select').forEach(s => s.selectedIndex = 0);
-    document.querySelectorAll('.highlight').forEach(hl => {
-        hl.parentNode.replaceChild(document.createTextNode(hl.textContent), hl);
-    });
     noteBox.style.display = 'none';
     updateStatus();
 }
@@ -482,31 +408,20 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('audioPlayer').addEventListener('error', () => {
         document.getElementById('audioStatus').style.display = 'block';
     });
-    
+    // Load saved highlights & notes
+    loadHighlights();
     // Restore note markers
-    setTimeout(() => {
-        document.querySelectorAll('.highlight[data-note]').forEach(hl => {
-            if (hl.getAttribute('data-note')) {
-                let marker = hl.querySelector('.note-marker');
-                if (!marker) {
-                    marker = document.createElement('span');
-                    marker.className = 'note-marker';
-                    marker.textContent = '!';
-                    marker.addEventListener('click', e => {
-                        e.stopPropagation();
-                        activeHighlight = hl;
-                        noteBox.style.left = (e.pageX + 10) + 'px';
-                        noteBox.style.top = (e.pageY) + 'px';
-                        noteBox.style.display = 'block';
-                        noteText.value = hl.getAttribute('data-note') || '';
-                        noteText.focus();
-                    });
-                    hl.appendChild(marker);
-                }
+    document.querySelectorAll('.highlight[data-note]').forEach(hl => {
+        if (hl.getAttribute('data-note')) {
+            let marker = hl.querySelector('.note-marker');
+            if (!marker) {
+                marker = document.createElement('span');
+                marker.className = 'note-marker';
+                marker.textContent = '!';
+                hl.appendChild(marker);
             }
-        });
-    }, 50);
-    
+        }
+    });
     // TEXT INPUTS Q1–10, 31–40
     [1,2,3,4,5,6,7,8,9,10,31,32,33,34,35,36,37,38,39,40].forEach(q => {
         const inp = document.getElementById(`q${q}`);
@@ -519,7 +434,6 @@ document.addEventListener('DOMContentLoaded', () => {
             saveAnswer(q, val);
         });
     });
-    
     // RADIO Q11–15
     [11,12,13,14,15].forEach(q => {
         const saved = localStorage.getItem(`${STORAGE_KEY}_q${q}`);
@@ -535,7 +449,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     });
-    
     // CHECKBOX Q21–24
     [21,22,23,24].forEach(q => {
         const saved = localStorage.getItem(`${STORAGE_KEY}_q${q}`);
@@ -552,9 +465,16 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     });
-    
     // SELECT Q16–20, 25–30
     [16,17,18,19,20,25,26,27,28,29,30].forEach(q => {
         const sel = document.getElementById(`q${q}`);
         if (!sel) return;
         const saved = localStorage.getItem(`${STORAGE_KEY}_q${q}`);
+        if (saved) sel.value = saved;
+        sel.addEventListener('change', () => saveAnswer(q, sel.value));
+    });
+    updateStatus();
+});
+</script>
+</body>
+</html>
