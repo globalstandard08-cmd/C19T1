@@ -17,15 +17,15 @@
         .empty { color: #999; font-style: italic; }
         .writing-box { padding: 15px; background: #f9f9f9; border-radius: 6px; margin: 10px 0; white-space: pre-wrap; min-height: 120px; border: 1px solid #e0e0e0; }
         .nav { margin-top: 30px; display: flex; gap: 15px; flex-wrap: wrap; }
-        .btn { padding: 10px 18px; border-radius: 4px; text-decoration: none; font-weight: bold; }
+        .btn { padding: 10px 18px; border-radius: 4px; text-decoration: none; font-weight: bold; border: none; cursor: pointer; }
         .back { background: #6b7280; color: white; }
         .print { background: #1f3a5f; color: white; }
+        .download { background: #10b981; color: white; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>📋 Your Answers — Cambridge 19 Test 1</h1>
-
         <!-- LISTENING -->
         <h2>🎧 Listening</h2>
         <h3>Part 1 — Questions 1–10</h3>
@@ -36,7 +36,6 @@
         <div id="listening-p3"></div>
         <h3>Part 4 — Questions 31–40</h3>
         <div id="listening-p4"></div>
-
         <!-- READING -->
         <h2>📖 Reading</h2>
         <h3>Passage 1 — Questions 1–13</h3>
@@ -45,33 +44,29 @@
         <div id="reading-p2"></div>
         <h3>Passage 3 — Questions 27–40</h3>
         <div id="reading-p3"></div>
-
         <!-- WRITING -->
         <h2>✍️ Writing</h2>
         <h3>Task 1</h3>
         <div id="writing-task1" class="writing-box"></div>
         <h3>Task 2</h3>
         <div id="writing-task2" class="writing-box"></div>
-
         <div class="nav">
             <a href="index.html" class="btn back">← Back to Home</a>
+            <button class="btn download" onclick="downloadAnswers()">⬇️ Download (.txt)</button>
             <a href="#" class="btn print" onclick="window.print()">🖨️ Print / Save as PDF</a>
         </div>
     </div>
-
 <script>
 // --- STORAGE KEYS — MATCH YOUR FILES EXACTLY ---
 const KEY_LISTENING = 'Cambridge19_Test1_Listening';
 const KEY_READING    = 'Cambridge19_Test1_Reading';
 const KEY_WRITING_T1 = 'task1Input';   // ✅ Matches your Task 1
 const KEY_WRITING_T2 = 'task2Input';   // ✅ Matches your Task 2
-
 // --- GET SAVED ANSWER ---
 function getSavedAnswer(prefix, qNum) {
     const val = localStorage.getItem(`${prefix}_q${qNum}`);
     return val ? val.trim() : '';
 }
-
 // --- MAKE ROW — ONLY SHOW USER'S ANSWER ---
 function makeRow(qNum, answer) {
     const display = answer || '<span class="empty">— No answer provided —</span>';
@@ -82,7 +77,6 @@ function makeRow(qNum, answer) {
         </div>
     `;
 }
-
 // --- RENDER QUESTION SECTION ---
 function renderSection(containerId, prefix, startQ, endQ) {
     const container = document.getElementById(containerId);
@@ -92,7 +86,6 @@ function renderSection(containerId, prefix, startQ, endQ) {
     }
     container.innerHTML = html;
 }
-
 // --- RENDER WRITING TASK ---
 function renderWritingBox(containerId, storageKey) {
     const container = document.getElementById(containerId);
@@ -103,7 +96,50 @@ function renderWritingBox(containerId, storageKey) {
         container.textContent = content;
     }
 }
-
+// --- DOWNLOAD FUNCTION ---
+function downloadAnswers() {
+    let text = 'YOUR ANSWERS — Cambridge 19 Test 1\n';
+    text += 'Generated: ' + new Date().toLocaleString() + '\n';
+    text += '='.repeat(50) + '\n\n';
+    
+    // Listening
+    text += '🎧 LISTENING\n';
+    text += '-'.repeat(30) + '\n';
+    for (let q = 1; q <= 40; q++) {
+        const ans = getSavedAnswer(KEY_LISTENING, q) || '— No answer —';
+        text += `Q${String(q).padStart(2, ' ')}: ${ans}\n`;
+    }
+    text += '\n';
+    
+    // Reading
+    text += '📖 READING\n';
+    text += '-'.repeat(30) + '\n';
+    for (let q = 1; q <= 40; q++) {
+        const ans = getSavedAnswer(KEY_READING, q) || '— No answer —';
+        text += `Q${String(q).padStart(2, ' ')}: ${ans}\n`;
+    }
+    text += '\n';
+    
+    // Writing
+    text += '✍️ WRITING\n';
+    text += '-'.repeat(30) + '\n';
+    text += 'Task 1:\n';
+    text += localStorage.getItem(KEY_WRITING_T1) || '— No response —';
+    text += '\n\nTask 2:\n';
+    text += localStorage.getItem(KEY_WRITING_T2) || '— No response —';
+    text += '\n';
+    
+    // Create download
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Cambridge19_Test1_Your_Answers.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
 // --- LOAD EVERYTHING ---
 document.addEventListener('DOMContentLoaded', () => {
     // Listening
@@ -111,12 +147,10 @@ document.addEventListener('DOMContentLoaded', () => {
     renderSection('listening-p2', KEY_LISTENING, 11, 20);
     renderSection('listening-p3', KEY_LISTENING, 21, 30);
     renderSection('listening-p4', KEY_LISTENING, 31, 40);
-
     // Reading
     renderSection('reading-p1', KEY_READING, 1, 13);
     renderSection('reading-p2', KEY_READING, 14, 26);
     renderSection('reading-p3', KEY_READING, 27, 40);
-
     // Writing — NOW BOTH MATCH YOUR KEYS!
     renderWritingBox('writing-task1', KEY_WRITING_T1);
     renderWritingBox('writing-task2', KEY_WRITING_T2);
