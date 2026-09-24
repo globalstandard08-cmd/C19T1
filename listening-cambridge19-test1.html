@@ -28,7 +28,7 @@
         .mcq-option { display: flex; align-items: flex-start; gap: 10px; margin: 10px 0; padding: 6px 0; font-size: 16px; }
         .mcq-option input { margin-top: 3px; cursor: pointer; }
         .mcq-option.checked label { font-weight: 500; }
-        .map-placeholder { border: 1px solid #999; background: #fff; padding: 20px; min-height: 300px; display: flex; align-items: center; justify-content: center; color: #666; }
+        .map-image { max-width: 100%; height: auto; display: block; margin: 0 auto 15px; border: 1px solid #ddd; border-radius: 4px; }
         .matching-table { width: 100%; margin: 15px 0; }
         .matching-table td { padding: 8px 0; font-size: 16px; border-bottom: 1px solid #eee; }
         .matching-select { padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 15px; }
@@ -146,7 +146,7 @@
 <div class="instruction"><strong>Questions 16–20</strong><br>Label the map below. Write the correct letter <strong>A–H</strong>.</div>
 <div class="map-block">
     <p style="font-weight:bold; text-align:center; margin-bottom:15px; color:#1f3a5f;">Farley House</p>
-    <div class="map-placeholder">[MAP — A(top path) B(west path) C(north entrance) D(building) E(west entrance) F(south-east path) G(old stables) H(south courtyard)]</div>
+    <img src="c19t1.png" alt="Map for Questions 16–20" class="map-image">
     <table class="matching-table">
         <tr><td class="q-number">16</td><td>Farm shop</td><td><select class="matching-select" id="q16" data-q="16"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select></td></tr>
         <tr><td class="q-number">17</td><td>Disabled entry</td><td><select class="matching-select" id="q17" data-q="17"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select></td></tr>
@@ -238,7 +238,6 @@ const STORAGE_KEY = 'Cambridge19_Test1_Listening';
 const passageId = 'listening-cambridge19-test1';
 let currentRange = null;
 let activeHighlight = null;
-
 // UPDATE NAVIGATION STATUS
 function updateStatus() {
     for (let q = 1; q <= 40; q++) {
@@ -248,7 +247,6 @@ function updateStatus() {
         btn.classList.toggle('answered', val.length > 0);
     }
 }
-
 // ✅ FIXED: ALLOW SELECTION IN LABELS — ONLY BLOCK ACTUAL INPUT FIELDS
 function isSelectionValid(sel) {
     if (!sel || sel.isCollapsed || !sel.toString().trim()) return false;
@@ -262,7 +260,6 @@ function isSelectionValid(sel) {
         return inArea && !inInput;
     } catch { return false; }
 }
-
 // SAVE/LOAD HIGHLIGHTS — YOUR ORIGINAL CODE FULLY RESTORED
 function saveHighlights() {
     localStorage.setItem(`${passageId}_highlights`, document.getElementById('passageArea').innerHTML);
@@ -271,7 +268,6 @@ function loadHighlights() {
     const saved = localStorage.getItem(`${passageId}_highlights`);
     if (saved) document.getElementById('passageArea').innerHTML = saved;
 }
-
 // DRAGGABLE NOTE LOGIC — ORIGINAL
 const noteBox = document.getElementById('noteBox');
 const noteText = document.getElementById('noteText');
@@ -279,7 +275,6 @@ const noteClose = document.getElementById('noteClose');
 const noteDragHandle = document.getElementById('noteDragHandle');
 let isDraggingNote = false;
 let dragOffsetX = 0, dragOffsetY = 0;
-
 noteClose.addEventListener('click', () => {
     noteBox.style.display = 'none';
     activeHighlight = null;
@@ -304,7 +299,6 @@ document.addEventListener('mousemove', e => {
     noteBox.style.top = (e.clientY - dragOffsetY) + 'px';
 });
 document.addEventListener('mouseup', () => { isDraggingNote = false; });
-
 // CONTEXT MENU — ORIGINAL
 const contextMenu = document.getElementById('contextMenu');
 document.addEventListener('contextmenu', e => {
@@ -335,7 +329,6 @@ document.addEventListener('contextmenu', e => {
 document.addEventListener('click', e => {
     if (!contextMenu.contains(e.target)) contextMenu.style.display = 'none';
 });
-
 // HIGHLIGHT — ORIGINAL
 document.getElementById('menuHighlight').addEventListener('click', () => {
     if (!currentRange) return;
@@ -350,7 +343,6 @@ document.getElementById('menuHighlight').addEventListener('click', () => {
     } catch { alert('Select smaller text.'); }
     contextMenu.style.display = 'none';
 });
-
 // ADD NOTE — ORIGINAL
 document.getElementById('menuAddNote').addEventListener('click', () => {
     contextMenu.style.display = 'none';
@@ -374,7 +366,6 @@ document.getElementById('menuAddNote').addEventListener('click', () => {
     noteText.value = activeHighlight.getAttribute('data-note') || '';
     noteText.focus();
 });
-
 // REMOVE — ORIGINAL
 document.getElementById('menuRemove').addEventListener('click', () => {
     contextMenu.style.display = 'none';
@@ -385,7 +376,6 @@ document.getElementById('menuRemove').addEventListener('click', () => {
     activeHighlight = null;
     saveHighlights();
 });
-
 // SAVE HELPERS — ORIGINAL
 function saveAnswer(q, val) {
     localStorage.setItem(`${STORAGE_KEY}_q${q}`, val);
@@ -402,7 +392,6 @@ function clearAll() {
     noteBox.style.display = 'none';
     updateStatus();
 }
-
 document.addEventListener('DOMContentLoaded', () => {
     // Audio error
     document.getElementById('audioPlayer').addEventListener('error', () => {
