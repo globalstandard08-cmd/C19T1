@@ -28,7 +28,15 @@
         .mcq-option { display: flex; align-items: flex-start; gap: 10px; margin: 10px 0; padding: 6px 0; font-size: 16px; }
         .mcq-option input { margin-top: 3px; cursor: pointer; }
         .mcq-option.checked label { font-weight: 500; }
-        .map-image { max-width: 100%; height: auto; display: block; margin: 0 auto 15px; border: 1px solid #ddd; border-radius: 4px; }
+        .map-image { 
+            max-width: 100%; 
+            height: auto; 
+            display: block; 
+            margin: 0 auto 20px; 
+            border: 1px solid #ddd; 
+            border-radius: 4px;
+            background: #fff;
+        }
         .matching-table { width: 100%; margin: 15px 0; }
         .matching-table td { padding: 8px 0; font-size: 16px; border-bottom: 1px solid #eee; }
         .matching-select { padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 15px; }
@@ -146,7 +154,12 @@
 <div class="instruction"><strong>Questions 16–20</strong><br>Label the map below. Write the correct letter <strong>A–H</strong>.</div>
 <div class="map-block">
     <p style="font-weight:bold; text-align:center; margin-bottom:15px; color:#1f3a5f;">Farley House</p>
-    <img src="c19t1.png" alt="Map for Questions 16–20" class="map-image">
+    <!-- MAP IMAGE -->
+    <img src="c19t1.png" alt="Farley House Map - Questions 16–20" class="map-image" onerror="this.style.border='2px solid red'; this.style.padding='10px'; this.alt='❌ Image not found — check filename & location'">
+    <!-- LEGEND -->
+    <p style="font-size:14px; color:#555; margin-bottom:15px; line-height:1.6;">
+        <strong>Legend:</strong> A (top path) &nbsp; B (west path) &nbsp; C (north entrance) &nbsp; D (building) &nbsp; E (west entrance) &nbsp; F (south-east path) &nbsp; G (old stables) &nbsp; H (south courtyard)
+    </p>
     <table class="matching-table">
         <tr><td class="q-number">16</td><td>Farm shop</td><td><select class="matching-select" id="q16" data-q="16"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select></td></tr>
         <tr><td class="q-number">17</td><td>Disabled entry</td><td><select class="matching-select" id="q17" data-q="17"><option value="">—</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select></td></tr>
