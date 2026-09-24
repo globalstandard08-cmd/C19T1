@@ -63,34 +63,31 @@ const KEY_READING    = 'Cambridge19_Test1_Reading';
 const KEY_WRITING_T1 = 'task1Input';
 const KEY_WRITING_T2 = 'task2Input';
 
-// --- HELPER: Get paired answer (check both single-q and double-q formats) ---
-function getPairedAnswer(prefix, combinedKey, qNumInPair) {
+// --- HELPER: Get paired answer (checks single-q and double-q formats) ---
+function getPairedAnswer(prefix, combinedKey, index) {
     let val = localStorage.getItem(`${prefix}_${combinedKey}`);
     if (!val) val = localStorage.getItem(`${prefix}_q${combinedKey}`);
     if (!val) val = localStorage.getItem(`${prefix}_qq${combinedKey}`);
     if (!val) return '';
     const parts = val.split(',');
-    return parts[qNumInPair] || '';
+    return parts[index] || '';
 }
 
-// --- GET SAVED ANSWER — handles ALL paired questions across Listening & Reading ---
+// --- GET SAVED ANSWER — matches EXACTLY how each page saves ---
 function getSavedAnswer(prefix, qNum) {
-    // === LISTENING PAIRED QUESTIONS ===
-    // Q21 & Q22 — stored together
-    if (qNum === 21 || qNum === 22) {
-        return getPairedAnswer(prefix, 'q21q22', qNum === 21 ? 0 : 1);
-    }
-    // Q23 & Q24 — stored together
-    if (qNum === 23 || qNum === 24) {
-        return getPairedAnswer(prefix, 'q23q24', qNum === 23 ? 0 : 1);
+    // ============= LISTENING =============
+    // ALL Listening questions save INDIVIDUALLY — including Q21-24
+    if (prefix === KEY_LISTENING) {
+        const val = localStorage.getItem(`${prefix}_q${qNum}`);
+        return val ? val.trim() : '';
     }
     
-    // === READING PAIRED QUESTIONS ===
-    // Q20 & Q21 — stored together
+    // ============= READING =============
+    // Q20 & Q21 — paired
     if (qNum === 20 || qNum === 21) {
         return getPairedAnswer(prefix, 'q20q21', qNum === 20 ? 0 : 1);
     }
-    // Q22 & Q23 — stored together
+    // Q22 & Q23 — paired
     if (qNum === 22 || qNum === 23) {
         return getPairedAnswer(prefix, 'q22q23', qNum === 22 ? 0 : 1);
     }
@@ -178,12 +175,12 @@ function downloadAnswers() {
 
 // --- LOAD EVERYTHING ---
 document.addEventListener('DOMContentLoaded', () => {
-    // Listening
+    // Listening — ALL individual keys including Q21-24 ✅
     renderSection('listening-p1', KEY_LISTENING, 1, 10);
     renderSection('listening-p2', KEY_LISTENING, 11, 20);
     renderSection('listening-p3', KEY_LISTENING, 21, 30);
     renderSection('listening-p4', KEY_LISTENING, 31, 40);
-    // Reading
+    // Reading — paired keys ✅
     renderSection('reading-p1', KEY_READING, 1, 13);
     renderSection('reading-p2', KEY_READING, 14, 26);
     renderSection('reading-p3', KEY_READING, 27, 40);
