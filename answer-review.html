@@ -3,23 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Review Answers — Cambridge 19 Test 1 — Full Test</title>
+    <title>Your Answers — Cambridge 19 Test 1</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
         body { background: #f4f6f9; padding: 20px; line-height: 1.7; }
         .container { max-width: 900px; margin: 0 auto; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 30px; }
         h1 { color: #1f3a5f; margin-bottom: 30px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
         h2 { color: #1f3a5f; margin: 30px 0 15px; font-size: 20px; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
-        h3 { margin: 15px 0 8px; font-size: 16px; color: #333; }
+        h3 { margin: 15px 0 8px; font-size: 16px; color: #444; }
         .answer-row { display: flex; padding: 10px 12px; border-bottom: 1px solid #eee; align-items: center; }
         .q-num { width: 50px; font-weight: bold; color: #1f3a5f; flex-shrink: 0; }
-        .user-ans { flex: 1; padding: 6px 10px; background: #e6f0ff; border-radius: 4px; margin: 0 10px; }
-        .correct-ans { flex: 1; padding: 6px 10px; background: #e8f5e9; border-radius: 4px; }
-        .status { width: 100px; text-align: center; font-weight: bold; flex-shrink: 0; }
-        .correct { color: #10b981; }
-        .incorrect { color: #dc2626; }
+        .user-ans { flex: 1; padding: 8px 12px; background: #e6f0ff; border-radius: 4px; }
         .empty { color: #999; font-style: italic; }
-        .writing-box { padding: 12px; background: #f9f9f9; border-radius: 6px; margin: 10px 0; white-space: pre-wrap; min-height: 100px; }
+        .writing-box { padding: 15px; background: #f9f9f9; border-radius: 6px; margin: 10px 0; white-space: pre-wrap; min-height: 120px; border: 1px solid #e0e0e0; }
         .nav { margin-top: 30px; display: flex; gap: 15px; flex-wrap: wrap; }
         .btn { padding: 10px 18px; border-radius: 4px; text-decoration: none; font-weight: bold; }
         .back { background: #6b7280; color: white; }
@@ -28,27 +24,27 @@
 </head>
 <body>
     <div class="container">
-        <h1>📋 Full Answer Review — Cambridge 19 Test 1</h1>
+        <h1>📋 Your Answers — Cambridge 19 Test 1</h1>
 
         <!-- LISTENING -->
-        <h2>🎧 Listening (Questions 1–40)</h2>
+        <h2>🎧 Listening</h2>
         <h3>Part 1 — Questions 1–10</h3>
-        <div id="listening-part1"></div>
+        <div id="listening-p1"></div>
         <h3>Part 2 — Questions 11–20</h3>
-        <div id="listening-part2"></div>
+        <div id="listening-p2"></div>
         <h3>Part 3 — Questions 21–30</h3>
-        <div id="listening-part3"></div>
+        <div id="listening-p3"></div>
         <h3>Part 4 — Questions 31–40</h3>
-        <div id="listening-part4"></div>
+        <div id="listening-p4"></div>
 
         <!-- READING -->
-        <h2>📖 Reading (Questions 1–40)</h2>
+        <h2>📖 Reading</h2>
         <h3>Passage 1 — Questions 1–13</h3>
-        <div id="reading-passage1"></div>
+        <div id="reading-p1"></div>
         <h3>Passage 2 — Questions 14–26</h3>
-        <div id="reading-passage2"></div>
+        <div id="reading-p2"></div>
         <h3>Passage 3 — Questions 27–40</h3>
-        <div id="reading-passage3"></div>
+        <div id="reading-p3"></div>
 
         <!-- WRITING -->
         <h2>✍️ Writing</h2>
@@ -58,85 +54,49 @@
         <div id="writing-task2" class="writing-box"></div>
 
         <div class="nav">
-            <a href="listening-cambridge19-test1.html" class="btn back">← Back to Test</a>
+            <a href="index.html" class="btn back">← Back to Home</a>
             <a href="#" class="btn print" onclick="window.print()">🖨️ Print / Save as PDF</a>
         </div>
     </div>
 
 <script>
-// --- STORAGE KEYS ---
+// --- STORAGE KEYS — MATCH YOUR FILES ---
 const KEY_LISTENING = 'Cambridge19_Test1_Listening';
 const KEY_READING    = 'Cambridge19_Test1_Reading';
 const KEY_WRITING    = 'Cambridge19_Test1_Writing';
 
-// --- OFFICIAL ANSWER KEYS ---
-const LISTENING_ANSWERS = {
-    1: '195', 2: 'stream', 3: 'evidence', 4: 'map', 5: 'history',
-    6: 'instruments', 7: 'achievement', 8: 'skills', 9: '6.50', 10: 'teachers',
-    11: 'C', 12: 'A', 13: 'C', 14: 'C', 15: 'A',
-    16: 'G', 17: 'E', 18: 'F', 19: 'H', 20: 'D',
-    21: 'B,D', 22: '', 23: 'A,D', 24: '', 25: 'F',
-    26: 'G', 27: 'C', 28: 'B', 29: 'H', 30: 'E',
-    31: 'fenced', 32: 'grandson', 33: 'artifacts', 34: 'farming', 35: 'circular',
-    36: 'tools', 37: 'family', 38: 'winter', 39: 'soil', 40: 'rainfall'
-};
-
-const READING_ANSWERS = {
-    1: 'FALSE', 2: 'FALSE', 3: 'NOT GIVEN', 4: 'FALSE', 5: 'NOT GIVEN',
-    6: 'TRUE', 7: 'TRUE', 8: 'paint', 9: 'topspin', 10: 'training',
-    11: 'intestines', 12: 'weights', 13: 'grips',
-    14: 'D', 15: 'G', 16: 'C', 17: 'A', 18: 'G',
-    19: 'E', 20: 'B', 21: 'F', 22: 'D', 23: 'A',
-    24: 'C', 25: 'B', 26: 'E',
-    27: 'YES', 28: 'NOT GIVEN', 29: 'NO', 30: 'YES',
-    31: 'G', 32: 'J', 33: 'H', 34: 'B', 35: 'E',
-    36: 'F', 37: 'D', 38: 'NOT GIVEN', 39: 'NO', 40: 'C'
-};
-
-// --- HELPER FUNCTIONS ---
-function getStoredAnswer(prefix, qNum) {
-    const stored = localStorage.getItem(`${prefix}_q${qNum}`);
-    return stored ? stored.trim() : '';
+// --- GET SAVED ANSWER ---
+function getSavedAnswer(prefix, qNum) {
+    const val = localStorage.getItem(`${prefix}_q${qNum}`);
+    return val ? val.trim() : '';
 }
 
-function buildRow(qNum, userAns, correctAns) {
-    let userDisplay, statusHtml;
-
-    if (!userAns) {
-        userDisplay = '<span class="empty">— No answer provided —</span>';
-        statusHtml = '<span class="status empty">—</span>';
-    } else if (userAns.toUpperCase() === String(correctAns).toUpperCase()) {
-        userDisplay = userAns;
-        statusHtml = '<span class="status correct">✓ CORRECT</span>';
-    } else {
-        userDisplay = userAns;
-        statusHtml = '<span class="status incorrect">✗ INCORRECT</span>';
-    }
-
+// --- BUILD ROW — ONLY SHOW USER'S ANSWER ---
+function makeRow(qNum, answer) {
+    const display = answer || '<span class="empty">— No answer provided —</span>';
     return `
         <div class="answer-row">
             <span class="q-num">${qNum}</span>
-            <span class="user-ans"><strong>Your Answer:</strong> ${userDisplay}</span>
-            <span class="correct-ans"><strong>Correct Answer:</strong> ${correctAns || '—'}</span>
-            ${statusHtml}
+            <span class="user-ans"><strong>Your Answer:</strong> ${display}</span>
         </div>
     `;
 }
 
-function renderSection(containerId, storageKeyPrefix, answerKey, startQ, endQ) {
+// --- RENDER QUESTION SECTION ---
+function renderSection(containerId, prefix, startQ, endQ) {
     const container = document.getElementById(containerId);
     let html = '';
     for (let q = startQ; q <= endQ; q++) {
-        const userAns = getStoredAnswer(storageKeyPrefix, q);
-        const correctAns = answerKey[q] || '';
-        html += buildRow(q, userAns, correctAns);
+        const ans = getSavedAnswer(prefix, q);
+        html += makeRow(q, ans);
     }
     container.innerHTML = html;
 }
 
-function renderWritingTask(containerId, taskId) {
+// --- RENDER WRITING TASK ---
+function renderWriting(containerId, taskKey) {
     const container = document.getElementById(containerId);
-    const content = localStorage.getItem(`${KEY_WRITING}_${taskId}`);
+    const content = localStorage.getItem(`${KEY_WRITING}_${taskKey}`);
     if (!content || !content.trim()) {
         container.innerHTML = '<span class="empty">— No response submitted —</span>';
     } else {
@@ -144,19 +104,26 @@ function renderWritingTask(containerId, taskId) {
     }
 }
 
-// --- RENDER EVERYTHING ---
+// --- DISPLAY EVERYTHING ---
 document.addEventListener('DOMContentLoaded', () => {
-    renderSection('listening-part1', KEY_LISTENING, LISTENING_ANSWERS, 1, 10);
-    renderSection('listening-part2', KEY_LISTENING, LISTENING_ANSWERS, 11, 20);
-    renderSection('listening-part3', KEY_LISTENING, LISTENING_ANSWERS, 21, 30);
-    renderSection('listening-part4', KEY_LISTENING, LISTENING_ANSWERS, 31, 40);
+    // Listening
+    renderSection('listening-p1', KEY_LISTENING, 1, 10);
+    renderSection('listening-p2', KEY_LISTENING, 11, 20);
+    renderSection('listening-p3', KEY_LISTENING, 21, 30);
+    renderSection('listening-p4', KEY_LISTENING, 31, 40);
 
-    renderSection('reading-passage1', KEY_READING, READING_ANSWERS, 1, 13);
-    renderSection('reading-passage2', KEY_READING, READING_ANSWERS, 14, 26);
-    renderSection('reading-passage3', KEY_READING, READING_ANSWERS, 27, 40);
+    // Reading
+    renderSection('reading-p1', KEY_READING, 1, 13);
+    renderSection('reading-p2', KEY_READING, 14, 26);
+    renderSection('reading-p3', KEY_READING, 27, 40);
 
-    renderWritingTask('writing-task1', 'task1');
-    renderWritingTask('writing-task2', 'task2');
+    // Writing — task1 and task2
+    renderWriting('writing-task1', 'task1');
+    renderWriting('writing-task2', 'task2');
+    
+    // Debug — check console if still not showing
+    console.log('Writing T1:', localStorage.getItem(`${KEY_WRITING}_task1`));
+    console.log('Writing T2:', localStorage.getItem(`${KEY_WRITING}_task2`));
 });
 </script>
 </body>
