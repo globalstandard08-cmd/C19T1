@@ -64,7 +64,7 @@
             background-color: #fefefe;
             display: flex;
             flex-direction: column;
-            overflow-y: auto; /* Only vertical scroll when content truly overflows */
+            overflow-y: auto;
         }
         .question-panel h2 {
             font-size: 20px;
@@ -97,7 +97,7 @@
             margin: 0 auto;
             padding: 10px;
         }
-        /* ✅ Expandable Bar — exactly like Reading section */
+        /* Expandable Resizer Bar — exactly like Reading */
         .resizer {
             width: 6px;
             background: #c5d2e3;
@@ -127,10 +127,10 @@
             background: #ffffff;
             resize: vertical;
             margin-bottom: 10px;
-            /* ✅ Autocorrect + Spellcheck OFF — confirmed */
+            /* ✅ ALL spellcheck/autocorrect fully disabled */
             spellcheck: false;
-            autocorrect: "off";
-            autocapitalize: "off";
+            autocorrect: off;
+            autocapitalize: off;
         }
         textarea:focus {
             outline: none;
@@ -230,7 +230,7 @@
         }
     </style>
 </head>
-<body>
+<body spellcheck="false">
 <div class="container">
     <div class="header">
         <img src="ielts-logo.png" alt="IELTS Logo" class="ielts-logo">
@@ -258,7 +258,13 @@
 
         <!-- Right Panel -->
         <div class="writing-panel" id="rightPanel">
-            <textarea id="task1Input" placeholder="Write your response here..."></textarea>
+            <textarea 
+                id="task1Input" 
+                placeholder="Write your response here..."
+                spellcheck="false"
+                autocorrect="off"
+                autocapitalize="off"
+            ></textarea>
             <div class="word-count" id="task1Count">Words: 0 / 150 minimum</div>
             <div class="save-note" id="save1">✅ Auto-saved</div>
             <div class="btn-row">
@@ -274,7 +280,7 @@
     </div>
 </div>
 <script>
-// ✅ Drag-to-Resize — exactly like Reading exam interface
+// Drag-to-Resize — exactly like Reading exam interface
 const leftPanel = document.getElementById('leftPanel');
 const rightPanel = document.getElementById('rightPanel');
 const resizer = document.getElementById('resizer');
@@ -294,7 +300,6 @@ document.addEventListener('mousemove', (e) => {
     const newLeftWidth = e.clientX - rect.left;
     const totalWidth = rect.width;
     
-    // Minimum width protection
     if (newLeftWidth >= 300 && (totalWidth - newLeftWidth - 6) >= 300) {
         leftPanel.style.width = `${(newLeftWidth / totalWidth) * 100}%`;
         rightPanel.style.width = `${((totalWidth - newLeftWidth - 6) / totalWidth) * 100}%`;
