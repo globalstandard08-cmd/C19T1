@@ -50,24 +50,33 @@
             font-size: 14px;
             font-style: italic;
         }
+        /* Resizable Split Layout */
         .split-layout {
             display: flex;
-            align-items: stretch;
+            align-items: flex-start;
             gap: 0;
+            min-height: 600px;
         }
         .question-panel {
-            width: 48%;
+            width: 50%;
+            min-width: 300px;
             padding: 20px 25px 25px;
             background-color: #fefefe;
-            border-right: 1px solid #e2e8f0;
             display: flex;
             flex-direction: column;
+            height: 600px;
+            overflow-y: auto; /* Vertical scroll for long content */
         }
         .question-panel h2 {
             font-size: 20px;
             font-weight: bold;
             margin: 0 0 15px;
             color: #1f3a5f;
+            position: sticky;
+            top: 0;
+            background: #fefefe;
+            z-index: 1;
+            padding-bottom: 8px;
         }
         .instruction-box {
             border: 1px solid #c5d2e3;
@@ -85,7 +94,6 @@
             border-radius: 4px;
             background: #fff;
             min-height: 300px;
-            max-height: 550px;
         }
         .task-image {
             display: block;
@@ -95,24 +103,44 @@
             margin: 0 auto;
             padding: 10px;
         }
+        /* Resizer Handle */
+        .resizer {
+            width: 8px;
+            background: #c5d2e3;
+            cursor: col-resize;
+            margin: 0 4px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        .resizer:hover, .resizer.active {
+            background: #1f3a5f;
+        }
         .writing-panel {
-            width: 52%;
+            width: 50%;
+            min-width: 300px;
             padding: 20px 25px;
             display: flex;
             flex-direction: column;
+            height: 600px;
+            position: sticky;
+            top: 0;
         }
         textarea {
             width: 100%;
             flex: 1;
-            min-height: 550px;
+            min-height: 500px;
             padding: 18px;
             border: 1px solid #c5d2e3;
             border-radius: 6px;
             font-size: 15px;
             line-height: 1.6;
             background: #ffffff;
-            resize: none;
+            resize: vertical;
             margin-bottom: 10px;
+            /* ✅ No spellcheck/autocorrect */
+            spellcheck: false;
+            autocorrect: off;
+            autocapitalize: off;
         }
         textarea:focus {
             outline: none;
@@ -195,10 +223,16 @@
             .split-layout {
                 flex-direction: column;
             }
+            .resizer {
+                width: 100%;
+                height: 8px;
+                cursor: row-resize;
+            }
             .question-panel, .writing-panel {
                 width: 100%;
-                border-right: none;
-                border-bottom: 1px solid #e2e8f0;
+                height: auto;
+                overflow-y: visible;
+                position: static;
             }
             .graph-container {
                 max-height: 350px;
@@ -219,7 +253,8 @@
         <p>You should spend about 20 minutes on this task.</p>
     </div>
     <div class="split-layout">
-        <div class="question-panel">
+        <!-- Left: Scrollable Question Panel -->
+        <div class="question-panel" id="leftPanel">
             <h2>WRITING TASK 1</h2>
             <div class="instruction-box">
                 The graph below gives information on the numbers of participants for different activities at one social centre in Melbourne, Australia for the period 2000 to 2020.<br><br>
@@ -230,7 +265,12 @@
                 <img src="C19writingtask1.png" alt="Number of participants, by activity 2000–2020" class="task-image">
             </div>
         </div>
-        <div class="writing-panel">
+
+        <!-- Resizer Handle -->
+        <div class="resizer" id="resizer"></div>
+
+        <!-- Right: Writing Panel -->
+        <div class="writing-panel" id="rightPanel">
             <textarea id="task1Input" placeholder="Write your response here..."></textarea>
             <div class="word-count" id="task1Count">Words: 0 / 150 minimum</div>
             <div class="save-note" id="save1">✅ Auto-saved</div>
@@ -247,6 +287,41 @@
     </div>
 </div>
 <script>
+// Drag-to-Resize functionality
+const leftPanel = document.getElementById('leftPanel');
+const rightPanel = document.getElementById('rightPanel');
+const resizer = document.getElementById('resizer');
+let isResizing = false;
+
+resizer.addEventListener('mousedown', (e) => {
+    isResizing = true;
+    resizer.classList.add('active');
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+});
+
+document.addEventListener('mousemove', (e) => {
+    if (!isResizing) return;
+    const container = document.querySelector('.split-layout');
+    const containerRect = container.getBoundingClientRect();
+    const leftWidth = e.clientX - containerRect.left;
+    const containerWidth = containerRect.width;
+    // Min width protection on both sides
+    if (leftWidth >= 300 && containerWidth - leftWidth - 8 >= 300) {
+        const leftPercent = (leftWidth / containerWidth) * 100;
+        leftPanel.style.width = `${leftPercent}%`;
+        rightPanel.style.width = `${100 - leftPercent - 2}%`;
+    }
+});
+
+document.addEventListener('mouseup', () => {
+    isResizing = false;
+    resizer.classList.remove('active');
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
+});
+
+// Keep all original functions unchanged
 function countWords(id, countId, min) {
     const text = document.getElementById(id).value.trim();
     const num = text ? text.replace(/\s+/g, ' ').split(' ').length : 0;
