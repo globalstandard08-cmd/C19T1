@@ -50,10 +50,10 @@
             font-size: 14px;
             font-style: italic;
         }
-        /* Resizable Split Layout */
+        /* Resizable Split Layout — exactly like Reading */
         .split-layout {
             display: flex;
-            align-items: flex-start;
+            align-items: stretch;
             gap: 0;
             min-height: 600px;
         }
@@ -64,19 +64,13 @@
             background-color: #fefefe;
             display: flex;
             flex-direction: column;
-            height: 600px;
-            overflow-y: auto; /* Vertical scroll for long content */
+            overflow-y: auto; /* Only vertical scroll when content truly overflows */
         }
         .question-panel h2 {
             font-size: 20px;
             font-weight: bold;
             margin: 0 0 15px;
             color: #1f3a5f;
-            position: sticky;
-            top: 0;
-            background: #fefefe;
-            z-index: 1;
-            padding-bottom: 8px;
         }
         .instruction-box {
             border: 1px solid #c5d2e3;
@@ -103,14 +97,12 @@
             margin: 0 auto;
             padding: 10px;
         }
-        /* Resizer Handle */
+        /* ✅ Expandable Bar — exactly like Reading section */
         .resizer {
-            width: 8px;
+            width: 6px;
             background: #c5d2e3;
             cursor: col-resize;
-            margin: 0 4px;
-            border-radius: 4px;
-            transition: background 0.2s;
+            flex-shrink: 0;
         }
         .resizer:hover, .resizer.active {
             background: #1f3a5f;
@@ -121,9 +113,7 @@
             padding: 20px 25px;
             display: flex;
             flex-direction: column;
-            height: 600px;
-            position: sticky;
-            top: 0;
+            flex-shrink: 0;
         }
         textarea {
             width: 100%;
@@ -137,10 +127,10 @@
             background: #ffffff;
             resize: vertical;
             margin-bottom: 10px;
-            /* ✅ No spellcheck/autocorrect */
+            /* ✅ Autocorrect + Spellcheck OFF — confirmed */
             spellcheck: false;
-            autocorrect: off;
-            autocapitalize: off;
+            autocorrect: "off";
+            autocapitalize: "off";
         }
         textarea:focus {
             outline: none;
@@ -225,14 +215,11 @@
             }
             .resizer {
                 width: 100%;
-                height: 8px;
+                height: 6px;
                 cursor: row-resize;
             }
             .question-panel, .writing-panel {
                 width: 100%;
-                height: auto;
-                overflow-y: visible;
-                position: static;
             }
             .graph-container {
                 max-height: 350px;
@@ -253,7 +240,7 @@
         <p>You should spend about 20 minutes on this task.</p>
     </div>
     <div class="split-layout">
-        <!-- Left: Scrollable Question Panel -->
+        <!-- Left Panel -->
         <div class="question-panel" id="leftPanel">
             <h2>WRITING TASK 1</h2>
             <div class="instruction-box">
@@ -266,10 +253,10 @@
             </div>
         </div>
 
-        <!-- Resizer Handle -->
+        <!-- Expandable Resizer Bar -->
         <div class="resizer" id="resizer"></div>
 
-        <!-- Right: Writing Panel -->
+        <!-- Right Panel -->
         <div class="writing-panel" id="rightPanel">
             <textarea id="task1Input" placeholder="Write your response here..."></textarea>
             <div class="word-count" id="task1Count">Words: 0 / 150 minimum</div>
@@ -287,7 +274,7 @@
     </div>
 </div>
 <script>
-// Drag-to-Resize functionality
+// ✅ Drag-to-Resize — exactly like Reading exam interface
 const leftPanel = document.getElementById('leftPanel');
 const rightPanel = document.getElementById('rightPanel');
 const resizer = document.getElementById('resizer');
@@ -303,14 +290,14 @@ resizer.addEventListener('mousedown', (e) => {
 document.addEventListener('mousemove', (e) => {
     if (!isResizing) return;
     const container = document.querySelector('.split-layout');
-    const containerRect = container.getBoundingClientRect();
-    const leftWidth = e.clientX - containerRect.left;
-    const containerWidth = containerRect.width;
-    // Min width protection on both sides
-    if (leftWidth >= 300 && containerWidth - leftWidth - 8 >= 300) {
-        const leftPercent = (leftWidth / containerWidth) * 100;
-        leftPanel.style.width = `${leftPercent}%`;
-        rightPanel.style.width = `${100 - leftPercent - 2}%`;
+    const rect = container.getBoundingClientRect();
+    const newLeftWidth = e.clientX - rect.left;
+    const totalWidth = rect.width;
+    
+    // Minimum width protection
+    if (newLeftWidth >= 300 && (totalWidth - newLeftWidth - 6) >= 300) {
+        leftPanel.style.width = `${(newLeftWidth / totalWidth) * 100}%`;
+        rightPanel.style.width = `${((totalWidth - newLeftWidth - 6) / totalWidth) * 100}%`;
     }
 });
 
@@ -321,7 +308,7 @@ document.addEventListener('mouseup', () => {
     document.body.style.userSelect = '';
 });
 
-// Keep all original functions unchanged
+// Original functions preserved
 function countWords(id, countId, min) {
     const text = document.getElementById(id).value.trim();
     const num = text ? text.replace(/\s+/g, ' ').split(' ').length : 0;
